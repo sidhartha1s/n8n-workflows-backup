@@ -1,0 +1,635 @@
+{
+  "updatedAt": "2026-02-04T17:02:20.144Z",
+  "createdAt": "2026-02-04T16:56:50.823Z",
+  "id": "lHFh9BPdfLKVrQeS1k2GJ",
+  "name": "WF Backups to GitHub",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "0f3b9424-7fe1-4106-98df-81cb714e972f",
+      "name": "On clicking 'execute'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        304,
+        32
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "id": "7ece4638-51bc-4c4e-b88d-b090ae16a419",
+      "name": "n8n",
+      "type": "n8n-nodes-base.n8n",
+      "position": [
+        704,
+        144
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "n8nApi": {
+          "id": "A8UqMhip8eWUj9i6",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "4a1861c5-1428-4f2f-9a8d-689f00ebdf3e",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        912,
+        144
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12,
+              "triggerAtMinute": 1
+            }
+          ]
+        }
+      },
+      "id": "a8edf6e4-62ff-4687-a392-bf0c72cfc503",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        304,
+        240
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## Backup to GitHub \nThis workflow will backup all instance workflows to GitHub every 24 hours.\n\nThe files are saved into folders using `YYYY/MM/` for the directory path and `ID.json` for the filename.\n\nThe Repo Owner, Repo Name and Main folder are set using the **Variables** feature but can be replaced with the `Config` node in the subworkflow. \n\nThe workflow runs calls itself to help reduce memory usage, Once the workflow has completed it will send an optional notification to Slack.\n\n### Time to Run\nTested with 1423 workflows on `1.44.1` it took under 30 minutes for the first run and under 12 minutes once the initial run is complete.",
+        "height": 417,
+        "width": 385,
+        "color": 4
+      },
+      "id": "3316d29e-17ac-499a-aed5-f192c7604685",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -176,
+        -48
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Main workflow loop",
+        "height": 416.1856906618075,
+        "width": 1272.6408145680155,
+        "color": 7
+      },
+      "id": "1dc3db8c-be4a-42ef-b1b7-2f592d35eede",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        272,
+        -48
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U06DLM6U3JM",
+          "mode": "list",
+          "cachedResultName": "sidhartha"
+        },
+        "text": "=:information_source:  Starting Workflow Backup {{ $json.id }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "ce81e66b-ad96-474a-85de-afafd942fcba",
+      "name": "Starting Message",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        544,
+        144
+      ],
+      "webhookId": "c02eb407-5547-4aa0-9ebf-46dab67b63b6",
+      "typeVersion": 2.2,
+      "executeOnce": true,
+      "credentials": {
+        "slackApi": {
+          "id": "O62AlOYXuAYiMczt",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": "={{ $workflow.id }}",
+        "mode": "each",
+        "options": {}
+      },
+      "id": "9bcd0e21-2db9-4163-93ab-6aa4c94d74de",
+      "name": "Execute Workflow",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "position": [
+        1136,
+        160
+      ],
+      "typeVersion": 1,
+      "executeOnce": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U06DLM6U3JM",
+          "mode": "list",
+          "cachedResultName": "sidhartha"
+        },
+        "text": "=✅ Backup has completed - {{ $('n8n').all().length }} workflows have been processed.",
+        "otherOptions": {}
+      },
+      "id": "245b68eb-adc3-477b-ae00-273224e861da",
+      "name": "Completed Notification",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        1136,
+        -16
+      ],
+      "webhookId": "a0c6e8c8-5d71-40fa-b02b-63a7ed5726c4",
+      "executeOnce": true,
+      "typeVersion": 2.2,
+      "credentials": {
+        "slackApi": {
+          "id": "O62AlOYXuAYiMczt",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U06DLM6U3JM",
+          "mode": "list",
+          "cachedResultName": "sidhartha"
+        },
+        "text": "=:x: Failed to backup {{ $('Loop Over Items').item.json.id }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "cd9309e6-8eef-4bbf-b704-c6781d22bacf",
+      "name": "Failed Flows",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        1344,
+        160
+      ],
+      "webhookId": "2a092edb-de12-490f-931b-34d70e7d7696",
+      "typeVersion": 2.2,
+      "executeOnce": false,
+      "credentials": {
+        "slackApi": {
+          "id": "O62AlOYXuAYiMczt",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "On clicking 'execute'": {
+      "main": [
+        [
+          {
+            "node": "Starting Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "n8n": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Completed Notification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "Starting Message": {
+      "main": [
+        [
+          {
+            "node": "n8n",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failed Flows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Failed Flows": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "367d95d2-9a7b-4ac4-8343-3766b32a5288",
+  "activeVersionId": "d9b3b9fa-18b6-439e-ad8f-dfef3cadac17",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-02-04T16:56:50.823Z",
+      "createdAt": "2026-02-04T16:56:50.823Z",
+      "role": "workflow:owner",
+      "workflowId": "lHFh9BPdfLKVrQeS1k2GJ",
+      "projectId": "RL6dq3Iv75Grec4D"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-02-04T16:59:19.401Z",
+    "createdAt": "2026-02-04T16:58:30.742Z",
+    "versionId": "d9b3b9fa-18b6-439e-ad8f-dfef3cadac17",
+    "workflowId": "lHFh9BPdfLKVrQeS1k2GJ",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "0f3b9424-7fe1-4106-98df-81cb714e972f",
+        "name": "On clicking 'execute'",
+        "type": "n8n-nodes-base.manualTrigger",
+        "position": [
+          304,
+          32
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "filters": {},
+          "requestOptions": {}
+        },
+        "id": "7ece4638-51bc-4c4e-b88d-b090ae16a419",
+        "name": "n8n",
+        "type": "n8n-nodes-base.n8n",
+        "position": [
+          704,
+          144
+        ],
+        "typeVersion": 1,
+        "credentials": {
+          "n8nApi": {
+            "id": "A8UqMhip8eWUj9i6",
+            "name": "n8n account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "4a1861c5-1428-4f2f-9a8d-689f00ebdf3e",
+        "name": "Loop Over Items",
+        "type": "n8n-nodes-base.splitInBatches",
+        "position": [
+          912,
+          144
+        ],
+        "typeVersion": 3
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 12,
+                "triggerAtMinute": 1
+              }
+            ]
+          }
+        },
+        "id": "a8edf6e4-62ff-4687-a392-bf0c72cfc503",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "position": [
+          304,
+          240
+        ],
+        "typeVersion": 1.2
+      },
+      {
+        "parameters": {
+          "content": "## Backup to GitHub \nThis workflow will backup all instance workflows to GitHub every 24 hours.\n\nThe files are saved into folders using `YYYY/MM/` for the directory path and `ID.json` for the filename.\n\nThe Repo Owner, Repo Name and Main folder are set using the **Variables** feature but can be replaced with the `Config` node in the subworkflow. \n\nThe workflow runs calls itself to help reduce memory usage, Once the workflow has completed it will send an optional notification to Slack.\n\n### Time to Run\nTested with 1423 workflows on `1.44.1` it took under 30 minutes for the first run and under 12 minutes once the initial run is complete.",
+          "height": 417,
+          "width": 385,
+          "color": 4
+        },
+        "id": "3316d29e-17ac-499a-aed5-f192c7604685",
+        "name": "Sticky Note1",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -176,
+          -48
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "## Main workflow loop",
+          "height": 416.1856906618075,
+          "width": 1272.6408145680155,
+          "color": 7
+        },
+        "id": "1dc3db8c-be4a-42ef-b1b7-2f592d35eede",
+        "name": "Sticky Note2",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          272,
+          -48
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U06DLM6U3JM",
+            "mode": "list",
+            "cachedResultName": "sidhartha"
+          },
+          "text": "=:information_source:  Starting Workflow Backup {{ $json.id }}",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "ce81e66b-ad96-474a-85de-afafd942fcba",
+        "name": "Starting Message",
+        "type": "n8n-nodes-base.slack",
+        "position": [
+          544,
+          144
+        ],
+        "webhookId": "c02eb407-5547-4aa0-9ebf-46dab67b63b6",
+        "typeVersion": 2.2,
+        "executeOnce": true,
+        "credentials": {
+          "slackApi": {
+            "id": "O62AlOYXuAYiMczt",
+            "name": "Slack account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowId": "={{ $workflow.id }}",
+          "mode": "each",
+          "options": {}
+        },
+        "id": "9bcd0e21-2db9-4163-93ab-6aa4c94d74de",
+        "name": "Execute Workflow",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "position": [
+          1136,
+          160
+        ],
+        "typeVersion": 1,
+        "executeOnce": true,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U06DLM6U3JM",
+            "mode": "list",
+            "cachedResultName": "sidhartha"
+          },
+          "text": "=✅ Backup has completed - {{ $('n8n').all().length }} workflows have been processed.",
+          "otherOptions": {}
+        },
+        "id": "245b68eb-adc3-477b-ae00-273224e861da",
+        "name": "Completed Notification",
+        "type": "n8n-nodes-base.slack",
+        "position": [
+          1136,
+          -16
+        ],
+        "webhookId": "a0c6e8c8-5d71-40fa-b02b-63a7ed5726c4",
+        "executeOnce": true,
+        "typeVersion": 2.2,
+        "credentials": {
+          "slackApi": {
+            "id": "O62AlOYXuAYiMczt",
+            "name": "Slack account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U06DLM6U3JM",
+            "mode": "list",
+            "cachedResultName": "sidhartha"
+          },
+          "text": "=:x: Failed to backup {{ $('Loop Over Items').item.json.id }}",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "cd9309e6-8eef-4bbf-b704-c6781d22bacf",
+        "name": "Failed Flows",
+        "type": "n8n-nodes-base.slack",
+        "position": [
+          1344,
+          160
+        ],
+        "webhookId": "2a092edb-de12-490f-931b-34d70e7d7696",
+        "typeVersion": 2.2,
+        "executeOnce": false,
+        "credentials": {
+          "slackApi": {
+            "id": "O62AlOYXuAYiMczt",
+            "name": "Slack account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "On clicking 'execute'": {
+        "main": [
+          [
+            {
+              "node": "Starting Message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "n8n": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Completed Notification",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Execute Workflow",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Starting Message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Starting Message": {
+        "main": [
+          [
+            {
+              "node": "n8n",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execute Workflow": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Failed Flows",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Failed Flows": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "sid sid",
+    "name": "Version d9b3b9fa",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
