@@ -1,0 +1,2491 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-04T16:55:37.345Z",
+    "createdAt": "2026-02-04T16:55:34.727Z",
+    "versionId": "9083ef3c-8635-4474-9efe-843d5a2c76bf",
+    "workflowId": "FUuUyFPM-to0vKP7Pz-Lw",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "seo-content-webhook",
+          "options": {}
+        },
+        "id": "86ac9b76-4e43-4cea-a3ee-1033f9155047",
+        "name": "Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1.1,
+        "position": [
+          -1040,
+          816
+        ],
+        "webhookId": "90517383-9c60-43cb-95a1-0b8f192314e9"
+      },
+      {
+        "parameters": {
+          "jsCode": "const webhookPayload = $input.first().json;\nconst rowData = webhookPayload.body || webhookPayload;\nconst requiredFields = ['Project Name', 'Status', 'Sitemap URL', 'SEO Plan Doc Link'];\nconst missingFields = requiredFields.filter(field => !rowData[field] || !rowData[field].trim());\n\nif (missingFields.length > 0) {\n  throw new Error(`❌ WEBHOOK DATA VALIDATION FAILED: ${missingFields.join(', ')}`);\n}\n\nreturn [{\n  json: {\n    'Project Name': String(rowData['Project Name']).trim(),\n    'Status': String(rowData['Status']).trim(),\n    'Sitemap URL': String(rowData['Sitemap URL']).trim(),\n    'SEO Plan Doc Link': String(rowData['SEO Plan Doc Link']).trim(),\n    'Language Variant': String(rowData['Language Variant'] || 'UK English').trim(),\n    'Content Type': String(rowData['Content Type'] || 'New Page').trim(),\n    'On Chain References (other than homepage)': String(rowData['On Chain References (other than homepage)'] || '').trim(),\n    'External Reference Links for Blogs': String(rowData['External Reference Links for Blogs'] || '').trim(),\n    'Child Property URL': String(rowData['Child Property URL'] || '').trim(),\n    '_executionId': new Date().getTime(),\n    '_projectId': String(rowData['Project Name']).trim() + '_' + Date.now(),\n    'attemptNumber': 1,\n    'maxAttempts': 3\n  }\n}];\n"
+        },
+        "id": "8d280945-96df-445d-b983-ff4ae05b4009",
+        "name": "1. Transform Webhook Data",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -832,
+          816
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "status-check",
+                "leftValue": "={{ $json.Status }}",
+                "rightValue": "Ready for n8n",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "8b3e0047-9d36-45af-87c8-55efe8646b17",
+        "name": "2. Check Status Ready",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -640,
+          816
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1xOERr-4SRbZUOuQAYRF7TaAHNSuVT73x2hz6ml1cELc",
+            "mode": "list"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Project Name": "={{ $json['Project Name'] }}",
+              "Status": "Processing",
+              "Processing Timestamp": "={{ $now.toISO() }}"
+            },
+            "matchingColumns": [
+              "Project Name"
+            ]
+          },
+          "options": {}
+        },
+        "id": "073313fe-bbee-4c54-af04-4f3b3558ec38",
+        "name": "1.5 Update Status Processing",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -432,
+          816
+        ],
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const originalData = $('2. Check Status Ready').first().json;\n\nreturn [{\n  json: {\n    ...originalData,\n    projectName: originalData['Project Name'],\n    sitemapUrl: originalData['Sitemap URL'],\n    docLink: originalData['SEO Plan Doc Link'],\n    languageVariant: originalData['Language Variant'] || 'UK English',\n    contentType: originalData['Content Type'] || 'New Page',\n    onChainReferences: originalData['On Chain References (other than homepage)'] || '',\n    externalReferences: originalData['External Reference Links for Blogs'] || '',\n    childPropertyUrl: originalData['Child Property URL'] || '',\n    executionId: originalData._executionId,\n    attemptNumber: originalData.attemptNumber || 1,\n    maxAttempts: 3\n  }\n}];\n"
+        },
+        "id": "5a69536c-74e8-458d-af11-53779e505fd7",
+        "name": "3. Extract Sheet Data",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -240,
+          816
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "doc-link-exists",
+                "leftValue": "={{ $json.docLink }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "isNotEmpty"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "03999c2e-45d7-4514-96a1-249d90169b7f",
+        "name": "3.5 Filter Invalid Docs",
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2,
+        "position": [
+          -640,
+          496
+        ],
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.docLink.replace('edit', 'export?format=txt').replace('view', 'export?format=txt') }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googleDriveOAuth2Api",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "text/plain"
+              }
+            ]
+          },
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "text"
+              }
+            },
+            "timeout": 30000
+          }
+        },
+        "id": "44b45869-e204-4aaf-a0ed-9bf7754602bf",
+        "name": "4. HTTP Export Google Doc",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          16,
+          752
+        ],
+        "alwaysOutputData": false,
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "Sg0UXxCzOm54svRm",
+            "name": "Google Drive account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const inputData = $input.first();\n\nif (!inputData || !inputData.json) {\n  throw new Error('❌ GOOGLE DOC EXPORT FAILED: No data received');\n}\n\nlet rawContent = inputData.json.data || inputData.json.body || inputData.json;\n\nif (typeof rawContent !== 'string') {\n  rawContent = JSON.stringify(rawContent);\n}\n\nif (!rawContent || rawContent.length < 100) {\n  throw new Error(`❌ SEO PLAN DOCUMENT TOO SHORT: ${rawContent.length} chars`);\n}\n\nrawContent = rawContent.replace(/\\r/g, '').replace(/\\n{3,}/g, '\\n\\n').trim();\n\nconst keywordPatterns = [\n  /keywords?:([\\s\\S]*?)(?:target page|action pointers?)/i\n];\n\nconst keywords = [];\n\nfor (const pattern of keywordPatterns) {\n  const match = rawContent.match(pattern);\n  if (match) {\n    const keywordSection = match[1];\n    const lines = keywordSection.split('\\n').filter(l => l.trim());\n    \n    for (const line of lines) {\n      if (line.match(/target page|action pointers?|page title/i)) continue;\n      \n      const extracted = line\n        .split(/[,\\-]/)\n        .map(k => k.trim())\n        .filter(k => k.length >= 3);\n      \n      keywords.push(...extracted);\n    }\n    break;\n  }\n}\n\nconst uniqueKeywords = [...new Set(keywords)];\n\nif (uniqueKeywords.length === 0) {\n  throw new Error('❌ NO KEYWORDS FOUND IN SEO PLAN');\n}\n\nlet seoGuidelines = '';\nconst actionPointersMatch = rawContent.match(/action\\s*pointers?:([\\s\\S]*)/i);\n\nif (actionPointersMatch && actionPointersMatch[1].trim().length >= 50) {\n  seoGuidelines = actionPointersMatch[1].trim();\n}\n\nif (!seoGuidelines || seoGuidelines.length < 100) {\n  seoGuidelines = rawContent;\n}\n\nreturn [{\n  json: {\n    keywords: uniqueKeywords.slice(0, 15),\n    keywordsRaw: uniqueKeywords.join(', '),\n    seoGuidelines: seoGuidelines.substring(0, 2500),\n    fullDocContent: rawContent.substring(0, 4000)\n  }\n}];\n"
+        },
+        "id": "510c5152-0c57-4c0c-92fb-3f5c8701c527",
+        "name": "5. Parse SEO Plan Doc",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          224,
+          752
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const data = $input.first().json;\nconst keywords = data.keywords;\nconst seoGuidelines = data.seoGuidelines;\n\nconst validationErrors = [];\n\nif (!keywords || keywords.length === 0) {\n  validationErrors.push('No keywords extracted');\n}\n\nif (!seoGuidelines || seoGuidelines.length < 20) {\n  validationErrors.push('SEO guidelines too short');\n}\n\nif (validationErrors.length > 0) {\n  throw new Error(`❌ SEO PLAN VALIDATION FAILED: ${validationErrors.join('; ')}`);\n}\n\nreturn [{json: data}];\n"
+        },
+        "id": "ca962e5f-dbac-4167-9bdb-88f4fa3b8706",
+        "name": "5.5. Validate SEO Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          416,
+          752
+        ]
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.sitemapUrl }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0"
+              },
+              {
+                "name": "Accept",
+                "value": "application/xml,text/xml,*/*"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 30000
+          }
+        },
+        "id": "a303895a-67e8-4f90-a9bd-3acbea8a42a3",
+        "name": "6. HTTP Fetch Sitemap",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          0,
+          944
+        ],
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "jsCode": "const inputData = $input.first().json;\nconst statusCode = inputData.statusCode || 200;\n\nif (statusCode !== 200) {\n  throw new Error(`❌ SITEMAP FETCH FAILED: Status ${statusCode}`);\n}\n\nreturn [{json: inputData}];\n"
+        },
+        "id": "f1c22edd-de63-4a56-986d-7a112a044e89",
+        "name": "7. Validate Sitemap",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          208,
+          944
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const inputData = $input.first().json;\nconst htmlBody = inputData.body || inputData.data;\nconst urlPattern = /<loc>([^<]+)<\\/loc>/g;\nconst urls = [];\nlet match;\n\nwhile ((match = urlPattern.exec(htmlBody)) !== null) {\n  const url = match[1].trim();\n  if (url && url.startsWith('http')) {\n    urls.push({json: {url: url}});\n  }\n}\n\nif (urls.length === 0) {\n  throw new Error('❌ NO URLS FOUND IN SITEMAP');\n}\n\nconsole.log(`📊 Sitemap contains ${urls.length} URLs`);\n\nreturn urls;\n"
+        },
+        "id": "919fb05f-42b3-40b5-a75d-b6b55bed680b",
+        "name": "8. Parse Sitemap",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          416,
+          944
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const sitemapUrls = $input.all();\nconst sheetData = $('3. Extract Sheet Data').first().json;\n\nconst MAX_URLS = 12;\nconst allUrls = [];\n\nconst isHomepage = (url) => {\n  try {\n    const parsed = new URL(url);\n    return parsed.pathname === '/' || parsed.pathname === '';\n  } catch {\n    return false;\n  }\n};\n\nconst childPropertyUrl = (sheetData.childPropertyUrl || '').trim();\n\nif (childPropertyUrl && childPropertyUrl.startsWith('http')) {\n  allUrls.push({\n    json: {\n      url: childPropertyUrl,\n      source: 'childproperty',\n      priority: 'high',\n      weight: 0.6\n    }\n  });\n  console.log(`✅ Priority URL: Child Property (weight=0.6) - ${childPropertyUrl}`);\n} else {\n  const homepage = sitemapUrls.find(item => isHomepage(item.json.url));\n  if (homepage) {\n    allUrls.push({\n      json: {\n        url: homepage.json.url,\n        source: 'homepage',\n        priority: 'high',\n        weight: 0.6\n      }\n    });\n    console.log(`✅ Priority URL: Homepage (weight=0.6) - ${homepage.json.url}`);\n  }\n}\n\nconst remainingSlots = MAX_URLS - allUrls.length;\n\nconst remainingUrls = sitemapUrls.filter(item => {\n  const urlToCheck = item.json.url;\n  const alreadyAdded = allUrls.find(u => u.json.url === urlToCheck);\n  return !alreadyAdded;\n}).slice(0, remainingSlots);\n\nconst weightPerUrl = remainingSlots > 0 ? 0.4 / remainingSlots : 0;\n\nremainingUrls.forEach(item => {\n  allUrls.push({\n    json: {\n      url: item.json.url,\n      source: 'sitemap',\n      priority: 'normal',\n      weight: weightPerUrl\n    }\n  });\n});\n\nconsole.log(`📊 Weight Distribution: 1 priority (0.6) + ${remainingUrls.length} regular (${weightPerUrl.toFixed(4)} each) = ${0.6 + (remainingUrls.length * weightPerUrl).toFixed(4)}`);\nconsole.log(`✅ Total URLs selected: ${allUrls.length}/${MAX_URLS}`);\n\nreturn allUrls;\n"
+        },
+        "id": "5784cffb-65ab-4b88-9861-80cfd3f32f0d",
+        "name": "8.5. 🔒 Limit URLs (Max 12)",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -560,
+          1168
+        ]
+      },
+      {
+        "parameters": {
+          "batchSize": 3,
+          "options": {}
+        },
+        "id": "42ca486d-4d6a-45f8-ac4d-e7a5c0e1e5ea",
+        "name": "9.5. 📦 Split in Batches (3 URLs)",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -336,
+          1168
+        ]
+      },
+      {
+        "parameters": {
+          "url": "={{ 'https://r.jina.ai/' + $json.url }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "X-Return-Format",
+                "value": "markdown"
+              }
+            ]
+          },
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "text"
+              }
+            },
+            "timeout": 30000
+          }
+        },
+        "id": "11e9f308-0233-4176-97e2-b1df82964282",
+        "name": "10. Jina AI Scraper",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -144,
+          1264
+        ],
+        "retryOnFail": true,
+        "maxTries": 2,
+        "waitBetweenTries": 3000
+      },
+      {
+        "parameters": {
+          "amount": 2.5
+        },
+        "id": "524b025f-238b-4ae7-935c-38d2d57bc623",
+        "name": "10.5. ⏱️ Wait (Rate Limit)",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          64,
+          1280
+        ],
+        "webhookId": "rate-limit-delay"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nconst node9Data = $('8.5. 🔒 Limit URLs (Max 12)').all();\n\nconst results = items.map((item, index) => {\n  if (item.json.error) {\n    console.log(`⚠️ JINA ERROR: ${item.json.error.message || 'Unknown error'}`);\n     return {\n      json: {\n        url: 'unknown',\n        content: '',\n        processed: false,\n        error: item.json.error\n      }\n    };\n  }\n\n  const originalItem = node9Data[index]?.json;\n  const url = originalItem?.url || '';\n  const weight = originalItem?.weight || 0;\n  const source = originalItem?.source || 'unknown';\n  const priority = originalItem?.priority || 'normal';\n  \n  // Jina returns raw text/markdown in the body or data field\n  let content = item.json?.data || item.json || '';\n  \n  if (typeof content !== 'string') {\n    content = JSON.stringify(content);\n  }\n  \n  // Basic clean up of Jina footer if present\n  content = content.replace(/To use Jina reader.*/i, '');\n  \n  const isValid = content.length >= 150;\n  \n  if (isValid) {\n    console.log(`✅ SUCCESS JINA: ${url.substring(0, 50)}... (${content.length}ch)`);\n  }\n  \n  return {\n    json: {\n      url,\n      content,\n      processed: isValid,\n      weight,\n      source,\n      priority,\n      error: null,\n      charCount: content.length\n    }\n  };\n});\n\nreturn results;\n"
+        },
+        "id": "429d875e-008a-46d0-8585-687d1724b98e",
+        "name": "11. Validate Jina Output",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          256,
+          1280
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nconst validItems = items.filter(item => \n  item.json?.content && \n  item.json.content.length >= 100 && \n  item.json.processed === true\n);\n\nif (validItems.length === 0) {\n   console.log('⚠️ WARNING: NO VALID CONTENT IN THIS BATCH');\n}\n\nconsole.log(`✅ Validation: ${validItems.length}/${items.length} items valid`);\n\nreturn items;\n"
+        },
+        "id": "d43f2780-ad17-471b-a9aa-ab7db575ea0b",
+        "name": "11.5. Validate Content Extraction",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          416,
+          1456
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nlet priorityContent = '';\nlet regularContent = '';\nlet totalChars = 0;\n\nitems.forEach(item => {\n  const content = item.json?.content;\n  const weight = item.json?.weight || 0;\n  const priority = item.json?.priority;\n  const source = item.json?.source;\n  \n  if (!content || content.length < 100) return;\n  \n  if (weight >= 0.6 || priority === 'high') {\n    priorityContent += `\\n\\n[PRIMARY ${source.toUpperCase()}] ${content}`;\n    totalChars += content.length;\n  } else {\n    const truncated = content.substring(0, 600);\n    regularContent += `\\n\\n[Supporting] ${truncated}`;\n    totalChars += truncated.length;\n  }\n});\n\nconst aggregatedContent = priorityContent + regularContent;\n\nif (!aggregatedContent || aggregatedContent.length < 200) {\n  throw new Error('❌ AGGREGATED CONTENT TOO SHORT - SITE SCRAPING FAILED');\n}\n\nconst finalContent = aggregatedContent.substring(0, 15000);\n\nconsole.log(`📊 Aggregated: ${items.length} pages → ${totalChars} chars → ${finalContent.length} final chars`);\n\nreturn [{\n  json: {\n    aggregatedContent: finalContent,\n    pageCount: items.length,\n    totalChars: totalChars,\n    finalChars: finalContent.length\n  }\n}];\n"
+        },
+        "id": "12a364e5-51e2-49ef-bf6a-c89d9c4680ca",
+        "name": "12. Aggregate Content",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          608,
+          1072
+        ]
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineAll",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3,
+        "position": [
+          960,
+          528
+        ],
+        "id": "bb8dbb37-472c-4fe0-8d89-b3f7f363af53",
+        "name": "13. Merge SEO + Website Data"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ \"You are a Senior Copywriter's Research Assistant. \\n\\nYour Job: Analyze the raw text scraped from a hotel website and extract only the critical facts needed for a new landing page/blog.\\n\\nRAW TEXT:\\n\" + $json.aggregatedContent + \"\\n\\nOUTPUT FORMAT (Plain Text Bullet Points):\\n1. USPs (What makes this place unique?)\\n2. Vibe & Atmosphere (Romantic, Family, Business, Nature?)\\n3. Key Amenities (Pools, Spa name, Dining names, specific Room Types)\\n4. Location Highlights (Distance to key landmarks in km)\\n5. Target Audience\\n\\nKeep it concise. Max 600 words. No marketing fluff, just facts.\" }}",
+          "options": {}
+        },
+        "id": "ad6b7319-e16a-4b8c-ba3f-7495c29d1c9b",
+        "name": "13.5 Context Refiner",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.7,
+        "position": [
+          1168,
+          528
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const mergedData = $('13. Merge SEO + Website Data').first().json;\nconst refinedContext = $input.first().json.output || $input.first().json.text;\nconst sheetData = $('3. Extract Sheet Data').first().json;\n\nconst seoContextText = mergedData.seoGuidelines;\nconst keywords = mergedData.keywords;\n\nif (!seoContextText || seoContextText.length < 50) {\n  throw new Error('❌ MERGE FAILED: MISSING SEO CONTEXT');\n}\n\nconsole.log(`✅ Context merged and refined.`);\n\nreturn [{\n  json: {\n    primaryKeyword: keywords[0] || 'NA',\n    secondaryKeyword1: keywords[1] || 'NA',\n    secondaryKeyword2: keywords[2] || 'NA',\n    tertiaryKeyword: keywords[3] || 'NA',\n    seoGuidelines: seoContextText,\n    refinedContext: refinedContext,\n    languageVariant: sheetData.languageVariant,\n    contentType: sheetData.contentType,\n    keywords: keywords,\n    attemptNumber: sheetData.attemptNumber || 1,\n    previousIssues: [],\n    executionId: sheetData.executionId\n  }\n}];\n"
+        },
+        "id": "80806869-d5bd-4db6-8bdb-b678bafa293d",
+        "name": "14. Merge All Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1472,
+          512
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "let ctx;\nlet currentAttempt = 1;\n\ntry {\n  const retryInput = $('18.8. Inject Retry Context').first();\n  if (retryInput && retryInput.json) {\n    ctx = retryInput.json;\n    currentAttempt = ctx.attemptNumber || 1;\n    console.log('🔄 RETRY DETECTED: Attempt ' + currentAttempt + '/3');\n  } else {\n    throw new Error('No retry context');\n  }\n} catch (e) {\n  ctx = $input.first().json;\n  currentAttempt = ctx.attemptNumber || 1;\n  console.log('✨ FIRST RUN: Attempt ' + currentAttempt + '/3');\n}\n\nif (currentAttempt > 3) {\n  throw new Error('🛑 MAX RETRY LIMIT REACHED (3/3). QC failed on all attempts.');\n}\n\nconst contentType = ctx.contentType || 'New Page';\nconst isBlog = contentType.toLowerCase().includes('blog');\n\nconst wordCountRules = isBlog \n  ? { min: 800, max: 1200, target: '800-1200' }\n  : { min: 500, max: 700, target: '500-700' };\n\n// --- ADVANCED SEO GUIDELINES LOGIC ---\n\nlet structureInstructions = '';\n\nif (isBlog) {\n  structureInstructions = `\n  BLOG STRUCTURE:\n  1. Introduction: Set the scene before jumping into the main topic. (E.g. if writing about Dehradun attractions, start with Dehradun's vibe). Prepare readers.\n  2. Body: Follow the plan structure (H1 > H2 > H3). Include listed places. Add factually correct places if relevant. Avoid repeating words.\n  3. Conclusion: Brief summary (1-2 lines). Mention property USPs. Add anchor texts.\n  `;\n} else {\n  structureInstructions = `\n  NEW PAGE STRUCTURE:\n  1. Introduction: DO NOT start directly with the hotel. First, set context about the city/topic (e.g. business hub/weekend getaway). Then lead into how the hotel fits this context.\n  2. Body: Focus entirely on the property (Rooms, Facilities, Location, USPs). H2 for main sections, H3 for sub-points. Simple, factual, easy to read.\n  3. Conclusion: Summarise highlights (1-2 lines). Subtly market the hotel as the perfect choice.\n  `;\n}\n\nconst languageRules = `\n  LANGUAGE & STYLE RULES:\n  • Use Active Voice.\n  • Capitalization: Title Case for all Headers (omitting prepositions/articles). E.g. \"Deluxe Room With Balcony\".\n  • Hyphens: Do NOT hyphenate numbers/units (250 sq. ft., 23 km). Do NOT hyphenate \"King size bed\".\n  • Units: Use \"km\", \"sq. ft.\". Use numbers instead of words (Stay 3 nights, not three).\n  • Terms: Use \"55-inch\" (not 55\"), \"high tea\" (not hi-tea), \"Doctor on Call\", \"walking distance\" (if <2km).\n  • Dashes: Use em dashes (—) for pauses. Avoid en dashes.\n  • Tone: Simple, factual, no fluff. No \"Lorem Ipsum\".\n`;\n\nconst retryContext = (currentAttempt > 1)\n  ? '\\n\\n🔄 RETRY ATTEMPT ' + currentAttempt + '/3:\\nPrevious QC issues: ' + (ctx.previousIssues || []).join(', ') + '\\n\\nFIX THESE SPECIFIC ISSUES. All other fields must remain unchanged.\\n'\n  : '';\n\nconst prompt = `You are an expert SEO content writer API. You DO NOT speak. You ONLY output valid JSON.\n${retryContext}\n\nBRIEF:\n• Content Type: ${contentType}\n• Target Word Count: ${wordCountRules.target} words\n• Primary Keyword: ${ctx.primaryKeyword}\n• Secondary Keywords: ${ctx.secondaryKeyword1}, ${ctx.secondaryKeyword2}\n\nPROPERTY FACTS (Strictly adhere to this):\n${ctx.refinedContext}\n\n${structureInstructions}\n\n${languageRules}\n\nSTRICT NEGATIVE CONSTRAINTS (DO NOT USE):\n• Nestled, Boasts, Oasis, Haven, Tapestry, Symphony, Breathtaking, Testament, Moreover, Furthermore\n• Do not use extra hyphens in page names.\n\nOUTPUT STRUCTURE (JSON ONLY):\n{\n  \"metaTitle\": \"[Keyword 1 | Keyword 2 | Hotel Name] (Max 65 chars). Prioritise keywords.\",\n  \"metaDescription\": \"[Include keyword. Summary. Max 160 chars]\",\n  \"blogContent\": \"# [H1 - must contain Primary Keyword]\\n\\n[Intro Paragraphs]\\n\\n## [H2]\\n...\",\n  \"faqSection\": \"Q1: [Question]\\nA1: [Answer max 30 words]\\n... [5-8 Questions]\"\n}\n\nINTERNAL LINKING:\n• Prioritise interlinks in opening paragraph.\n• Link terms like 'rooms', 'dining', 'offers'.\n• Format: <a href=\"/rooms\">Rooms</a>\n\nSEO PLAN (Follow strictly):\n${ctx.seoGuidelines}\n\nOUTPUT VALID JSON NOW.`;\n\nreturn [{\n  json: {\n    prompt: prompt,\n    wordCountRules: wordCountRules,\n    primaryKeyword: ctx.primaryKeyword,\n    attemptNumber: currentAttempt,\n    previousIssues: ctx.previousIssues || []\n  }\n}];\n"
+        },
+        "id": "60283b00-5317-4591-b14e-e76bb75df0db",
+        "name": "15. Build AI Prompt",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1664,
+          512
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const ctx = $input.first().json;\nconst currentAttempt = ctx.attemptNumber || 1;\n\nif (currentAttempt > 3) {\n  throw new Error('🛑 MAX RETRY LIMIT REACHED (3/3)');\n}\n\nconst issues = (ctx.previousIssues || []).join('\\n- ');\n\nconst prompt = '🔄 RETRY ATTEMPT ' + currentAttempt + '/3\\n\\nYour previous JSON output FAILED QC:\\n\\nQC FAILURES:\\n- ' + issues + '\\n\\nFIX ONLY THESE ISSUES. Keep all other fields unchanged. OUTPUT CORRECTED JSON.';\n\nreturn [{\n  json: {\n    prompt: prompt,\n    attemptNumber: currentAttempt,\n    previousIssues: ctx.previousIssues\n  }\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1504,
+          1440
+        ],
+        "id": "292c2431-95a3-4bd1-9510-c0b42f9beac8",
+        "name": "15.5 Retry Prompt Gen"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.prompt }}",
+          "hasOutputParser": true,
+          "options": {}
+        },
+        "id": "c6253a81-3510-4f86-b3d7-83528d70d92b",
+        "name": "16. AI Generate Content",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "position": [
+          976,
+          912
+        ],
+        "typeVersion": 1.7,
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "jsCode": "const content = $input.first().json;\nlet parsed;\n\ntry {\n  parsed = typeof content === 'string' ? JSON.parse(content) : content;\n} catch (e) {\n  throw new Error('❌ Invalid JSON from AI');\n}\n\nif (parsed.output && typeof parsed.output === 'object') {\n  console.log('🔍 Detected nested output structure - extracting');\n  parsed = parsed.output;\n}\n\n// Redundant now, but kept as a safety net\nconst aiPhrases = /\\b(nestled|boasts|moreover|furthermore|in the heart of|look no further|when it comes to|breathtaking|exquisite|serene|majestic|vibrant|iconic)\\b/gi;\n\nfunction humanize(text) {\n  if (!text) return '';\n  return text\n    .replace(aiPhrases, match => {\n      const replacements = {\n        'nestled': 'located', 'boasts': 'has', 'moreover': 'also',\n        'furthermore': 'also', 'in the heart of': 'in', \n        'look no further': '', 'when it comes to': 'for'\n      };\n      return replacements[match.toLowerCase()] || '';\n    })\n    .replace(/\\s{2,}/g, ' ');\n}\n\nfunction filterHTML(text) {\n  if (!text) return '';\n  return text\n    .replace(/<!DOCTYPE[^>]*>/gi, '')\n    .replace(/<html[^>]*>/gi, '')\n    .replace(/<\\/html>/gi, '')\n    .replace(/<head[^>]*>[\\s\\S]*?<\\/head>/gi, '')\n    .replace(/<meta[^>]*>/gi, '')\n    .replace(/<body[^>]*>/gi, '')\n    .replace(/<\\/body>/gi, '');\n}\n\nparsed.metaTitle = humanize(filterHTML(parsed.metaTitle || '')).trim();\nparsed.metaDescription = humanize(filterHTML(parsed.metaDescription || '')).trim();\nparsed.blogContent = humanize(filterHTML(parsed.blogContent || ''));\nparsed.faqSection = humanize(filterHTML(parsed.faqSection || ''));\n\nconsole.log(`✅ Cleaned output: Title=${parsed.metaTitle.length}ch, Desc=${parsed.metaDescription.length}ch, Content=${parsed.blogContent.length}ch`);\n\nreturn [{json: parsed}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1328,
+          832
+        ],
+        "id": "8e1291b5-8425-433a-a1fa-eed9902856f8",
+        "name": "16.5 Format & Clean"
+      },
+      {
+        "parameters": {
+          "jsCode": "const qcIssues = [];\nconst qcWarnings = [];\nlet sourceNode = null;\nlet parsedContent = null;\nlet currentAttempt = 1;\n\ntry {\n  const retryNode = $('15.5 Retry Prompt Gen').last();\n  if (retryNode && retryNode.json && retryNode.json.attemptNumber) {\n    currentAttempt = retryNode.json.attemptNumber;\n    console.log('🔄 Context: Using Retry Node 15.5, Attempt ' + currentAttempt);\n  } else {\n    const promptNode = $('15. Build AI Prompt').first();\n    if (promptNode && promptNode.json && promptNode.json.attemptNumber) {\n      currentAttempt = promptNode.json.attemptNumber;\n      console.log('✨ Context: Using Initial Node 15, Attempt ' + currentAttempt);\n    }\n  }\n} catch (e) {\n  try {\n      const promptNode = $('15. Build AI Prompt').first();\n      currentAttempt = promptNode.json.attemptNumber || 1;\n  } catch (err) {\n      console.log('⚠️ Could not read attempt number from upstream nodes');\n  }\n}\n\ntry {\n  console.log('🔍 ATTEMPTING NODE 16.5 (Humanizer)');\n  const humanizedItem = $('16.5 Format & Clean').first();\n  \n  if (!humanizedItem || !humanizedItem.json) {\n    throw new Error('Node 16.5 returned null');\n  }\n  \n  parsedContent = humanizedItem.json;\n  sourceNode = '16.5 (Cleaned)';\n  console.log('✅ USING NODE 16.5 OUTPUT');\n  \n} catch (humanizerError) {\n  console.log('⚠️ NODE 16.5 FAILED: ' + humanizerError.message);\n  console.log('🔄 FALLING BACK TO NODE 16');\n  \n  try {\n    const writerItem = $('16. AI Generate Content').first();\n    \n    if (!writerItem || !writerItem.json) {\n      throw new Error('Node 16 returned null');\n    }\n    \n    if (writerItem.json.output && typeof writerItem.json.output === 'object') {\n      parsedContent = writerItem.json.output;\n      sourceNode = '16 (AI Generated)';\n      console.log('✅ USING NODE 16 OUTPUT');\n    } else {\n      throw new Error('Node 16 output missing or invalid');\n    }\n    \n  } catch (writerError) {\n    console.log('❌ NODE 16 ALSO FAILED: ' + writerError.message);\n    throw new Error('BOTH Node 16 and 16.5 failed. Check AI model or credentials.');\n  }\n}\n\nif (!parsedContent || typeof parsedContent !== 'object') {\n  throw new Error('❌ Parsed content is not a valid object');\n}\n\nconst metaTitle = (parsedContent.metaTitle || '').trim();\nconst metaDescription = (parsedContent.metaDescription || '').trim();\nconst blogContent = (parsedContent.blogContent || '').trim();\nconst faqSection = (parsedContent.faqSection || '').trim();\n\nconsole.log(`📊 QC Input - Attempt: ${currentAttempt}/3, Title: ${metaTitle.length}ch, Desc: ${metaDescription.length}ch, Content: ${blogContent.length}ch`);\n\n// --- ADVANCED SEO GUIDELINES QC ---\n\n// 1. Structure Tags Check\nif (/<html|<!DOCTYPE|<head|<meta/i.test(blogContent)) {\n  qcIssues.push('HTML structure tags detected in blogContent - must be markdown only');\n}\n\n// 2. Meta Title (Max 65 chars per guidelines)\nif (!metaTitle) {\n  qcIssues.push('Meta Title missing');\n} else {\n  if (metaTitle.length > 65) {\n    qcIssues.push(`Meta Title ${metaTitle.length} chars - EXCEEDS 65 CHAR LIMIT`);\n  } else if (metaTitle.length < 30) {\n    qcIssues.push(`Meta Title ${metaTitle.length} chars - TOO SHORT`);\n  }\n}\n\n// 3. Meta Description (Max 160 chars)\nif (!metaDescription) {\n  qcIssues.push('Meta Description missing');\n} else {\n  if (metaDescription.length > 160) {\n    qcIssues.push(`Meta Description ${metaDescription.length} chars - EXCEEDS 160 CHAR LIMIT`);\n  } else if (metaDescription.length < 100) {\n    qcIssues.push(`Meta Description ${metaDescription.length} chars - TOO SHORT`);\n  }\n}\n\n// 4. Forbidden Words (Strict Negative Constraints)\nconst forbiddenWords = ['nestled', 'boasts', 'oasis', 'haven', 'tapestry', 'symphony', 'breathtaking', 'testament', 'moreover', 'furthermore', 'hi-tea'];\nforbiddenWords.forEach(word => {\n  const regex = new RegExp(`\\\\b${word}\\\\b`, 'i');\n  if (regex.test(blogContent) || regex.test(metaDescription)) {\n    qcIssues.push(`FORBIDDEN WORD DETECTED: '${word}'`);\n  }\n});\n\n// 5. Word Count\nif (!blogContent || blogContent.length < 100) {\n  qcIssues.push('Blog content missing or too short');\n} else {\n  const cleanBlog = blogContent.split('\\n').filter(function(line) {\n    return !line.match(/^#{1,6}\\s/);\n  }).join('\\n').trim();\n  \n  const wordCount = cleanBlog.split(/\\s+/).length;\n  \n  let wordCountRules;\n  try {\n    wordCountRules = $('15. Build AI Prompt').first().json.wordCountRules || { min: 500, max: 650 };\n  } catch (e) {\n    wordCountRules = { min: 500, max: 650 };\n  }\n  \n  if (wordCount < wordCountRules.min * 0.9) {\n    qcIssues.push(`Word count ${wordCount} - TOO SHORT (min ${wordCountRules.min})`);\n  } \n  // Note: Relaxed upper limit check to avoid false failures on comprehensive guides\n}\n\n// 6. FAQ Count\nif (!faqSection || faqSection.length < 20) {\n  qcIssues.push('FAQ section missing');\n} else {\n  const faqPattern = /^\\s*Q\\d+\\s*:/gm;\n  const faqQuestions = faqSection.match(faqPattern) || [];\n  \n  if (faqQuestions.length < 5) {\n    qcIssues.push(`FAQ has ${faqQuestions.length} questions - MUST HAVE 5-8`);\n  }\n}\n\nconst qcPassed = qcIssues.length === 0;\nconst qcScore = Math.max(0, 100 - qcIssues.length * 20);\n\nconsole.log('========================================');\nconsole.log('QC RESULT: ' + (qcPassed ? '✅ PASSED' : '❌ FAILED'));\nconsole.log('Score: ' + qcScore + '/100');\nconsole.log('Issues: ' + (qcIssues.length > 0 ? qcIssues.join(' | ') : 'None'));\nconsole.log('========================================');\n\nlet keywords = [];\ntry {\n  keywords = $('14. Merge All Context').first().json.keywords || [];\n} catch (e) {\n  keywords = [];\n}\n\nreturn [{\n  json: {\n    qcPassed: qcPassed,\n    qcScore: qcScore,\n    qcIssues: qcIssues,\n    qcWarnings: qcWarnings,\n    attemptNumber: currentAttempt,\n    keywords: keywords,\n    sourceNode: sourceNode,\n    parsedOutput: {\n      metaTitle: metaTitle,\n      metaDescription: metaDescription,\n      blogContent: blogContent,\n      faqSection: faqSection\n    },\n    fullOutput: JSON.stringify(parsedContent, null, 2)\n  }\n}];\n"
+        },
+        "id": "16681e15-a853-4632-bb88-4093ed0450ac",
+        "name": "17. QC Check",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1504,
+          832
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "qc-check",
+                "leftValue": "={{ $json.qcPassed }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "cc124c5c-3359-46c8-a3aa-34b85c1ce654",
+        "name": "18. IF QC Passed?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          1376,
+          1104
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1xOERr-4SRbZUOuQAYRF7TaAHNSuVT73x2hz6ml1cELc",
+            "mode": "list"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Project Name": "={{ $('3. Extract Sheet Data').first().json.projectName }}",
+              "AI Generated Blog Post": "={{ $('17. QC Check').first().json.parsedOutput.blogContent }}",
+              "Meta Title": "={{ $('17. QC Check').first().json.parsedOutput.metaTitle }}",
+              "Meta Description": "={{ $('17. QC Check').first().json.parsedOutput.metaDescription }}",
+              "FAQ + Hyperlinks": "={{ $('17. QC Check').first().json.parsedOutput.faqSection }}",
+              "Keywords Used": "={{ $('17. QC Check').first().json.keywords.join(', ') }}",
+              "QC Status": "Passed",
+              "QC Feedback": "={{ '✅ Score: ' + $('17. QC Check').first().json.qcScore + '/100 | Attempt: ' + $('17. QC Check').first().json.attemptNumber + '/3 | Source: ' + $('17. QC Check').first().json.sourceNode }}",
+              "Processing Timestamp": "={{ $now.toISO() }}",
+              "Status": "Complete"
+            },
+            "matchingColumns": [
+              "Project Name"
+            ]
+          },
+          "options": {}
+        },
+        "id": "586d96fd-db2f-48fc-ad5a-73983bd188a2",
+        "name": "19. Update Sheet Success",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          2016,
+          768
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const qcResult = $input.first().json;\nconst MAX_ATTEMPTS = 3;\nconst currentAttempt = qcResult.attemptNumber || 1;\n\nconsole.log(`❌ QC FAILED at attempt ${currentAttempt}/3`);\n\nif (currentAttempt >= MAX_ATTEMPTS) {\n  console.log(`🛑 MAX ATTEMPTS REACHED (${currentAttempt}/${MAX_ATTEMPTS}) - STOPPING`);\n  return [{\n    json: {\n      attemptNumber: currentAttempt,\n      maxAttempts: MAX_ATTEMPTS,\n      shouldRetry: false,\n      previousIssues: qcResult.qcIssues || [],\n      qcScore: qcResult.qcScore || 0,\n      mergedContext: null\n    }\n  }];\n}\n\nconst nextAttempt = currentAttempt + 1;\nconst shouldRetry = true;\n\nconsole.log(`🔄 WILL RETRY: Attempt ${nextAttempt}/${MAX_ATTEMPTS}`);\n\nconst originalContext = $('14. Merge All Context').first().json;\n\nreturn [{\n  json: {\n    attemptNumber: nextAttempt,\n    maxAttempts: MAX_ATTEMPTS,\n    shouldRetry: shouldRetry,\n    previousIssues: qcResult.qcIssues || [],\n    qcScore: qcResult.qcScore || 0,\n    previousOutput: qcResult.fullOutput || '{}',\n    mergedContext: {\n      ...originalContext,\n      attemptNumber: nextAttempt,\n      previousIssues: qcResult.qcIssues || [],\n      previousOutput: qcResult.fullOutput || '{}'\n    }\n  }\n}];\n"
+        },
+        "id": "e9fb90a1-c511-40e5-84e3-11f746ce2e8c",
+        "name": "18.5. Retry Logic & Counter",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1632,
+          1120
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "retry-check",
+                "leftValue": "={{ $json.shouldRetry }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "2dd5cea2-48a4-46bb-9443-4428ebf3e26a",
+        "name": "18.6. IF Should Retry?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          1808,
+          1152
+        ]
+      },
+      {
+        "parameters": {
+          "amount": "={{ $json.attemptNumber === 2 ? 15 : ($json.attemptNumber === 3 ? 30 : 60) }}"
+        },
+        "id": "17b44e1f-8872-483b-8343-101a420858c7",
+        "name": "18.7. Wait (Exponential Backoff)",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1024,
+          1312
+        ],
+        "webhookId": "018489bd-981a-4b19-bc9c-da75e56938bc"
+      },
+      {
+        "parameters": {
+          "jsCode": "const retryData = $input.first().json;\n\nif (!retryData.mergedContext) {\n  throw new Error('🛑 RETRY ABORTED: No context to inject');\n}\n\nconsole.log(`✅ INJECTING RETRY CONTEXT: Attempt ${retryData.attemptNumber}/3`);\n\nreturn [{\n  json: retryData.mergedContext\n}];\n"
+        },
+        "id": "34475209-21f2-4246-8b21-f5cfdbb23ded",
+        "name": "18.8. Inject Retry Context",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1232,
+          1312
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1xOERr-4SRbZUOuQAYRF7TaAHNSuVT73x2hz6ml1cELc",
+            "mode": "list"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Project Name": "={{ $('3. Extract Sheet Data').first().json.projectName }}",
+              "QC Status": "={{ 'Failed - Max Attempts (' + $json.attemptNumber + '/3)' }}",
+              "QC Feedback": "={{ '❌ QC Score: ' + $json.qcScore + '/100 | Issues: ' + $json.previousIssues.join('; ') }}",
+              "Processing Timestamp": "={{ $now.toISO() }}",
+              "Status": "Manual Review Needed"
+            },
+            "matchingColumns": [
+              "Project Name"
+            ]
+          },
+          "options": {}
+        },
+        "id": "993de6ad-da93-46ce-963d-7f18dfdedc6a",
+        "name": "20. Update Sheet Failed (Max Retries)",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          2016,
+          976
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('14. Merge All Context').first().json.primaryKeyword + '-' + $('14. Merge All Context').first().json.executionId }}"
+        },
+        "id": "38cac59e-a482-4f89-b923-81bb661aeba9",
+        "name": "Window Buffer Memory",
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "position": [
+          1040,
+          1120
+        ],
+        "typeVersion": 1.3
+      },
+      {
+        "parameters": {
+          "model": "mistral-medium-2505",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          1120,
+          736
+        ],
+        "id": "9ec67b73-6300-4438-8831-2e8e4591766c",
+        "name": "Mistral Cloud Chat Model",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "zVNIevhGxwl3AEol",
+            "name": "Mistral Cloud account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "schemaType": "manual",
+          "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"metaTitle\": {\n      \"type\": \"string\",\n      \"description\": \"SEO-optimized meta title. Max 65 characters.\"\n    },\n    \"metaDescription\": {\n      \"type\": \"string\",\n      \"description\": \"SEO-optimized meta description. Max 160 characters.\"\n    },\n    \"blogContent\": {\n      \"type\": \"string\",\n      \"description\": \"Blog post content in markdown. No HTML.\"\n    },\n    \"faqSection\": {\n      \"type\": \"string\",\n      \"description\": \"FAQ section with 5-8 questions.\"\n    }\n  },\n  \"required\": [\"metaTitle\", \"metaDescription\", \"blogContent\", \"faqSection\"]\n}\n"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          1184,
+          1120
+        ],
+        "id": "3f580948-f08a-4beb-b32e-dc0c16d2b3b6",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {
+          "content": "\n\n\n\n\n\n# Replace codes with Native nodes\n\n## You are an expert N8N workflow designer. Create workflows using ONLY built-in N8N nodes from the official node library. Never use Code nodes, Function nodes, Execute Command nodes, or any custom JavaScript. Required guidelines: ∙ Use native nodes like HTTP Request, Webhook, Gmail, Slack, Google Sheets, Microsoft Excel, Airtable, Discord, Telegram ∙ For data manipulation use Set node, Split In Batches, Merge, Compare Datasets ∙ For logic use IF node, Switch node, Stop and Error node ∙ For scheduling use Cron node, Wait node, Schedule Trigger ∙ Always provide complete N8N JSON format ∙ Include proper node connections and parameter configurations ∙ Test workflows should be executable without custom code Create a workflow for: [insert your specific automation request here] ",
+          "height": 752,
+          "width": 752
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -192,
+          -96
+        ],
+        "id": "d9b6ec0a-624e-44e4-9e10-22a65d3255f7",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          880,
+          1120
+        ],
+        "id": "d8d0c23e-c3da-4e73-a2a1-e88f43c0b441",
+        "name": "path NO-OP"
+      },
+      {
+        "parameters": {
+          "content": "",
+          "height": 192,
+          "width": 208,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1952,
+          752
+        ],
+        "id": "85333e11-9c3c-4a62-9c8a-99a2dfb35a98",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "",
+          "height": 192,
+          "width": 208,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1952,
+          960
+        ],
+        "id": "753f79be-b1a7-47bf-bf10-33295c0e51ab",
+        "name": "Sticky Note2"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "1. Transform Webhook Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "1. Transform Webhook Data": {
+        "main": [
+          [
+            {
+              "node": "2. Check Status Ready",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "2. Check Status Ready": {
+        "main": [
+          [
+            {
+              "node": "1.5 Update Status Processing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "1.5 Update Status Processing": {
+        "main": [
+          [
+            {
+              "node": "3. Extract Sheet Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "3. Extract Sheet Data": {
+        "main": [
+          [
+            {
+              "node": "6. HTTP Fetch Sitemap",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "4. HTTP Export Google Doc",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "4. HTTP Export Google Doc": {
+        "main": [
+          [
+            {
+              "node": "5. Parse SEO Plan Doc",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "5. Parse SEO Plan Doc": {
+        "main": [
+          [
+            {
+              "node": "5.5. Validate SEO Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "5.5. Validate SEO Context": {
+        "main": [
+          [
+            {
+              "node": "13. Merge SEO + Website Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "6. HTTP Fetch Sitemap": {
+        "main": [
+          [
+            {
+              "node": "7. Validate Sitemap",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "7. Validate Sitemap": {
+        "main": [
+          [
+            {
+              "node": "8. Parse Sitemap",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "8. Parse Sitemap": {
+        "main": [
+          [
+            {
+              "node": "8.5. 🔒 Limit URLs (Max 12)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "8.5. 🔒 Limit URLs (Max 12)": {
+        "main": [
+          [
+            {
+              "node": "9.5. 📦 Split in Batches (3 URLs)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "9.5. 📦 Split in Batches (3 URLs)": {
+        "main": [
+          [
+            {
+              "node": "12. Aggregate Content",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "10. Jina AI Scraper",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "10. Jina AI Scraper": {
+        "main": [
+          [
+            {
+              "node": "10.5. ⏱️ Wait (Rate Limit)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "10.5. ⏱️ Wait (Rate Limit)": {
+        "main": [
+          [
+            {
+              "node": "11. Validate Jina Output",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "11. Validate Jina Output": {
+        "main": [
+          [
+            {
+              "node": "11.5. Validate Content Extraction",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "11.5. Validate Content Extraction": {
+        "main": [
+          [
+            {
+              "node": "9.5. 📦 Split in Batches (3 URLs)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "12. Aggregate Content": {
+        "main": [
+          [
+            {
+              "node": "13. Merge SEO + Website Data",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "13. Merge SEO + Website Data": {
+        "main": [
+          [
+            {
+              "node": "13.5 Context Refiner",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "13.5 Context Refiner": {
+        "main": [
+          [
+            {
+              "node": "14. Merge All Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "14. Merge All Context": {
+        "main": [
+          [
+            {
+              "node": "15. Build AI Prompt",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "15. Build AI Prompt": {
+        "main": [
+          [
+            {
+              "node": "16. AI Generate Content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "15.5 Retry Prompt Gen": {
+        "main": [
+          [
+            {
+              "node": "path NO-OP",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "16. AI Generate Content": {
+        "main": [
+          [
+            {
+              "node": "16.5 Format & Clean",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "16.5 Format & Clean": {
+        "main": [
+          [
+            {
+              "node": "17. QC Check",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "17. QC Check": {
+        "main": [
+          [
+            {
+              "node": "18. IF QC Passed?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "18. IF QC Passed?": {
+        "main": [
+          [
+            {
+              "node": "19. Update Sheet Success",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "18.5. Retry Logic & Counter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "18.5. Retry Logic & Counter": {
+        "main": [
+          [
+            {
+              "node": "18.6. IF Should Retry?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "18.6. IF Should Retry?": {
+        "main": [
+          [
+            {
+              "node": "18.7. Wait (Exponential Backoff)",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "20. Update Sheet Failed (Max Retries)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "18.7. Wait (Exponential Backoff)": {
+        "main": [
+          [
+            {
+              "node": "18.8. Inject Retry Context",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "18.8. Inject Retry Context": {
+        "main": [
+          [
+            {
+              "node": "15.5 Retry Prompt Gen",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Window Buffer Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "16. AI Generate Content",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mistral Cloud Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "13.5 Context Refiner",
+              "type": "ai_languageModel",
+              "index": 0
+            },
+            {
+              "node": "16. AI Generate Content",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "16. AI Generate Content",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "path NO-OP": {
+        "main": [
+          [
+            {
+              "node": "16. AI Generate Content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "sid sid",
+    "name": "Version 9083ef3c",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "9083ef3c-8635-4474-9efe-843d5a2c76bf",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "1. Transform Webhook Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. Transform Webhook Data": {
+      "main": [
+        [
+          {
+            "node": "2. Check Status Ready",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Check Status Ready": {
+      "main": [
+        [
+          {
+            "node": "1.5 Update Status Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1.5 Update Status Processing": {
+      "main": [
+        [
+          {
+            "node": "3. Extract Sheet Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Extract Sheet Data": {
+      "main": [
+        [
+          {
+            "node": "6. HTTP Fetch Sitemap",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "4. HTTP Export Google Doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. HTTP Export Google Doc": {
+      "main": [
+        [
+          {
+            "node": "5. Parse SEO Plan Doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Parse SEO Plan Doc": {
+      "main": [
+        [
+          {
+            "node": "5.5. Validate SEO Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5.5. Validate SEO Context": {
+      "main": [
+        [
+          {
+            "node": "13. Merge SEO + Website Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. HTTP Fetch Sitemap": {
+      "main": [
+        [
+          {
+            "node": "7. Validate Sitemap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7. Validate Sitemap": {
+      "main": [
+        [
+          {
+            "node": "8. Parse Sitemap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8. Parse Sitemap": {
+      "main": [
+        [
+          {
+            "node": "8.5. 🔒 Limit URLs (Max 12)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8.5. 🔒 Limit URLs (Max 12)": {
+      "main": [
+        [
+          {
+            "node": "9.5. 📦 Split in Batches (3 URLs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9.5. 📦 Split in Batches (3 URLs)": {
+      "main": [
+        [
+          {
+            "node": "12. Aggregate Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "10. Jina AI Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10. Jina AI Scraper": {
+      "main": [
+        [
+          {
+            "node": "10.5. ⏱️ Wait (Rate Limit)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10.5. ⏱️ Wait (Rate Limit)": {
+      "main": [
+        [
+          {
+            "node": "11. Validate Jina Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11. Validate Jina Output": {
+      "main": [
+        [
+          {
+            "node": "11.5. Validate Content Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11.5. Validate Content Extraction": {
+      "main": [
+        [
+          {
+            "node": "9.5. 📦 Split in Batches (3 URLs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12. Aggregate Content": {
+      "main": [
+        [
+          {
+            "node": "13. Merge SEO + Website Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "13. Merge SEO + Website Data": {
+      "main": [
+        [
+          {
+            "node": "13.5 Context Refiner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13.5 Context Refiner": {
+      "main": [
+        [
+          {
+            "node": "14. Merge All Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "14. Merge All Context": {
+      "main": [
+        [
+          {
+            "node": "15. Build AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15. Build AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "16. AI Generate Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15.5 Retry Prompt Gen": {
+      "main": [
+        [
+          {
+            "node": "path NO-OP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "16. AI Generate Content": {
+      "main": [
+        [
+          {
+            "node": "16.5 Format & Clean",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "16.5 Format & Clean": {
+      "main": [
+        [
+          {
+            "node": "17. QC Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "17. QC Check": {
+      "main": [
+        [
+          {
+            "node": "18. IF QC Passed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "18. IF QC Passed?": {
+      "main": [
+        [
+          {
+            "node": "19. Update Sheet Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "18.5. Retry Logic & Counter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "18.5. Retry Logic & Counter": {
+      "main": [
+        [
+          {
+            "node": "18.6. IF Should Retry?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "18.6. IF Should Retry?": {
+      "main": [
+        [
+          {
+            "node": "18.7. Wait (Exponential Backoff)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "20. Update Sheet Failed (Max Retries)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "18.7. Wait (Exponential Backoff)": {
+      "main": [
+        [
+          {
+            "node": "18.8. Inject Retry Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "18.8. Inject Retry Context": {
+      "main": [
+        [
+          {
+            "node": "15.5 Retry Prompt Gen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "16. AI Generate Content",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Cloud Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "13.5 Context Refiner",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "16. AI Generate Content",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "16. AI Generate Content",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "path NO-OP": {
+      "main": [
+        [
+          {
+            "node": "16. AI Generate Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-04T16:54:32.172Z",
+  "id": "FUuUyFPM-to0vKP7Pz-Lw",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SEO 4.2 (check - Jan 8 M.oD)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "seo-content-webhook",
+        "options": {}
+      },
+      "id": "86ac9b76-4e43-4cea-a3ee-1033f9155047",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1040,
+        816
+      ],
+      "webhookId": "90517383-9c60-43cb-95a1-0b8f192314e9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const webhookPayload = $input.first().json;\nconst rowData = webhookPayload.body || webhookPayload;\nconst requiredFields = ['Project Name', 'Status', 'Sitemap URL', 'SEO Plan Doc Link'];\nconst missingFields = requiredFields.filter(field => !rowData[field] || !rowData[field].trim());\n\nif (missingFields.length > 0) {\n  throw new Error(`❌ WEBHOOK DATA VALIDATION FAILED: ${missingFields.join(', ')}`);\n}\n\nreturn [{\n  json: {\n    'Project Name': String(rowData['Project Name']).trim(),\n    'Status': String(rowData['Status']).trim(),\n    'Sitemap URL': String(rowData['Sitemap URL']).trim(),\n    'SEO Plan Doc Link': String(rowData['SEO Plan Doc Link']).trim(),\n    'Language Variant': String(rowData['Language Variant'] || 'UK English').trim(),\n    'Content Type': String(rowData['Content Type'] || 'New Page').trim(),\n    'On Chain References (other than homepage)': String(rowData['On Chain References (other than homepage)'] || '').trim(),\n    'External Reference Links for Blogs': String(rowData['External Reference Links for Blogs'] || '').trim(),\n    'Child Property URL': String(rowData['Child Property URL'] || '').trim(),\n    '_executionId': new Date().getTime(),\n    '_projectId': String(rowData['Project Name']).trim() + '_' + Date.now(),\n    'attemptNumber': 1,\n    'maxAttempts': 3\n  }\n}];\n"
+      },
+      "id": "8d280945-96df-445d-b983-ff4ae05b4009",
+      "name": "1. Transform Webhook Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -832,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "status-check",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "Ready for n8n",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "8b3e0047-9d36-45af-87c8-55efe8646b17",
+      "name": "2. Check Status Ready",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -640,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1xOERr-4SRbZUOuQAYRF7TaAHNSuVT73x2hz6ml1cELc",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Project Name": "={{ $json['Project Name'] }}",
+            "Status": "Processing",
+            "Processing Timestamp": "={{ $now.toISO() }}"
+          },
+          "matchingColumns": [
+            "Project Name"
+          ]
+        },
+        "options": {}
+      },
+      "id": "073313fe-bbee-4c54-af04-4f3b3558ec38",
+      "name": "1.5 Update Status Processing",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -432,
+        816
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const originalData = $('2. Check Status Ready').first().json;\n\nreturn [{\n  json: {\n    ...originalData,\n    projectName: originalData['Project Name'],\n    sitemapUrl: originalData['Sitemap URL'],\n    docLink: originalData['SEO Plan Doc Link'],\n    languageVariant: originalData['Language Variant'] || 'UK English',\n    contentType: originalData['Content Type'] || 'New Page',\n    onChainReferences: originalData['On Chain References (other than homepage)'] || '',\n    externalReferences: originalData['External Reference Links for Blogs'] || '',\n    childPropertyUrl: originalData['Child Property URL'] || '',\n    executionId: originalData._executionId,\n    attemptNumber: originalData.attemptNumber || 1,\n    maxAttempts: 3\n  }\n}];\n"
+      },
+      "id": "5a69536c-74e8-458d-af11-53779e505fd7",
+      "name": "3. Extract Sheet Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "doc-link-exists",
+              "leftValue": "={{ $json.docLink }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "isNotEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "03999c2e-45d7-4514-96a1-249d90169b7f",
+      "name": "3.5 Filter Invalid Docs",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        -640,
+        496
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.docLink.replace('edit', 'export?format=txt').replace('view', 'export?format=txt') }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "text/plain"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "44b45869-e204-4aaf-a0ed-9bf7754602bf",
+      "name": "4. HTTP Export Google Doc",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        16,
+        752
+      ],
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Sg0UXxCzOm54svRm",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first();\n\nif (!inputData || !inputData.json) {\n  throw new Error('❌ GOOGLE DOC EXPORT FAILED: No data received');\n}\n\nlet rawContent = inputData.json.data || inputData.json.body || inputData.json;\n\nif (typeof rawContent !== 'string') {\n  rawContent = JSON.stringify(rawContent);\n}\n\nif (!rawContent || rawContent.length < 100) {\n  throw new Error(`❌ SEO PLAN DOCUMENT TOO SHORT: ${rawContent.length} chars`);\n}\n\nrawContent = rawContent.replace(/\\r/g, '').replace(/\\n{3,}/g, '\\n\\n').trim();\n\nconst keywordPatterns = [\n  /keywords?:([\\s\\S]*?)(?:target page|action pointers?)/i\n];\n\nconst keywords = [];\n\nfor (const pattern of keywordPatterns) {\n  const match = rawContent.match(pattern);\n  if (match) {\n    const keywordSection = match[1];\n    const lines = keywordSection.split('\\n').filter(l => l.trim());\n    \n    for (const line of lines) {\n      if (line.match(/target page|action pointers?|page title/i)) continue;\n      \n      const extracted = line\n        .split(/[,\\-]/)\n        .map(k => k.trim())\n        .filter(k => k.length >= 3);\n      \n      keywords.push(...extracted);\n    }\n    break;\n  }\n}\n\nconst uniqueKeywords = [...new Set(keywords)];\n\nif (uniqueKeywords.length === 0) {\n  throw new Error('❌ NO KEYWORDS FOUND IN SEO PLAN');\n}\n\nlet seoGuidelines = '';\nconst actionPointersMatch = rawContent.match(/action\\s*pointers?:([\\s\\S]*)/i);\n\nif (actionPointersMatch && actionPointersMatch[1].trim().length >= 50) {\n  seoGuidelines = actionPointersMatch[1].trim();\n}\n\nif (!seoGuidelines || seoGuidelines.length < 100) {\n  seoGuidelines = rawContent;\n}\n\nreturn [{\n  json: {\n    keywords: uniqueKeywords.slice(0, 15),\n    keywordsRaw: uniqueKeywords.join(', '),\n    seoGuidelines: seoGuidelines.substring(0, 2500),\n    fullDocContent: rawContent.substring(0, 4000)\n  }\n}];\n"
+      },
+      "id": "510c5152-0c57-4c0c-92fb-3f5c8701c527",
+      "name": "5. Parse SEO Plan Doc",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        752
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst keywords = data.keywords;\nconst seoGuidelines = data.seoGuidelines;\n\nconst validationErrors = [];\n\nif (!keywords || keywords.length === 0) {\n  validationErrors.push('No keywords extracted');\n}\n\nif (!seoGuidelines || seoGuidelines.length < 20) {\n  validationErrors.push('SEO guidelines too short');\n}\n\nif (validationErrors.length > 0) {\n  throw new Error(`❌ SEO PLAN VALIDATION FAILED: ${validationErrors.join('; ')}`);\n}\n\nreturn [{json: data}];\n"
+      },
+      "id": "ca962e5f-dbac-4167-9bdb-88f4fa3b8706",
+      "name": "5.5. Validate SEO Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        752
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.sitemapUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0"
+            },
+            {
+              "name": "Accept",
+              "value": "application/xml,text/xml,*/*"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "a303895a-67e8-4f90-a9bd-3acbea8a42a3",
+      "name": "6. HTTP Fetch Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        0,
+        944
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\nconst statusCode = inputData.statusCode || 200;\n\nif (statusCode !== 200) {\n  throw new Error(`❌ SITEMAP FETCH FAILED: Status ${statusCode}`);\n}\n\nreturn [{json: inputData}];\n"
+      },
+      "id": "f1c22edd-de63-4a56-986d-7a112a044e89",
+      "name": "7. Validate Sitemap",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        944
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\nconst htmlBody = inputData.body || inputData.data;\nconst urlPattern = /<loc>([^<]+)<\\/loc>/g;\nconst urls = [];\nlet match;\n\nwhile ((match = urlPattern.exec(htmlBody)) !== null) {\n  const url = match[1].trim();\n  if (url && url.startsWith('http')) {\n    urls.push({json: {url: url}});\n  }\n}\n\nif (urls.length === 0) {\n  throw new Error('❌ NO URLS FOUND IN SITEMAP');\n}\n\nconsole.log(`📊 Sitemap contains ${urls.length} URLs`);\n\nreturn urls;\n"
+      },
+      "id": "919fb05f-42b3-40b5-a75d-b6b55bed680b",
+      "name": "8. Parse Sitemap",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        944
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const sitemapUrls = $input.all();\nconst sheetData = $('3. Extract Sheet Data').first().json;\n\nconst MAX_URLS = 12;\nconst allUrls = [];\n\nconst isHomepage = (url) => {\n  try {\n    const parsed = new URL(url);\n    return parsed.pathname === '/' || parsed.pathname === '';\n  } catch {\n    return false;\n  }\n};\n\nconst childPropertyUrl = (sheetData.childPropertyUrl || '').trim();\n\nif (childPropertyUrl && childPropertyUrl.startsWith('http')) {\n  allUrls.push({\n    json: {\n      url: childPropertyUrl,\n      source: 'childproperty',\n      priority: 'high',\n      weight: 0.6\n    }\n  });\n  console.log(`✅ Priority URL: Child Property (weight=0.6) - ${childPropertyUrl}`);\n} else {\n  const homepage = sitemapUrls.find(item => isHomepage(item.json.url));\n  if (homepage) {\n    allUrls.push({\n      json: {\n        url: homepage.json.url,\n        source: 'homepage',\n        priority: 'high',\n        weight: 0.6\n      }\n    });\n    console.log(`✅ Priority URL: Homepage (weight=0.6) - ${homepage.json.url}`);\n  }\n}\n\nconst remainingSlots = MAX_URLS - allUrls.length;\n\nconst remainingUrls = sitemapUrls.filter(item => {\n  const urlToCheck = item.json.url;\n  const alreadyAdded = allUrls.find(u => u.json.url === urlToCheck);\n  return !alreadyAdded;\n}).slice(0, remainingSlots);\n\nconst weightPerUrl = remainingSlots > 0 ? 0.4 / remainingSlots : 0;\n\nremainingUrls.forEach(item => {\n  allUrls.push({\n    json: {\n      url: item.json.url,\n      source: 'sitemap',\n      priority: 'normal',\n      weight: weightPerUrl\n    }\n  });\n});\n\nconsole.log(`📊 Weight Distribution: 1 priority (0.6) + ${remainingUrls.length} regular (${weightPerUrl.toFixed(4)} each) = ${0.6 + (remainingUrls.length * weightPerUrl).toFixed(4)}`);\nconsole.log(`✅ Total URLs selected: ${allUrls.length}/${MAX_URLS}`);\n\nreturn allUrls;\n"
+      },
+      "id": "5784cffb-65ab-4b88-9861-80cfd3f32f0d",
+      "name": "8.5. 🔒 Limit URLs (Max 12)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        1168
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 3,
+        "options": {}
+      },
+      "id": "42ca486d-4d6a-45f8-ac4d-e7a5c0e1e5ea",
+      "name": "9.5. 📦 Split in Batches (3 URLs)",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -336,
+        1168
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://r.jina.ai/' + $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Return-Format",
+              "value": "markdown"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "11e9f308-0233-4176-97e2-b1df82964282",
+      "name": "10. Jina AI Scraper",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -144,
+        1264
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "amount": 2.5
+      },
+      "id": "524b025f-238b-4ae7-935c-38d2d57bc623",
+      "name": "10.5. ⏱️ Wait (Rate Limit)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        1280
+      ],
+      "webhookId": "rate-limit-delay"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst node9Data = $('8.5. 🔒 Limit URLs (Max 12)').all();\n\nconst results = items.map((item, index) => {\n  if (item.json.error) {\n    console.log(`⚠️ JINA ERROR: ${item.json.error.message || 'Unknown error'}`);\n     return {\n      json: {\n        url: 'unknown',\n        content: '',\n        processed: false,\n        error: item.json.error\n      }\n    };\n  }\n\n  const originalItem = node9Data[index]?.json;\n  const url = originalItem?.url || '';\n  const weight = originalItem?.weight || 0;\n  const source = originalItem?.source || 'unknown';\n  const priority = originalItem?.priority || 'normal';\n  \n  // Jina returns raw text/markdown in the body or data field\n  let content = item.json?.data || item.json || '';\n  \n  if (typeof content !== 'string') {\n    content = JSON.stringify(content);\n  }\n  \n  // Basic clean up of Jina footer if present\n  content = content.replace(/To use Jina reader.*/i, '');\n  \n  const isValid = content.length >= 150;\n  \n  if (isValid) {\n    console.log(`✅ SUCCESS JINA: ${url.substring(0, 50)}... (${content.length}ch)`);\n  }\n  \n  return {\n    json: {\n      url,\n      content,\n      processed: isValid,\n      weight,\n      source,\n      priority,\n      error: null,\n      charCount: content.length\n    }\n  };\n});\n\nreturn results;\n"
+      },
+      "id": "429d875e-008a-46d0-8585-687d1724b98e",
+      "name": "11. Validate Jina Output",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        1280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst validItems = items.filter(item => \n  item.json?.content && \n  item.json.content.length >= 100 && \n  item.json.processed === true\n);\n\nif (validItems.length === 0) {\n   console.log('⚠️ WARNING: NO VALID CONTENT IN THIS BATCH');\n}\n\nconsole.log(`✅ Validation: ${validItems.length}/${items.length} items valid`);\n\nreturn items;\n"
+      },
+      "id": "d43f2780-ad17-471b-a9aa-ab7db575ea0b",
+      "name": "11.5. Validate Content Extraction",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        1456
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nlet priorityContent = '';\nlet regularContent = '';\nlet totalChars = 0;\n\nitems.forEach(item => {\n  const content = item.json?.content;\n  const weight = item.json?.weight || 0;\n  const priority = item.json?.priority;\n  const source = item.json?.source;\n  \n  if (!content || content.length < 100) return;\n  \n  if (weight >= 0.6 || priority === 'high') {\n    priorityContent += `\\n\\n[PRIMARY ${source.toUpperCase()}] ${content}`;\n    totalChars += content.length;\n  } else {\n    const truncated = content.substring(0, 600);\n    regularContent += `\\n\\n[Supporting] ${truncated}`;\n    totalChars += truncated.length;\n  }\n});\n\nconst aggregatedContent = priorityContent + regularContent;\n\nif (!aggregatedContent || aggregatedContent.length < 200) {\n  throw new Error('❌ AGGREGATED CONTENT TOO SHORT - SITE SCRAPING FAILED');\n}\n\nconst finalContent = aggregatedContent.substring(0, 15000);\n\nconsole.log(`📊 Aggregated: ${items.length} pages → ${totalChars} chars → ${finalContent.length} final chars`);\n\nreturn [{\n  json: {\n    aggregatedContent: finalContent,\n    pageCount: items.length,\n    totalChars: totalChars,\n    finalChars: finalContent.length\n  }\n}];\n"
+      },
+      "id": "12a364e5-51e2-49ef-bf6a-c89d9c4680ca",
+      "name": "12. Aggregate Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        1072
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        960,
+        528
+      ],
+      "id": "bb8dbb37-472c-4fe0-8d89-b3f7f363af53",
+      "name": "13. Merge SEO + Website Data"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ \"You are a Senior Copywriter's Research Assistant. \\n\\nYour Job: Analyze the raw text scraped from a hotel website and extract only the critical facts needed for a new landing page/blog.\\n\\nRAW TEXT:\\n\" + $json.aggregatedContent + \"\\n\\nOUTPUT FORMAT (Plain Text Bullet Points):\\n1. USPs (What makes this place unique?)\\n2. Vibe & Atmosphere (Romantic, Family, Business, Nature?)\\n3. Key Amenities (Pools, Spa name, Dining names, specific Room Types)\\n4. Location Highlights (Distance to key landmarks in km)\\n5. Target Audience\\n\\nKeep it concise. Max 600 words. No marketing fluff, just facts.\" }}",
+        "options": {}
+      },
+      "id": "ad6b7319-e16a-4b8c-ba3f-7495c29d1c9b",
+      "name": "13.5 Context Refiner",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1168,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const mergedData = $('13. Merge SEO + Website Data').first().json;\nconst refinedContext = $input.first().json.output || $input.first().json.text;\nconst sheetData = $('3. Extract Sheet Data').first().json;\n\nconst seoContextText = mergedData.seoGuidelines;\nconst keywords = mergedData.keywords;\n\nif (!seoContextText || seoContextText.length < 50) {\n  throw new Error('❌ MERGE FAILED: MISSING SEO CONTEXT');\n}\n\nconsole.log(`✅ Context merged and refined.`);\n\nreturn [{\n  json: {\n    primaryKeyword: keywords[0] || 'NA',\n    secondaryKeyword1: keywords[1] || 'NA',\n    secondaryKeyword2: keywords[2] || 'NA',\n    tertiaryKeyword: keywords[3] || 'NA',\n    seoGuidelines: seoContextText,\n    refinedContext: refinedContext,\n    languageVariant: sheetData.languageVariant,\n    contentType: sheetData.contentType,\n    keywords: keywords,\n    attemptNumber: sheetData.attemptNumber || 1,\n    previousIssues: [],\n    executionId: sheetData.executionId\n  }\n}];\n"
+      },
+      "id": "80806869-d5bd-4db6-8bdb-b678bafa293d",
+      "name": "14. Merge All Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "let ctx;\nlet currentAttempt = 1;\n\ntry {\n  const retryInput = $('18.8. Inject Retry Context').first();\n  if (retryInput && retryInput.json) {\n    ctx = retryInput.json;\n    currentAttempt = ctx.attemptNumber || 1;\n    console.log('🔄 RETRY DETECTED: Attempt ' + currentAttempt + '/3');\n  } else {\n    throw new Error('No retry context');\n  }\n} catch (e) {\n  ctx = $input.first().json;\n  currentAttempt = ctx.attemptNumber || 1;\n  console.log('✨ FIRST RUN: Attempt ' + currentAttempt + '/3');\n}\n\nif (currentAttempt > 3) {\n  throw new Error('🛑 MAX RETRY LIMIT REACHED (3/3). QC failed on all attempts.');\n}\n\nconst contentType = ctx.contentType || 'New Page';\nconst isBlog = contentType.toLowerCase().includes('blog');\n\nconst wordCountRules = isBlog \n  ? { min: 800, max: 1200, target: '800-1200' }\n  : { min: 500, max: 700, target: '500-700' };\n\n// --- ADVANCED SEO GUIDELINES LOGIC ---\n\nlet structureInstructions = '';\n\nif (isBlog) {\n  structureInstructions = `\n  BLOG STRUCTURE:\n  1. Introduction: Set the scene before jumping into the main topic. (E.g. if writing about Dehradun attractions, start with Dehradun's vibe). Prepare readers.\n  2. Body: Follow the plan structure (H1 > H2 > H3). Include listed places. Add factually correct places if relevant. Avoid repeating words.\n  3. Conclusion: Brief summary (1-2 lines). Mention property USPs. Add anchor texts.\n  `;\n} else {\n  structureInstructions = `\n  NEW PAGE STRUCTURE:\n  1. Introduction: DO NOT start directly with the hotel. First, set context about the city/topic (e.g. business hub/weekend getaway). Then lead into how the hotel fits this context.\n  2. Body: Focus entirely on the property (Rooms, Facilities, Location, USPs). H2 for main sections, H3 for sub-points. Simple, factual, easy to read.\n  3. Conclusion: Summarise highlights (1-2 lines). Subtly market the hotel as the perfect choice.\n  `;\n}\n\nconst languageRules = `\n  LANGUAGE & STYLE RULES:\n  • Use Active Voice.\n  • Capitalization: Title Case for all Headers (omitting prepositions/articles). E.g. \"Deluxe Room With Balcony\".\n  • Hyphens: Do NOT hyphenate numbers/units (250 sq. ft., 23 km). Do NOT hyphenate \"King size bed\".\n  • Units: Use \"km\", \"sq. ft.\". Use numbers instead of words (Stay 3 nights, not three).\n  • Terms: Use \"55-inch\" (not 55\"), \"high tea\" (not hi-tea), \"Doctor on Call\", \"walking distance\" (if <2km).\n  • Dashes: Use em dashes (—) for pauses. Avoid en dashes.\n  • Tone: Simple, factual, no fluff. No \"Lorem Ipsum\".\n`;\n\nconst retryContext = (currentAttempt > 1)\n  ? '\\n\\n🔄 RETRY ATTEMPT ' + currentAttempt + '/3:\\nPrevious QC issues: ' + (ctx.previousIssues || []).join(', ') + '\\n\\nFIX THESE SPECIFIC ISSUES. All other fields must remain unchanged.\\n'\n  : '';\n\nconst prompt = `You are an expert SEO content writer API. You DO NOT speak. You ONLY output valid JSON.\n${retryContext}\n\nBRIEF:\n• Content Type: ${contentType}\n• Target Word Count: ${wordCountRules.target} words\n• Primary Keyword: ${ctx.primaryKeyword}\n• Secondary Keywords: ${ctx.secondaryKeyword1}, ${ctx.secondaryKeyword2}\n\nPROPERTY FACTS (Strictly adhere to this):\n${ctx.refinedContext}\n\n${structureInstructions}\n\n${languageRules}\n\nSTRICT NEGATIVE CONSTRAINTS (DO NOT USE):\n• Nestled, Boasts, Oasis, Haven, Tapestry, Symphony, Breathtaking, Testament, Moreover, Furthermore\n• Do not use extra hyphens in page names.\n\nOUTPUT STRUCTURE (JSON ONLY):\n{\n  \"metaTitle\": \"[Keyword 1 | Keyword 2 | Hotel Name] (Max 65 chars). Prioritise keywords.\",\n  \"metaDescription\": \"[Include keyword. Summary. Max 160 chars]\",\n  \"blogContent\": \"# [H1 - must contain Primary Keyword]\\n\\n[Intro Paragraphs]\\n\\n## [H2]\\n...\",\n  \"faqSection\": \"Q1: [Question]\\nA1: [Answer max 30 words]\\n... [5-8 Questions]\"\n}\n\nINTERNAL LINKING:\n• Prioritise interlinks in opening paragraph.\n• Link terms like 'rooms', 'dining', 'offers'.\n• Format: <a href=\"/rooms\">Rooms</a>\n\nSEO PLAN (Follow strictly):\n${ctx.seoGuidelines}\n\nOUTPUT VALID JSON NOW.`;\n\nreturn [{\n  json: {\n    prompt: prompt,\n    wordCountRules: wordCountRules,\n    primaryKeyword: ctx.primaryKeyword,\n    attemptNumber: currentAttempt,\n    previousIssues: ctx.previousIssues || []\n  }\n}];\n"
+      },
+      "id": "60283b00-5317-4591-b14e-e76bb75df0db",
+      "name": "15. Build AI Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const ctx = $input.first().json;\nconst currentAttempt = ctx.attemptNumber || 1;\n\nif (currentAttempt > 3) {\n  throw new Error('🛑 MAX RETRY LIMIT REACHED (3/3)');\n}\n\nconst issues = (ctx.previousIssues || []).join('\\n- ');\n\nconst prompt = '🔄 RETRY ATTEMPT ' + currentAttempt + '/3\\n\\nYour previous JSON output FAILED QC:\\n\\nQC FAILURES:\\n- ' + issues + '\\n\\nFIX ONLY THESE ISSUES. Keep all other fields unchanged. OUTPUT CORRECTED JSON.';\n\nreturn [{\n  json: {\n    prompt: prompt,\n    attemptNumber: currentAttempt,\n    previousIssues: ctx.previousIssues\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1504,
+        1440
+      ],
+      "id": "292c2431-95a3-4bd1-9510-c0b42f9beac8",
+      "name": "15.5 Retry Prompt Gen"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "id": "c6253a81-3510-4f86-b3d7-83528d70d92b",
+      "name": "16. AI Generate Content",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        976,
+        912
+      ],
+      "typeVersion": 1.7,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $input.first().json;\nlet parsed;\n\ntry {\n  parsed = typeof content === 'string' ? JSON.parse(content) : content;\n} catch (e) {\n  throw new Error('❌ Invalid JSON from AI');\n}\n\nif (parsed.output && typeof parsed.output === 'object') {\n  console.log('🔍 Detected nested output structure - extracting');\n  parsed = parsed.output;\n}\n\n// Redundant now, but kept as a safety net\nconst aiPhrases = /\\b(nestled|boasts|moreover|furthermore|in the heart of|look no further|when it comes to|breathtaking|exquisite|serene|majestic|vibrant|iconic)\\b/gi;\n\nfunction humanize(text) {\n  if (!text) return '';\n  return text\n    .replace(aiPhrases, match => {\n      const replacements = {\n        'nestled': 'located', 'boasts': 'has', 'moreover': 'also',\n        'furthermore': 'also', 'in the heart of': 'in', \n        'look no further': '', 'when it comes to': 'for'\n      };\n      return replacements[match.toLowerCase()] || '';\n    })\n    .replace(/\\s{2,}/g, ' ');\n}\n\nfunction filterHTML(text) {\n  if (!text) return '';\n  return text\n    .replace(/<!DOCTYPE[^>]*>/gi, '')\n    .replace(/<html[^>]*>/gi, '')\n    .replace(/<\\/html>/gi, '')\n    .replace(/<head[^>]*>[\\s\\S]*?<\\/head>/gi, '')\n    .replace(/<meta[^>]*>/gi, '')\n    .replace(/<body[^>]*>/gi, '')\n    .replace(/<\\/body>/gi, '');\n}\n\nparsed.metaTitle = humanize(filterHTML(parsed.metaTitle || '')).trim();\nparsed.metaDescription = humanize(filterHTML(parsed.metaDescription || '')).trim();\nparsed.blogContent = humanize(filterHTML(parsed.blogContent || ''));\nparsed.faqSection = humanize(filterHTML(parsed.faqSection || ''));\n\nconsole.log(`✅ Cleaned output: Title=${parsed.metaTitle.length}ch, Desc=${parsed.metaDescription.length}ch, Content=${parsed.blogContent.length}ch`);\n\nreturn [{json: parsed}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        832
+      ],
+      "id": "8e1291b5-8425-433a-a1fa-eed9902856f8",
+      "name": "16.5 Format & Clean"
+    },
+    {
+      "parameters": {
+        "jsCode": "const qcIssues = [];\nconst qcWarnings = [];\nlet sourceNode = null;\nlet parsedContent = null;\nlet currentAttempt = 1;\n\ntry {\n  const retryNode = $('15.5 Retry Prompt Gen').last();\n  if (retryNode && retryNode.json && retryNode.json.attemptNumber) {\n    currentAttempt = retryNode.json.attemptNumber;\n    console.log('🔄 Context: Using Retry Node 15.5, Attempt ' + currentAttempt);\n  } else {\n    const promptNode = $('15. Build AI Prompt').first();\n    if (promptNode && promptNode.json && promptNode.json.attemptNumber) {\n      currentAttempt = promptNode.json.attemptNumber;\n      console.log('✨ Context: Using Initial Node 15, Attempt ' + currentAttempt);\n    }\n  }\n} catch (e) {\n  try {\n      const promptNode = $('15. Build AI Prompt').first();\n      currentAttempt = promptNode.json.attemptNumber || 1;\n  } catch (err) {\n      console.log('⚠️ Could not read attempt number from upstream nodes');\n  }\n}\n\ntry {\n  console.log('🔍 ATTEMPTING NODE 16.5 (Humanizer)');\n  const humanizedItem = $('16.5 Format & Clean').first();\n  \n  if (!humanizedItem || !humanizedItem.json) {\n    throw new Error('Node 16.5 returned null');\n  }\n  \n  parsedContent = humanizedItem.json;\n  sourceNode = '16.5 (Cleaned)';\n  console.log('✅ USING NODE 16.5 OUTPUT');\n  \n} catch (humanizerError) {\n  console.log('⚠️ NODE 16.5 FAILED: ' + humanizerError.message);\n  console.log('🔄 FALLING BACK TO NODE 16');\n  \n  try {\n    const writerItem = $('16. AI Generate Content').first();\n    \n    if (!writerItem || !writerItem.json) {\n      throw new Error('Node 16 returned null');\n    }\n    \n    if (writerItem.json.output && typeof writerItem.json.output === 'object') {\n      parsedContent = writerItem.json.output;\n      sourceNode = '16 (AI Generated)';\n      console.log('✅ USING NODE 16 OUTPUT');\n    } else {\n      throw new Error('Node 16 output missing or invalid');\n    }\n    \n  } catch (writerError) {\n    console.log('❌ NODE 16 ALSO FAILED: ' + writerError.message);\n    throw new Error('BOTH Node 16 and 16.5 failed. Check AI model or credentials.');\n  }\n}\n\nif (!parsedContent || typeof parsedContent !== 'object') {\n  throw new Error('❌ Parsed content is not a valid object');\n}\n\nconst metaTitle = (parsedContent.metaTitle || '').trim();\nconst metaDescription = (parsedContent.metaDescription || '').trim();\nconst blogContent = (parsedContent.blogContent || '').trim();\nconst faqSection = (parsedContent.faqSection || '').trim();\n\nconsole.log(`📊 QC Input - Attempt: ${currentAttempt}/3, Title: ${metaTitle.length}ch, Desc: ${metaDescription.length}ch, Content: ${blogContent.length}ch`);\n\n// --- ADVANCED SEO GUIDELINES QC ---\n\n// 1. Structure Tags Check\nif (/<html|<!DOCTYPE|<head|<meta/i.test(blogContent)) {\n  qcIssues.push('HTML structure tags detected in blogContent - must be markdown only');\n}\n\n// 2. Meta Title (Max 65 chars per guidelines)\nif (!metaTitle) {\n  qcIssues.push('Meta Title missing');\n} else {\n  if (metaTitle.length > 65) {\n    qcIssues.push(`Meta Title ${metaTitle.length} chars - EXCEEDS 65 CHAR LIMIT`);\n  } else if (metaTitle.length < 30) {\n    qcIssues.push(`Meta Title ${metaTitle.length} chars - TOO SHORT`);\n  }\n}\n\n// 3. Meta Description (Max 160 chars)\nif (!metaDescription) {\n  qcIssues.push('Meta Description missing');\n} else {\n  if (metaDescription.length > 160) {\n    qcIssues.push(`Meta Description ${metaDescription.length} chars - EXCEEDS 160 CHAR LIMIT`);\n  } else if (metaDescription.length < 100) {\n    qcIssues.push(`Meta Description ${metaDescription.length} chars - TOO SHORT`);\n  }\n}\n\n// 4. Forbidden Words (Strict Negative Constraints)\nconst forbiddenWords = ['nestled', 'boasts', 'oasis', 'haven', 'tapestry', 'symphony', 'breathtaking', 'testament', 'moreover', 'furthermore', 'hi-tea'];\nforbiddenWords.forEach(word => {\n  const regex = new RegExp(`\\\\b${word}\\\\b`, 'i');\n  if (regex.test(blogContent) || regex.test(metaDescription)) {\n    qcIssues.push(`FORBIDDEN WORD DETECTED: '${word}'`);\n  }\n});\n\n// 5. Word Count\nif (!blogContent || blogContent.length < 100) {\n  qcIssues.push('Blog content missing or too short');\n} else {\n  const cleanBlog = blogContent.split('\\n').filter(function(line) {\n    return !line.match(/^#{1,6}\\s/);\n  }).join('\\n').trim();\n  \n  const wordCount = cleanBlog.split(/\\s+/).length;\n  \n  let wordCountRules;\n  try {\n    wordCountRules = $('15. Build AI Prompt').first().json.wordCountRules || { min: 500, max: 650 };\n  } catch (e) {\n    wordCountRules = { min: 500, max: 650 };\n  }\n  \n  if (wordCount < wordCountRules.min * 0.9) {\n    qcIssues.push(`Word count ${wordCount} - TOO SHORT (min ${wordCountRules.min})`);\n  } \n  // Note: Relaxed upper limit check to avoid false failures on comprehensive guides\n}\n\n// 6. FAQ Count\nif (!faqSection || faqSection.length < 20) {\n  qcIssues.push('FAQ section missing');\n} else {\n  const faqPattern = /^\\s*Q\\d+\\s*:/gm;\n  const faqQuestions = faqSection.match(faqPattern) || [];\n  \n  if (faqQuestions.length < 5) {\n    qcIssues.push(`FAQ has ${faqQuestions.length} questions - MUST HAVE 5-8`);\n  }\n}\n\nconst qcPassed = qcIssues.length === 0;\nconst qcScore = Math.max(0, 100 - qcIssues.length * 20);\n\nconsole.log('========================================');\nconsole.log('QC RESULT: ' + (qcPassed ? '✅ PASSED' : '❌ FAILED'));\nconsole.log('Score: ' + qcScore + '/100');\nconsole.log('Issues: ' + (qcIssues.length > 0 ? qcIssues.join(' | ') : 'None'));\nconsole.log('========================================');\n\nlet keywords = [];\ntry {\n  keywords = $('14. Merge All Context').first().json.keywords || [];\n} catch (e) {\n  keywords = [];\n}\n\nreturn [{\n  json: {\n    qcPassed: qcPassed,\n    qcScore: qcScore,\n    qcIssues: qcIssues,\n    qcWarnings: qcWarnings,\n    attemptNumber: currentAttempt,\n    keywords: keywords,\n    sourceNode: sourceNode,\n    parsedOutput: {\n      metaTitle: metaTitle,\n      metaDescription: metaDescription,\n      blogContent: blogContent,\n      faqSection: faqSection\n    },\n    fullOutput: JSON.stringify(parsedContent, null, 2)\n  }\n}];\n"
+      },
+      "id": "16681e15-a853-4632-bb88-4093ed0450ac",
+      "name": "17. QC Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1504,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "qc-check",
+              "leftValue": "={{ $json.qcPassed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "cc124c5c-3359-46c8-a3aa-34b85c1ce654",
+      "name": "18. IF QC Passed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1376,
+        1104
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1xOERr-4SRbZUOuQAYRF7TaAHNSuVT73x2hz6ml1cELc",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Project Name": "={{ $('3. Extract Sheet Data').first().json.projectName }}",
+            "AI Generated Blog Post": "={{ $('17. QC Check').first().json.parsedOutput.blogContent }}",
+            "Meta Title": "={{ $('17. QC Check').first().json.parsedOutput.metaTitle }}",
+            "Meta Description": "={{ $('17. QC Check').first().json.parsedOutput.metaDescription }}",
+            "FAQ + Hyperlinks": "={{ $('17. QC Check').first().json.parsedOutput.faqSection }}",
+            "Keywords Used": "={{ $('17. QC Check').first().json.keywords.join(', ') }}",
+            "QC Status": "Passed",
+            "QC Feedback": "={{ '✅ Score: ' + $('17. QC Check').first().json.qcScore + '/100 | Attempt: ' + $('17. QC Check').first().json.attemptNumber + '/3 | Source: ' + $('17. QC Check').first().json.sourceNode }}",
+            "Processing Timestamp": "={{ $now.toISO() }}",
+            "Status": "Complete"
+          },
+          "matchingColumns": [
+            "Project Name"
+          ]
+        },
+        "options": {}
+      },
+      "id": "586d96fd-db2f-48fc-ad5a-73983bd188a2",
+      "name": "19. Update Sheet Success",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2016,
+        768
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const qcResult = $input.first().json;\nconst MAX_ATTEMPTS = 3;\nconst currentAttempt = qcResult.attemptNumber || 1;\n\nconsole.log(`❌ QC FAILED at attempt ${currentAttempt}/3`);\n\nif (currentAttempt >= MAX_ATTEMPTS) {\n  console.log(`🛑 MAX ATTEMPTS REACHED (${currentAttempt}/${MAX_ATTEMPTS}) - STOPPING`);\n  return [{\n    json: {\n      attemptNumber: currentAttempt,\n      maxAttempts: MAX_ATTEMPTS,\n      shouldRetry: false,\n      previousIssues: qcResult.qcIssues || [],\n      qcScore: qcResult.qcScore || 0,\n      mergedContext: null\n    }\n  }];\n}\n\nconst nextAttempt = currentAttempt + 1;\nconst shouldRetry = true;\n\nconsole.log(`🔄 WILL RETRY: Attempt ${nextAttempt}/${MAX_ATTEMPTS}`);\n\nconst originalContext = $('14. Merge All Context').first().json;\n\nreturn [{\n  json: {\n    attemptNumber: nextAttempt,\n    maxAttempts: MAX_ATTEMPTS,\n    shouldRetry: shouldRetry,\n    previousIssues: qcResult.qcIssues || [],\n    qcScore: qcResult.qcScore || 0,\n    previousOutput: qcResult.fullOutput || '{}',\n    mergedContext: {\n      ...originalContext,\n      attemptNumber: nextAttempt,\n      previousIssues: qcResult.qcIssues || [],\n      previousOutput: qcResult.fullOutput || '{}'\n    }\n  }\n}];\n"
+      },
+      "id": "e9fb90a1-c511-40e5-84e3-11f746ce2e8c",
+      "name": "18.5. Retry Logic & Counter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1632,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "retry-check",
+              "leftValue": "={{ $json.shouldRetry }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2dd5cea2-48a4-46bb-9443-4428ebf3e26a",
+      "name": "18.6. IF Should Retry?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1808,
+        1152
+      ]
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.attemptNumber === 2 ? 15 : ($json.attemptNumber === 3 ? 30 : 60) }}"
+      },
+      "id": "17b44e1f-8872-483b-8343-101a420858c7",
+      "name": "18.7. Wait (Exponential Backoff)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1024,
+        1312
+      ],
+      "webhookId": "018489bd-981a-4b19-bc9c-da75e56938bc"
+    },
+    {
+      "parameters": {
+        "jsCode": "const retryData = $input.first().json;\n\nif (!retryData.mergedContext) {\n  throw new Error('🛑 RETRY ABORTED: No context to inject');\n}\n\nconsole.log(`✅ INJECTING RETRY CONTEXT: Attempt ${retryData.attemptNumber}/3`);\n\nreturn [{\n  json: retryData.mergedContext\n}];\n"
+      },
+      "id": "34475209-21f2-4246-8b21-f5cfdbb23ded",
+      "name": "18.8. Inject Retry Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        1312
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1xOERr-4SRbZUOuQAYRF7TaAHNSuVT73x2hz6ml1cELc",
+          "mode": "list"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Project Name": "={{ $('3. Extract Sheet Data').first().json.projectName }}",
+            "QC Status": "={{ 'Failed - Max Attempts (' + $json.attemptNumber + '/3)' }}",
+            "QC Feedback": "={{ '❌ QC Score: ' + $json.qcScore + '/100 | Issues: ' + $json.previousIssues.join('; ') }}",
+            "Processing Timestamp": "={{ $now.toISO() }}",
+            "Status": "Manual Review Needed"
+          },
+          "matchingColumns": [
+            "Project Name"
+          ]
+        },
+        "options": {}
+      },
+      "id": "993de6ad-da93-46ce-963d-7f18dfdedc6a",
+      "name": "20. Update Sheet Failed (Max Retries)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2016,
+        976
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('14. Merge All Context').first().json.primaryKeyword + '-' + $('14. Merge All Context').first().json.executionId }}"
+      },
+      "id": "38cac59e-a482-4f89-b923-81bb661aeba9",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        1040,
+        1120
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "model": "mistral-medium-2505",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        736
+      ],
+      "id": "9ec67b73-6300-4438-8831-2e8e4591766c",
+      "name": "Mistral Cloud Chat Model",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "zVNIevhGxwl3AEol",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"metaTitle\": {\n      \"type\": \"string\",\n      \"description\": \"SEO-optimized meta title. Max 65 characters.\"\n    },\n    \"metaDescription\": {\n      \"type\": \"string\",\n      \"description\": \"SEO-optimized meta description. Max 160 characters.\"\n    },\n    \"blogContent\": {\n      \"type\": \"string\",\n      \"description\": \"Blog post content in markdown. No HTML.\"\n    },\n    \"faqSection\": {\n      \"type\": \"string\",\n      \"description\": \"FAQ section with 5-8 questions.\"\n    }\n  },\n  \"required\": [\"metaTitle\", \"metaDescription\", \"blogContent\", \"faqSection\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1184,
+        1120
+      ],
+      "id": "3f580948-f08a-4beb-b32e-dc0c16d2b3b6",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n# Replace codes with Native nodes\n\n## You are an expert N8N workflow designer. Create workflows using ONLY built-in N8N nodes from the official node library. Never use Code nodes, Function nodes, Execute Command nodes, or any custom JavaScript. Required guidelines: ∙ Use native nodes like HTTP Request, Webhook, Gmail, Slack, Google Sheets, Microsoft Excel, Airtable, Discord, Telegram ∙ For data manipulation use Set node, Split In Batches, Merge, Compare Datasets ∙ For logic use IF node, Switch node, Stop and Error node ∙ For scheduling use Cron node, Wait node, Schedule Trigger ∙ Always provide complete N8N JSON format ∙ Include proper node connections and parameter configurations ∙ Test workflows should be executable without custom code Create a workflow for: [insert your specific automation request here] ",
+        "height": 752,
+        "width": 752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -96
+      ],
+      "id": "d9b6ec0a-624e-44e4-9e10-22a65d3255f7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        880,
+        1120
+      ],
+      "id": "d8d0c23e-c3da-4e73-a2a1-e88f43c0b441",
+      "name": "path NO-OP"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 192,
+        "width": 208,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1952,
+        752
+      ],
+      "id": "85333e11-9c3c-4a62-9c8a-99a2dfb35a98",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 192,
+        "width": 208,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1952,
+        960
+      ],
+      "id": "753f79be-b1a7-47bf-bf10-33295c0e51ab",
+      "name": "Sticky Note2"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows-backup",
+  "repo_owner": "sidhartha1s",
+  "repo_path": "backups",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-04T16:54:32.172Z",
+      "createdAt": "2026-02-04T16:54:32.172Z",
+      "role": "workflow:owner",
+      "workflowId": "FUuUyFPM-to0vKP7Pz-Lw",
+      "projectId": "RL6dq3Iv75Grec4D"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-02-12T08:10:15.645Z",
+      "createdAt": "2026-02-12T08:10:15.645Z",
+      "id": "XiQ98FfaOPYbyP2x",
+      "name": "SEO"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-12T08:10:17.413Z",
+  "versionId": "9083ef3c-8635-4474-9efe-843d5a2c76bf"
+}
