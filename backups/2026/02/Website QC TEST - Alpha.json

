@@ -1,0 +1,3765 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-04T17:00:38.543Z",
+    "createdAt": "2026-02-04T17:00:36.149Z",
+    "versionId": "e25d6699-27ba-4c91-82e0-9b8e3f46ed9b",
+    "workflowId": "LWzxtqy0wMcjWSluzGQxK",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "={{ $('On form submission1').first().json['Sitemap link in XML format'] }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0"
+              },
+              {
+                "name": "Accept",
+                "value": "application/xml,text/xml,*/*"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 30000
+          }
+        },
+        "id": "dcf4a4dc-8eeb-48eb-af12-fa89569c3d07",
+        "name": "6. HTTP Fetch Sitemap",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          304,
+          80
+        ],
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "amount": 2.5
+        },
+        "id": "6bb7c66e-27e4-4bad-ab6c-7147bb0da785",
+        "name": "10.5. ⏱️ Wait (Rate Limit)",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1264,
+          64
+        ],
+        "webhookId": "02a5c864-8ffc-4c73-8bd7-038fd848d65a"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.xml",
+        "typeVersion": 1,
+        "position": [
+          464,
+          80
+        ],
+        "id": "4e5d4fb4-9b25-44b1-9643-0c4600aa97f2",
+        "name": "XML"
+      },
+      {
+        "parameters": {
+          "batchSize": 5,
+          "options": {}
+        },
+        "id": "8562db46-1433-4d07-bb40-e5fa07da774b",
+        "name": "9.5. 📦 Split in Batches (5 URLs)",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          960,
+          64
+        ]
+      },
+      {
+        "parameters": {
+          "resource": "spreadsheet",
+          "title": "={{ $json['Property Name'] }} Website QC",
+          "sheetsUi": {
+            "sheetValues": [
+              {
+                "title": "Test"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -32,
+          -64
+        ],
+        "id": "2d645174-bca3-4ae7-a4a6-65ec1f1d70b6",
+        "name": "Create spreadsheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "5766eb19-4fcf-4216-8dbb-023b42d18185",
+                "name": "columns",
+                "value": "Property/Page Name, QC Parameters, Action Item",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          304,
+          -64
+        ],
+        "id": "4ed56d0c-4cc9-46e2-b758-e8774ac81692",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "markdown, url",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -496,
+          368
+        ],
+        "id": "983d4ef0-2d78-4f8a-a4dc-b4b7dddde907",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=# You are the Director of Content Operations, who have great expertise working with high-conversion Hotel websites, In-depth SEO, AI-engine optimisation and a great eye for details.\n\n- You have absolute mastery over the \"31 Content Rules\", attached on the Google Sheets n8n tool node, that **you must follow** at all times. They are the \"Bible\" you follow, and must adhere strictly - NO DEVIATION.\n\n## instructions\nWith respect to the 31 rules, which are further categorised under the below names, You are required to find errors/mismatches against the attached content that you should check.\n\n### For every issue you find, you *MUST categorise it into exactly one of the following 2 categories:*\n1. Language and Grammar\n2. AI Suggestions\n\n## Danger zone\n- Do not invent issues which are out of scope of the 125 rules.\n\n## Output Format\nDo not write a summary paragraph. *You must ONLY OUTPUT a valid JSON object matching the Structure Definition.*\n- **You MUST include the \"url\" field in your output exactly as provided in the input below.**\n- Put all and every distinct issue into the `qc_breakdown` list.\n- Always Output *1. Language and Grammar* first. If no grammar/language issues found, output \"No issues found\".\n- Use the exact category names listed above.\n- If a category has no issues, do not invent them.\n- List out any and all grammatical errors of the particular page under the \"1. Language and Grammar\" section.\n- Explicitly list any enhancements and suggestions you noticed on the page under \"2. AI Suggestions\" only.\n\n### You must analyse the content of the page and make sure it aligns with {{ $('On form submission1').item.json['Specify Language'] }} Spelling, and also, if the 31 rules of the sheet are being followed.\n\n#### Examples of UK vs US English spellings include, but are not limited to.\n\nUK: colour, favourite, centre, metre, litre, organise, personalise, recognise, analyse, travelling, cancelled, labelled, programme, catalogue, licence, defence, aluminium, jewellery, cosy, mould, grey, cheque, tyre, neighbourhood, manoeuvre\n\nUS: color, favorite, center, meter, liter, organize, personalize, recognize, analyze, traveling, canceled, labeled, program, catalog, license, defense, aluminum, jewelry, cozy, mold, gray, check, tire, neighborhood, maneuver\n\nPAGE URL: {{ $json.url }}\nCONTENT TO CHECK: {{ $json.markdown }}",
+          "hasOutputParser": true,
+          "needsFallback": true,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          -96,
+          304
+        ],
+        "id": "8f96c5a1-953b-436a-b1bf-de9382a78d1f",
+        "name": "AI Agent1",
+        "retryOnFail": false
+      },
+      {
+        "parameters": {
+          "jsCode": "// Split the comma-separated string from $json.rows\nconst headersArray = $json.columns.split(',');\n\n// Create an object where each key is a header (trimmed) and its value is the header text\nconst headersObject = {};\nheadersArray.forEach(header => {\nconst trimmedHeader = header.trim();\nheadersObject[trimmedHeader] = trimmedHeader;\n});\n\n// Return the object so that each header becomes a column in the first row of your sheet\nreturn [\n{\njson: headersObject\n}\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          464,
+          -64
+        ],
+        "id": "5774e6c6-69b4-4537-ade5-a5977bd8af72",
+        "name": "Inject Columns to sheet"
+      },
+      {
+        "parameters": {
+          "amount": 2
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          144,
+          -64
+        ],
+        "id": "7d6d26b9-5b4c-43c5-a54d-662d564d0f50",
+        "name": "Wait",
+        "webhookId": "7cc60e64-97cf-4664-a914-ab1a8328ff95"
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "documentId": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+            "mode": "url"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.sheets[0].properties.sheetId }}",
+            "mode": "id"
+          }
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          144,
+          80
+        ],
+        "id": "92287429-6c93-49a5-8be6-b448a90e97ff",
+        "name": "Delete extra row (keep only header)",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').item.json.spreadsheetUrl }}",
+            "mode": "url"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').item.json.sheets[0].properties.sheetId }}",
+            "mode": "id"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "S no",
+                "displayName": "S no",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Page URL",
+                "displayName": "Page URL",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "QC Remarks",
+                "displayName": "QC Remarks",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Suggestions",
+                "displayName": "Suggestions",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "QC Score",
+                "displayName": "QC Score",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -32,
+          80
+        ],
+        "id": "578e15af-badb-4c2c-b6a1-bc6b3ae6b885",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "# 1. Initialisation ",
+          "height": 384,
+          "width": 880
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -208,
+          -128
+        ],
+        "id": "446cf569-93d1-4aad-b858-c0fd2aec1bc3",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -304,
+          304
+        ],
+        "id": "e8177af2-558f-41b5-ad82-be12eacf6f19",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n  \"url\": \"Extract the dynamic URL from the prompt here\",\n  \"qc_breakdown\": [\n    {\n      \"category\": \"Language and Grammar\",\n      \"issue\": \"LG01 | Specific issue details\"\n    }\n  ]\n}",
+          "autoFix": true
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          -336,
+          448
+        ],
+        "id": "cc31246d-6e46-4075-b115-8d534f70a75e",
+        "name": "Structured Output Parser",
+        "retryOnFail": true,
+        "waitBetweenTries": 3000
+      },
+      {
+        "parameters": {
+          "content": "# Start w/ Form submission\n",
+          "height": 112,
+          "width": 288,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -528,
+          16
+        ],
+        "id": "03dc0d13-457f-4cf5-8d6c-a7e23c6f0338",
+        "name": "Sticky Note6"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://crawl4ai:11235/md",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"url\": \"{{ $json.loc }}\",\n  \"f\": \"fit\",\n  \"q\": null,\n  \"c\": \"0\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1104,
+          64
+        ],
+        "id": "88426143-f034-46a0-85fb-a385b05eadd8",
+        "name": "Crawl4AI"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          800,
+          400
+        ],
+        "id": "b1042279-ee8e-4dde-b5c4-8522ff541ee2",
+        "name": "Rest OPS - Pending."
+      },
+      {
+        "parameters": {
+          "jsCode": "/**\n * Senior Engineer Logic: Flattening AI output and appending \n * a separator row (\"---\") to conclude the page report.\n */\n\nconst input = $input.all();\nconst results = [];\n\nfor (const item of input) {\n  // Point to the AI Agent's \"output\" wrapper\n  const data = item.json.output;\n\n  if (data && Array.isArray(data.qc_breakdown)) {\n    data.qc_breakdown.forEach(entry => {\n      \n      // Handling the double-nested structure seen in the input schema\n      const entryData = entry.qc_breakdown || entry;\n\n      results.push({\n        \"Property/Page Name\": data.url || \"URL Not Found\",\n        \"QC Parameters\": entryData.category || \"N/A\",\n        \"Action Item\": entryData.issue || \"No issues found\"\n      });\n    });\n  }\n}\n\n// Push the visual separator row after all QC entries for the current page are added\nif (results.length > 0) {\n  results.push({\n    \"Property/Page Name\": \"---\",\n    \"QC Parameters\": \"---\",\n    \"Action Item\": \"---\"\n  });\n}\n\nreturn results;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          256,
+          304
+        ],
+        "id": "d3f898cd-6fbe-4b82-98c7-3df4380f4028",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw",
+            "mode": "list",
+            "cachedResultName": "Content QC",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 798831405,
+            "mode": "list",
+            "cachedResultName": "Language and Grammar",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit#gid=798831405"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheetsTool",
+        "typeVersion": 4.7,
+        "position": [
+          256,
+          448
+        ],
+        "id": "cc696e8c-4e8f-4a94-b622-86b3d3c29329",
+        "name": "Get row(s) in sheet in Google Sheets",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+            "mode": "url"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.sheets[0].properties.sheetId }}",
+            "mode": "id"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Property/Page Name": "={{ $json[\"Property/Page Name\"] }}",
+              "Action Item": "={{ $json[\"Action Item\"] }}",
+              "QC Parameters": "={{ $json[\"QC Parameters\"] }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Property/Page Name",
+                "displayName": "Property/Page Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "QC Parameters",
+                "displayName": "QC Parameters",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Action Item",
+                "displayName": "Action Item",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          416,
+          304
+        ],
+        "id": "1cd33882-d631-47a1-b3ce-73e72e734a76",
+        "name": "Append row in sheet1",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          592,
+          304
+        ],
+        "id": "8867cb73-caed-4899-924c-1c2143395c60",
+        "name": "Wait1",
+        "webhookId": "7533690a-9ac1-4c49-98b6-1b6ff456851a"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.limit",
+        "typeVersion": 1,
+        "position": [
+          1008,
+          400
+        ],
+        "id": "7cba91c9-55d4-4107-8971-6d76b07aad74",
+        "name": "Limit"
+      },
+      {
+        "parameters": {
+          "select": "channel",
+          "channelId": {
+            "__rl": true,
+            "value": "C0A81V933SA",
+            "mode": "list",
+            "cachedResultName": "n8n-automation"
+          },
+          "text": "=AI Website QC for {{ $('On form submission1').first().json['Property Name'] }} property has finished. \n\nPlease review the pointers below: {{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+          "otherOptions": {}
+        },
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.4,
+        "position": [
+          1232,
+          400
+        ],
+        "id": "997a2d69-0dd3-4683-a418-8a67eebfecd8",
+        "name": "Send a message",
+        "webhookId": "a1cf1ecf-e1b1-4e80-8259-598d0300676a",
+        "credentials": {
+          "slackApi": {
+            "id": "O62AlOYXuAYiMczt",
+            "name": "Slack account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://r.jina.ai/ {{ $json.URL }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer jina_87b7830720fe4130a6decdb321d58765Y5rVc8VK59ogel3De2QqwWO-Sbss"
+              },
+              {
+                "name": "X-No-Cache",
+                "value": "true"
+              },
+              {
+                "name": "X-With-Generated-Alt",
+                "value": "true"
+              },
+              {
+                "name": "X-With-Images-Summary",
+                "value": "true"
+              },
+              {
+                "name": "X-With-Links-Summary",
+                "value": "true"
+              },
+              {
+                "name": "X-Return-Format",
+                "value": "markdown"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -784,
+          608
+        ],
+        "id": "eec96e51-970a-464d-8ecc-4774719df1a6",
+        "name": "Crawl4AI1",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "88f93c05-78b3-40bd-8b9e-4598fb60779d",
+                "name": "URL",
+                "value": "https://www.devshreedeogarh.com/",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1200,
+          624
+        ],
+        "id": "a07b4308-b12d-418f-8302-81500a0f4bcc",
+        "name": "Edit Fields1",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "model": "devstral-medium-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          96,
+          448
+        ],
+        "id": "18520f74-85d6-47df-b9d6-f88f891d7a44",
+        "name": "Mistral Cloud Chat Model",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "zVNIevhGxwl3AEol",
+            "name": "Mistral Cloud account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "mistral-large-2512",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          -208,
+          672
+        ],
+        "id": "107fb253-9a27-4063-898e-a3c0a5ac07f6",
+        "name": "Mistral Cloud Chat Model1",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "zVNIevhGxwl3AEol",
+            "name": "Mistral Cloud account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://crawl4ai:11235/md",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"url\": \"{{ $json.URL }}\",\n  \"f\": \"fit\",\n  \"q\": null,\n  \"c\": \"0\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -960,
+          624
+        ],
+        "id": "9eba32cc-3882-4c8c-8a1d-435f07a53594",
+        "name": "Crawl4AI2",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "0c764118-ca56-4a6a-9d65-f8062829b749"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "cd615b2e-4c0f-410f-ae5a-b81515c61fd1",
+                      "leftValue": "",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          -928,
+          368
+        ],
+        "id": "6c8f6ead-6bba-4f7b-9bdf-b6eb3465b6a6",
+        "name": "Switch",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "content": "# 2. Crawl n Scrape\n",
+          "height": 384,
+          "width": 720,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          688,
+          -128
+        ],
+        "id": "99049a2b-b466-4d23-894d-bd1124ebcc4c",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "# 4. Output",
+          "height": 336,
+          "width": 656,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          752,
+          272
+        ],
+        "id": "1d4f941d-f7cb-4e28-8758-e0ae82a50051",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "# 3. QC ",
+          "height": 336,
+          "width": 1280,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -544,
+          272
+        ],
+        "id": "8b5966a5-cef9-42c0-a570-1c9ff6d85a3c",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "content": "# Header footer - later",
+          "height": 224,
+          "width": 464
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -1104,
+          304
+        ],
+        "id": "fd5c6436-03fa-40ee-af09-8fd60c6a73e4",
+        "name": "Sticky Note4",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "formTitle": "Submit Website Details for QC",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Property Name",
+                "placeholder": "eg: Sarovar Hotels",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Sitemap link in XML format",
+                "placeholder": "Eg: https://www.sarovarhotels.com/sitemap.xml",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Specify Language",
+                "placeholder": "Eg: \"UK English\"",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Is it a child property?",
+                "placeholder": "\"Yes\" or \"No\"",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "If child, specify child URL",
+                "placeholder": "eg: \"./sarovar-premiere-alwar/\""
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.5,
+        "position": [
+          -192,
+          0
+        ],
+        "id": "95572d9a-dfb7-4081-8a57-4cfa612a385b",
+        "name": "On form submission1",
+        "webhookId": "d8e06741-65ed-46da-8a35-d4a9fa7fe029"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "64bee07a-c781-425b-8019-56bdb343d123",
+                "leftValue": "={{ $('On form submission1').item.json['Is it a child property?'] }}",
+                "rightValue": "yes",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          784,
+          16
+        ],
+        "id": "7b4c27d4-1535-4716-bdc2-f885e2b1d391",
+        "name": "If its a Child Prop"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "urlset.url",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          624,
+          16
+        ],
+        "id": "93f280c8-39e0-46ae-9111-08a88fdc8350",
+        "name": "Split Out URLs"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "fbf37fbb-4f7e-4cdc-b1c7-ef01f2d5f9bf",
+                "leftValue": "={{ $('Split Out URLs').item.json.loc }}",
+                "rightValue": "={{ $('On form submission1').first().json['If child, specify child URL'] }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1104,
+          -96
+        ],
+        "id": "05421c36-f7cc-43c3-912d-35787abb6462",
+        "name": "Filter Only Child URLs"
+      },
+      {
+        "parameters": {
+          "model": "mistral-large-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          432,
+          448
+        ],
+        "id": "21a2aad3-f334-4eb3-a051-2a10ea687224",
+        "name": "Mistral Cloud Chat Model2",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "zVNIevhGxwl3AEol",
+            "name": "Mistral Cloud account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "openai/gpt-oss-120b:free",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          0,
+          672
+        ],
+        "id": "f62ef92b-439d-49fd-a2d2-a03eabbca8d0",
+        "name": "OpenRouter Chat Model",
+        "credentials": {
+          "openRouterApi": {
+            "id": "x0LG52oVRDHGvw9B",
+            "name": "OpenRouter account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "markdown, url",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -32,
+          1104
+        ],
+        "id": "cbd9dadf-1630-49d6-b90c-28d786d9fac2",
+        "name": "Split Out",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=# You are the Director of Content Operations, who have great expertise working with high-conversion Hotel websites, In-depth SEO, AI-engine optimisation and a great eye for details.\n\n- You have absolute mastery over the \"31 Content Rules\", attached on the Google Sheets n8n tool node, that **you must follow** at all times. They are the \"Bible\" you follow, and must adhere strictly - NO DEVIATION.\n\n## instructions\nWith respect to the 31 rules, which are further categorised under the below names, You are required to find errors/mismatches against the attached content that you should check.\n\n### For every issue you find, you *MUST categorise it into exactly one of the following 2 categories:*\n1. Language and Grammar\n2. AI Suggestions\n\n## Danger zone\n- Do not invent issues which are out of scope of the 125 rules.\n\n## Output Format\nDo not write a summary paragraph. *You must ONLY OUTPUT a valid JSON object matching the Structure Definition.*\n- **You MUST include the \"url\" field in your output exactly as provided in the input below.**\n- Put all and every distinct issue into the `qc_breakdown` list.\n- Always Output *1. Language and Grammar* first. If no grammar/language issues found, output \"No issues found\".\n- Use the exact category names listed above.\n- If a category has no issues, do not invent them.\n- List out any and all grammatical errors of the particular page under the \"1. Language and Grammar\" section.\n- Explicitly list any enhancements and suggestions you noticed on the page under \"2. AI Suggestions\" only.\n\n### You must analyse the content of the page and make sure it aligns with {{ $('On form submission1').first().json['Specify Language'] }} Spelling, and also, if the 31 rules of the sheet are being followed.\n\n#### Examples of UK vs US English spellings include, but are not limited to.\n\nUK: colour, favourite, centre, metre, litre, organise, personalise, recognise, analyse, travelling, cancelled, labelled, programme, catalogue, licence, defence, aluminium, jewellery, cosy, mould, grey, cheque, tyre, neighbourhood, manoeuvre\n\nUS: color, favorite, center, meter, liter, organize, personalize, recognize, analyze, traveling, canceled, labeled, program, catalog, license, defense, aluminum, jewelry, cozy, mold, gray, check, tire, neighborhood, maneuver\n\nPAGE URL: {{ $json.url }}\nCONTENT TO CHECK: {{ $json.markdown }}",
+          "hasOutputParser": true,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          368,
+          1040
+        ],
+        "id": "be15a36a-5c77-475f-8fb6-0a9ce4c5dddc",
+        "name": "AI Agent",
+        "retryOnFail": false,
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          160,
+          1040
+        ],
+        "id": "1af07cbf-8cfb-49ea-a42c-b5cede383870",
+        "name": "Loop Over Items1",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n  \"url\": \"Extract the dynamic URL from the prompt here\",\n  \"qc_breakdown\": [\n    {\n      \"category\": \"Language and Grammar\",\n      \"issue\": \"Specific issue details\"\n    }\n  ]\n}",
+          "autoFix": true
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          128,
+          1184
+        ],
+        "id": "01a99097-6001-4e14-b114-5a876fd82002",
+        "name": "Structured Output Parser1",
+        "retryOnFail": true,
+        "waitBetweenTries": 3000,
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "jsCode": "/**\n * Senior Engineer Logic: Flattening AI output and appending \n * a separator row (\"---\") to conclude the page report.\n */\n\nconst input = $input.all();\nconst results = [];\n\nfor (const item of input) {\n  // Point to the AI Agent's \"output\" wrapper\n  const data = item.json.output;\n\n  if (data && Array.isArray(data.qc_breakdown)) {\n    data.qc_breakdown.forEach(entry => {\n      \n      // Handling the double-nested structure seen in the input schema\n      const entryData = entry.qc_breakdown || entry;\n\n      results.push({\n        \"Property/Page Name\": data.url || \"URL Not Found\",\n        \"QC Parameters\": entryData.category || \"N/A\",\n        \"Action Item\": entryData.issue || \"No issues found\"\n      });\n    });\n  }\n}\n\n// Push the visual separator row after all QC entries for the current page are added\nif (results.length > 0) {\n  results.push({\n    \"Property/Page Name\": \"---\",\n    \"QC Parameters\": \"---\",\n    \"Action Item\": \"---\"\n  });\n}\n\nreturn results;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          720,
+          1040
+        ],
+        "id": "aaeba0ad-1cdb-4b70-a91b-40ca040d21e3",
+        "name": "Code in JavaScript1",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw",
+            "mode": "list",
+            "cachedResultName": "Content QC",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 798831405,
+            "mode": "list",
+            "cachedResultName": "Language and Grammar",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit#gid=798831405"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheetsTool",
+        "typeVersion": 4.7,
+        "position": [
+          720,
+          1184
+        ],
+        "id": "4c8c4397-1495-4ba4-a66a-d56d396ddc92",
+        "name": "Get row(s) in sheet in Google Sheets1",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+            "mode": "url"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.sheets[0].properties.sheetId }}",
+            "mode": "id"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Property/Page Name": "={{ $json[\"Property/Page Name\"] }}",
+              "Action Item": "={{ $json[\"Action Item\"] }}",
+              "QC Parameters": "={{ $json[\"QC Parameters\"] }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Property/Page Name",
+                "displayName": "Property/Page Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "QC Parameters",
+                "displayName": "QC Parameters",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Action Item",
+                "displayName": "Action Item",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          880,
+          1040
+        ],
+        "id": "bf3697b4-0f29-428c-91c6-49d27888a481",
+        "name": "Append row in sheet2",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1056,
+          1040
+        ],
+        "id": "30f9a8a6-6d26-4bb5-8c48-efc65ea82696",
+        "name": "Wait2",
+        "webhookId": "7533690a-9ac1-4c49-98b6-1b6ff456851a",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "model": "devstral-medium-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          624,
+          1344
+        ],
+        "id": "1e0c47a1-f325-4c57-9109-249c6a1dcc8f",
+        "name": "Mistral Cloud Chat Model3",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "zVNIevhGxwl3AEol",
+            "name": "Mistral Cloud account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "model": "mistral-large-2512",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          304,
+          1472
+        ],
+        "id": "34e540ae-a8e0-47a7-ab54-931c1c1f5dc1",
+        "name": "Mistral Cloud Chat Model4",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "zVNIevhGxwl3AEol",
+            "name": "Mistral Cloud account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "content": "# 3. QC ",
+          "height": 336,
+          "width": 1280,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -80,
+          1008
+        ],
+        "id": "5432da91-b193-47e5-bc01-7b16a1709381",
+        "name": "Sticky Note5",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "model": "mistral-large-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          896,
+          1184
+        ],
+        "id": "b4be0f3f-71d7-48ee-b73d-537f0a9feb30",
+        "name": "Mistral Cloud Chat Model5",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "zVNIevhGxwl3AEol",
+            "name": "Mistral Cloud account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "model": "arcee-ai/trinity-large-preview:free",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          464,
+          1408
+        ],
+        "id": "b0e36e9d-6a59-4947-9f1b-be3725777503",
+        "name": "OpenRouter Chat Model1",
+        "credentials": {
+          "openRouterApi": {
+            "id": "x0LG52oVRDHGvw9B",
+            "name": "OpenRouter account"
+          }
+        },
+        "disabled": true
+      }
+    ],
+    "connections": {
+      "6. HTTP Fetch Sitemap": {
+        "main": [
+          [
+            {
+              "node": "XML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "10.5. ⏱️ Wait (Rate Limit)": {
+        "main": [
+          [
+            {
+              "node": "9.5. 📦 Split in Batches (5 URLs)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "XML": {
+        "main": [
+          [
+            {
+              "node": "Split Out URLs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "9.5. 📦 Split in Batches (5 URLs)": {
+        "main": [
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Crawl4AI",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create spreadsheet": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Inject Columns to sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Inject Columns to sheet": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Delete extra row (keep only header)": {
+        "main": [
+          [
+            {
+              "node": "6. HTTP Fetch Sitemap",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet": {
+        "main": [
+          [
+            {
+              "node": "Delete extra row (keep only header)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Rest OPS - Pending.",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "AI Agent1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Crawl4AI": {
+        "main": [
+          [
+            {
+              "node": "10.5. ⏱️ Wait (Rate Limit)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Rest OPS - Pending.": {
+        "main": [
+          [
+            {
+              "node": "Limit",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s) in sheet in Google Sheets": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet1": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "Crawl4AI2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mistral Cloud Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Mistral Cloud Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "On form submission1": {
+        "main": [
+          [
+            {
+              "node": "Create spreadsheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If its a Child Prop": {
+        "main": [
+          [
+            {
+              "node": "Filter Only Child URLs",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "9.5. 📦 Split in Batches (5 URLs)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out URLs": {
+        "main": [
+          [
+            {
+              "node": "If its a Child Prop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter Only Child URLs": {
+        "main": [
+          [
+            {
+              "node": "9.5. 📦 Split in Batches (5 URLs)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mistral Cloud Chat Model2": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Structured Output Parser",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [],
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser1": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s) in sheet in Google Sheets1": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet2": {
+        "main": [
+          [
+            {
+              "node": "Wait2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait2": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mistral Cloud Chat Model5": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Structured Output Parser1",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "sid sid",
+    "name": "Version e25d6699",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "e25d6699-27ba-4c91-82e0-9b8e3f46ed9b",
+  "connections": {
+    "6. HTTP Fetch Sitemap": {
+      "main": [
+        [
+          {
+            "node": "XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10.5. ⏱️ Wait (Rate Limit)": {
+      "main": [
+        [
+          {
+            "node": "9.5. 📦 Split in Batches (5 URLs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "XML": {
+      "main": [
+        [
+          {
+            "node": "Split Out URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9.5. 📦 Split in Batches (5 URLs)": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Crawl4AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create spreadsheet": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Inject Columns to sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inject Columns to sheet": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete extra row (keep only header)": {
+      "main": [
+        [
+          {
+            "node": "6. HTTP Fetch Sitemap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Delete extra row (keep only header)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Rest OPS - Pending.",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crawl4AI": {
+      "main": [
+        [
+          {
+            "node": "10.5. ⏱️ Wait (Rate Limit)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rest OPS - Pending.": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Crawl4AI2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission1": {
+      "main": [
+        [
+          {
+            "node": "Create spreadsheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If its a Child Prop": {
+      "main": [
+        [
+          {
+            "node": "Filter Only Child URLs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "9.5. 📦 Split in Batches (5 URLs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out URLs": {
+      "main": [
+        [
+          {
+            "node": "If its a Child Prop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Only Child URLs": {
+      "main": [
+        [
+          {
+            "node": "9.5. 📦 Split in Batches (5 URLs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Cloud Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Cloud Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Language and Grammar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sonnet 4.5": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Grok fast 4.1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-04T17:00:20.225Z",
+  "id": "LWzxtqy0wMcjWSluzGQxK",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Website QC TEST - Alpha",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "={{ $('On form submission1').first().json['Sitemap link in XML format'] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0"
+            },
+            {
+              "name": "Accept",
+              "value": "application/xml,text/xml,*/*"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "dcf4a4dc-8eeb-48eb-af12-fa89569c3d07",
+      "name": "6. HTTP Fetch Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        304,
+        80
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "amount": 2.5
+      },
+      "id": "6bb7c66e-27e4-4bad-ab6c-7147bb0da785",
+      "name": "10.5. ⏱️ Wait (Rate Limit)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1248,
+        64
+      ],
+      "webhookId": "02a5c864-8ffc-4c73-8bd7-038fd848d65a"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        464,
+        80
+      ],
+      "id": "4e5d4fb4-9b25-44b1-9643-0c4600aa97f2",
+      "name": "XML"
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "id": "8562db46-1433-4d07-bb40-e5fa07da774b",
+      "name": "9.5. 📦 Split in Batches (5 URLs)",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        960,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "={{ $json['Property Name'] }} Website QC",
+        "sheetsUi": {
+          "sheetValues": [
+            {
+              "title": "Test"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        -64
+      ],
+      "id": "2d645174-bca3-4ae7-a4a6-65ec1f1d70b6",
+      "name": "Create spreadsheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5766eb19-4fcf-4216-8dbb-023b42d18185",
+              "name": "columns",
+              "value": "Property/Page Name, QC Parameters, Action Item",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        304,
+        -64
+      ],
+      "id": "4ed56d0c-4cc9-46e2-b758-e8774ac81692",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "markdown, url",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        368
+      ],
+      "id": "983d4ef0-2d78-4f8a-a4dc-b4b7dddde907",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# You are the Director of Content Operations, who have great expertise working with high-conversion Hotel websites, In-depth SEO, AI-engine optimisation and a great eye for details. You **only output Valid JSON**\n\n- You have absolute mastery over the \"31 Content Rules\", from the Google Sheets **n8n tool node**, that **you must follow** at all times. They are the \"Bible\" you follow, and must adhere strictly - NO DEVIATION.\n\n## instructions\n- With respect to the 31 rules, which are further categorised under the below names, You are required to find errors/mismatches against the attached content that you should check.\n\n## CRITICAL: Never output conversational text. Never narrate what you are about to do. Your ONLY output must be the final JSON object. Do not write \"I'll analyze\", \"Let me\", \"I will\", or any sentence before or after the JSON. Silence before and after the JSON. Raw JSON only.\n\n### For every issue you find, you *MUST categorise it into exactly one of the following 2 categories:*\n1. Language and Grammar\n2. AI Suggestions\n\n## Danger zone\n- Do not invent issues which are out of scope of the 125 rules.\n\n## Output Format\nDo not write a summary paragraph. **You must ONLY OUTPUT a valid JSON object matching the Structure Definition.**\n- **You MUST include the \"url\" field in your output exactly as provided in the input below.**\n- Structure the output like \"Rule_Code | Distinct issue\".\nexample output: \"LG01 | Country code is wrong. Property is in India, while country code reads +1 which is for US numbers.\" \n- Put all and every distinct issue into the `qc_breakdown` list.\n- Always Output *1. Language and Grammar* first. If no grammar/language issues found, output \"No issues found\".\n- Use the exact category names listed above.\n- If a category has no issues, do not invent them.\n- List out any and all grammatical errors of the particular page under the \"1. Language and Grammar\" section.\n- Explicitly list any enhancements and suggestions you noticed on the page under \"2. AI Suggestions\" only.\n\n### You must analyse the content of the page and make sure it aligns with {{ $('On form submission1').first().json['Specify Language'] }} Spelling, and also, if the 31 rules of the sheet are being followed.\n\n#### Examples of UK vs US English spellings include, but are not limited to.\n\nUK: colour, favourite, centre, metre, litre, organise, personalise, recognise, analyse, travelling, cancelled, labelled, programme, catalogue, licence, defence, aluminium, jewellery, cosy, mould, grey, cheque, tyre, neighbourhood, manoeuvre\n\nUS: color, favorite, center, meter, liter, organize, personalize, recognize, analyze, traveling, canceled, labeled, program, catalog, license, defense, aluminum, jewelry, cozy, mold, gray, check, tire, neighborhood, maneuver\n\nPAGE URL: {{$json.url.toString()}}\nCONTENT TO CHECK: {{ $json.markdown }}",
+        "hasOutputParser": true,
+        "options": {
+          "returnIntermediateSteps": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -96,
+        304
+      ],
+      "id": "8f96c5a1-953b-436a-b1bf-de9382a78d1f",
+      "name": "AI Agent1",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split the comma-separated string from $json.rows\nconst headersArray = $json.columns.split(',');\n\n// Create an object where each key is a header (trimmed) and its value is the header text\nconst headersObject = {};\nheadersArray.forEach(header => {\nconst trimmedHeader = header.trim();\nheadersObject[trimmedHeader] = trimmedHeader;\n});\n\n// Return the object so that each header becomes a column in the first row of your sheet\nreturn [\n{\njson: headersObject\n}\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        -64
+      ],
+      "id": "5774e6c6-69b4-4537-ade5-a5977bd8af72",
+      "name": "Inject Columns to sheet"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        144,
+        -64
+      ],
+      "id": "7d6d26b9-5b4c-43c5-a54d-662d564d0f50",
+      "name": "Wait",
+      "webhookId": "7cc60e64-97cf-4664-a914-ab1a8328ff95"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').first().json.sheets[0].properties.sheetId }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        144,
+        80
+      ],
+      "id": "92287429-6c93-49a5-8be6-b448a90e97ff",
+      "name": "Delete extra row (keep only header)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').item.json.spreadsheetUrl }}",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').item.json.sheets[0].properties.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "S no",
+              "displayName": "S no",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Page URL",
+              "displayName": "Page URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "QC Remarks",
+              "displayName": "QC Remarks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Suggestions",
+              "displayName": "Suggestions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "QC Score",
+              "displayName": "QC Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        80
+      ],
+      "id": "578e15af-badb-4c2c-b6a1-bc6b3ae6b885",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# 1. Initialisation ",
+        "height": 384,
+        "width": 880
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -128
+      ],
+      "id": "446cf569-93d1-4aad-b858-c0fd2aec1bc3",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -304,
+        304
+      ],
+      "id": "e8177af2-558f-41b5-ad82-be12eacf6f19",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"url\": \"Extract the dynamic URL from the prompt here\",\n  \"qc_breakdown\": [\n    {\n      \"category\": \"Language and Grammar\",\n      \"issue\": \"LG01 | Specific issue details\"\n    }\n  ]\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -336,
+        448
+      ],
+      "id": "cc31246d-6e46-4075-b115-8d534f70a75e",
+      "name": "Structured Output Parser",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "content": "# Start w/ Form submission\n",
+        "height": 112,
+        "width": 288,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        16
+      ],
+      "id": "03dc0d13-457f-4cf5-8d6c-a7e23c6f0338",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://crawl4ai:11235/md",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"url\": \"{{ $json.loc }}\",\n  \"f\": \"fit\",\n  \"q\": null,\n  \"c\": \"0\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1104,
+        64
+      ],
+      "id": "88426143-f034-46a0-85fb-a385b05eadd8",
+      "name": "Crawl4AI"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        800,
+        400
+      ],
+      "id": "b1042279-ee8e-4dde-b5c4-8522ff541ee2",
+      "name": "Rest OPS - Pending."
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Senior Engineer Logic: Flattening AI output and appending \n * a separator row (\"---\") to conclude the page report.\n */\n\nconst input = $input.all();\nconst results = [];\n\nfor (const item of input) {\n  // Point to the AI Agent's \"output\" wrapper\n  const data = item.json.output;\n\n  if (data && Array.isArray(data.qc_breakdown)) {\n    data.qc_breakdown.forEach(entry => {\n      \n      // Handling the double-nested structure seen in the input schema\n      const entryData = entry.qc_breakdown || entry;\n\n      results.push({\n        \"Property/Page Name\": data.url || \"URL Not Found\",\n        \"QC Parameters\": entryData.category || \"N/A\",\n        \"Action Item\": entryData.issue || \"No issues found\"\n      });\n    });\n  }\n}\n\n// Push the visual separator row after all QC entries for the current page are added\nif (results.length > 0) {\n  results.push({\n    \"Property/Page Name\": \"---\",\n    \"QC Parameters\": \"---\",\n    \"Action Item\": \"---\"\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        304
+      ],
+      "id": "d3f898cd-6fbe-4b82-98c7-3df4380f4028",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').first().json.sheets[0].properties.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Property/Page Name": "={{ $json[\"Property/Page Name\"] }}",
+            "Action Item": "={{ $json[\"Action Item\"] }}",
+            "QC Parameters": "={{ $json[\"QC Parameters\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Property/Page Name",
+              "displayName": "Property/Page Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "QC Parameters",
+              "displayName": "QC Parameters",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Action Item",
+              "displayName": "Action Item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        304
+      ],
+      "id": "1cd33882-d631-47a1-b3ce-73e72e734a76",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        592,
+        304
+      ],
+      "id": "8867cb73-caed-4899-924c-1c2143395c60",
+      "name": "Wait1",
+      "webhookId": "7533690a-9ac1-4c49-98b6-1b6ff456851a"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        400
+      ],
+      "id": "7cba91c9-55d4-4107-8971-6d76b07aad74",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0A81V933SA",
+          "mode": "list",
+          "cachedResultName": "n8n-automation"
+        },
+        "text": "=AI Website QC for {{ $('On form submission1').first().json['Property Name'] }} property has finished. \n\nPlease review the pointers below: {{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        1232,
+        400
+      ],
+      "id": "997a2d69-0dd3-4683-a418-8a67eebfecd8",
+      "name": "Send a message",
+      "webhookId": "a1cf1ecf-e1b1-4e80-8259-598d0300676a",
+      "credentials": {
+        "slackApi": {
+          "id": "O62AlOYXuAYiMczt",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/ {{ $json.URL }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer jina_87b7830720fe4130a6decdb321d58765Y5rVc8VK59ogel3De2QqwWO-Sbss"
+            },
+            {
+              "name": "X-No-Cache",
+              "value": "true"
+            },
+            {
+              "name": "X-With-Generated-Alt",
+              "value": "true"
+            },
+            {
+              "name": "X-With-Images-Summary",
+              "value": "true"
+            },
+            {
+              "name": "X-With-Links-Summary",
+              "value": "true"
+            },
+            {
+              "name": "X-Return-Format",
+              "value": "markdown"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -288,
+        1152
+      ],
+      "id": "eec96e51-970a-464d-8ecc-4774719df1a6",
+      "name": "Crawl4AI1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "88f93c05-78b3-40bd-8b9e-4598fb60779d",
+              "name": "URL",
+              "value": "https://www.devshreedeogarh.com/",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -704,
+        1168
+      ],
+      "id": "a07b4308-b12d-418f-8302-81500a0f4bcc",
+      "name": "Edit Fields1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://crawl4ai:11235/md",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"url\": \"{{ $json.URL }}\",\n  \"f\": \"fit\",\n  \"q\": null,\n  \"c\": \"0\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -464,
+        1168
+      ],
+      "id": "9eba32cc-3882-4c8c-8a1d-435f07a53594",
+      "name": "Crawl4AI2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0c764118-ca56-4a6a-9d65-f8062829b749"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "cd615b2e-4c0f-410f-ae5a-b81515c61fd1",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -928,
+        368
+      ],
+      "id": "6c8f6ead-6bba-4f7b-9bdf-b6eb3465b6a6",
+      "name": "Switch",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# 2. Crawl n Scrape\n",
+        "height": 384,
+        "width": 704,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        688,
+        -128
+      ],
+      "id": "99049a2b-b466-4d23-894d-bd1124ebcc4c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# 4. Output",
+        "height": 336,
+        "width": 640,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        752,
+        272
+      ],
+      "id": "1d4f941d-f7cb-4e28-8758-e0ae82a50051",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# 3. QC ",
+        "height": 336,
+        "width": 1280,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        272
+      ],
+      "id": "8b5966a5-cef9-42c0-a570-1c9ff6d85a3c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Header footer - later",
+        "height": 224,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1104,
+        304
+      ],
+      "id": "fd5c6436-03fa-40ee-af09-8fd60c6a73e4",
+      "name": "Sticky Note4",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "formTitle": "Submit Website Details for QC",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Property Name",
+              "placeholder": "eg: Sarovar Hotels",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Sitemap link in XML format",
+              "placeholder": "Eg: https://www.sarovarhotels.com/sitemap.xml",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Specify Language",
+              "placeholder": "Eg: \"UK English\"",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Is it a child property?",
+              "placeholder": "\"Yes\" or \"No\"",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "If child, specify child URL",
+              "placeholder": "eg: \"./sarovar-premiere-alwar/\""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -176,
+        0
+      ],
+      "id": "95572d9a-dfb7-4081-8a57-4cfa612a385b",
+      "name": "On form submission1",
+      "webhookId": "d8e06741-65ed-46da-8a35-d4a9fa7fe029"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "64bee07a-c781-425b-8019-56bdb343d123",
+              "leftValue": "={{ $('On form submission1').item.json['Is it a child property?'] }}",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        784,
+        16
+      ],
+      "id": "7b4c27d4-1535-4716-bdc2-f885e2b1d391",
+      "name": "If its a Child Prop"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "urlset.url",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        624,
+        16
+      ],
+      "id": "93f280c8-39e0-46ae-9111-08a88fdc8350",
+      "name": "Split Out URLs"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fbf37fbb-4f7e-4cdc-b1c7-ef01f2d5f9bf",
+              "leftValue": "={{ $('Split Out URLs').item.json.loc }}",
+              "rightValue": "={{ $('On form submission1').first().json['If child, specify child URL'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1104,
+        -96
+      ],
+      "id": "05421c36-f7cc-43c3-912d-35787abb6462",
+      "name": "Filter Only Child URLs"
+    },
+    {
+      "parameters": {
+        "model": "mistral-large-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        448,
+        464
+      ],
+      "id": "21a2aad3-f334-4eb3-a051-2a10ea687224",
+      "name": "Mistral Cloud Chat Model2",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "zVNIevhGxwl3AEol",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "markdown, url",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        1104
+      ],
+      "id": "cbd9dadf-1630-49d6-b90c-28d786d9fac2",
+      "name": "Split Out",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# You are the Director of Content Operations, who have great expertise working with high-conversion Hotel websites, In-depth SEO, AI-engine optimisation and a great eye for details.\n\n- You have absolute mastery over the \"31 Content Rules\", attached on the Google Sheets n8n tool node, that **you must follow** at all times. They are the \"Bible\" you follow, and must adhere strictly - NO DEVIATION.\n\n## instructions\nWith respect to the 31 rules, which are further categorised under the below names, You are required to find errors/mismatches against the attached content that you should check.\n\n### For every issue you find, you *MUST categorise it into exactly one of the following 2 categories:*\n1. Language and Grammar\n2. AI Suggestions\n\n## Danger zone\n- Do not invent issues which are out of scope of the 125 rules.\n\n## Output Format\nDo not write a summary paragraph. *You must ONLY OUTPUT a valid JSON object matching the Structure Definition.*\n- **You MUST include the \"url\" field in your output exactly as provided in the input below.**\n- Put all and every distinct issue into the `qc_breakdown` list.\n- Always Output *1. Language and Grammar* first. If no grammar/language issues found, output \"No issues found\".\n- Use the exact category names listed above.\n- If a category has no issues, do not invent them.\n- List out any and all grammatical errors of the particular page under the \"1. Language and Grammar\" section.\n- Explicitly list any enhancements and suggestions you noticed on the page under \"2. AI Suggestions\" only.\n\n### You must analyse the content of the page and make sure it aligns with {{ $('On form submission1').first().json['Specify Language'] }} Spelling, and also, if the 31 rules of the sheet are being followed.\n\n#### Examples of UK vs US English spellings include, but are not limited to.\n\nUK: colour, favourite, centre, metre, litre, organise, personalise, recognise, analyse, travelling, cancelled, labelled, programme, catalogue, licence, defence, aluminium, jewellery, cosy, mould, grey, cheque, tyre, neighbourhood, manoeuvre\n\nUS: color, favorite, center, meter, liter, organize, personalize, recognize, analyze, traveling, canceled, labeled, program, catalog, license, defense, aluminum, jewelry, cozy, mold, gray, check, tire, neighborhood, maneuver\n\nPAGE URL: {{ $json.url }}\nCONTENT TO CHECK: {{ $json.markdown }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        368,
+        1040
+      ],
+      "id": "be15a36a-5c77-475f-8fb6-0a9ce4c5dddc",
+      "name": "AI Agent",
+      "retryOnFail": false,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        160,
+        1040
+      ],
+      "id": "1af07cbf-8cfb-49ea-a42c-b5cede383870",
+      "name": "Loop Over Items1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"url\": \"Extract the dynamic URL from the prompt here\",\n  \"qc_breakdown\": [\n    {\n      \"category\": \"Language and Grammar\",\n      \"issue\": \"Specific issue details\"\n    }\n  ]\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        128,
+        1184
+      ],
+      "id": "01a99097-6001-4e14-b114-5a876fd82002",
+      "name": "Structured Output Parser1",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Senior Engineer Logic: Flattening AI output and appending \n * a separator row (\"---\") to conclude the page report.\n */\n\nconst input = $input.all();\nconst results = [];\n\nfor (const item of input) {\n  // Point to the AI Agent's \"output\" wrapper\n  const data = item.json.output;\n\n  if (data && Array.isArray(data.qc_breakdown)) {\n    data.qc_breakdown.forEach(entry => {\n      \n      // Handling the double-nested structure seen in the input schema\n      const entryData = entry.qc_breakdown || entry;\n\n      results.push({\n        \"Property/Page Name\": data.url || \"URL Not Found\",\n        \"QC Parameters\": entryData.category || \"N/A\",\n        \"Action Item\": entryData.issue || \"No issues found\"\n      });\n    });\n  }\n}\n\n// Push the visual separator row after all QC entries for the current page are added\nif (results.length > 0) {\n  results.push({\n    \"Property/Page Name\": \"---\",\n    \"QC Parameters\": \"---\",\n    \"Action Item\": \"---\"\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        1040
+      ],
+      "id": "aaeba0ad-1cdb-4b70-a91b-40ca040d21e3",
+      "name": "Code in JavaScript1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw",
+          "mode": "list",
+          "cachedResultName": "Content QC",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 798831405,
+          "mode": "list",
+          "cachedResultName": "Language and Grammar",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit#gid=798831405"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        720,
+        1184
+      ],
+      "id": "4c8c4397-1495-4ba4-a66a-d56d396ddc92",
+      "name": "Get row(s) in sheet in Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create spreadsheet').first().json.sheets[0].properties.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Property/Page Name": "={{ $json[\"Property/Page Name\"] }}",
+            "Action Item": "={{ $json[\"Action Item\"] }}",
+            "QC Parameters": "={{ $json[\"QC Parameters\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Property/Page Name",
+              "displayName": "Property/Page Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "QC Parameters",
+              "displayName": "QC Parameters",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Action Item",
+              "displayName": "Action Item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        880,
+        1040
+      ],
+      "id": "bf3697b4-0f29-428c-91c6-49d27888a481",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1056,
+        1040
+      ],
+      "id": "30f9a8a6-6d26-4bb5-8c48-efc65ea82696",
+      "name": "Wait2",
+      "webhookId": "7533690a-9ac1-4c49-98b6-1b6ff456851a",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": "devstral-medium-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        624,
+        1344
+      ],
+      "id": "1e0c47a1-f325-4c57-9109-249c6a1dcc8f",
+      "name": "Mistral Cloud Chat Model3",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "zVNIevhGxwl3AEol",
+          "name": "Mistral Cloud account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": "mistral-large-2512",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        304,
+        1472
+      ],
+      "id": "34e540ae-a8e0-47a7-ab54-931c1c1f5dc1",
+      "name": "Mistral Cloud Chat Model4",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "zVNIevhGxwl3AEol",
+          "name": "Mistral Cloud account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# 3. QC ",
+        "height": 336,
+        "width": 1280,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        1008
+      ],
+      "id": "5432da91-b193-47e5-bc01-7b16a1709381",
+      "name": "Sticky Note5",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": "mistral-large-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        896,
+        1184
+      ],
+      "id": "b4be0f3f-71d7-48ee-b73d-537f0a9feb30",
+      "name": "Mistral Cloud Chat Model5",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "zVNIevhGxwl3AEol",
+          "name": "Mistral Cloud account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": "arcee-ai/trinity-large-preview:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        464,
+        1408
+      ],
+      "id": "b0e36e9d-6a59-4947-9f1b-be3725777503",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "x0LG52oVRDHGvw9B",
+          "name": "OpenRouter account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw",
+          "mode": "list",
+          "cachedResultName": "Content QC",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 798831405,
+          "mode": "list",
+          "cachedResultName": "Language and Grammar",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit#gid=798831405"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        112,
+        512
+      ],
+      "id": "cc696e8c-4e8f-4a94-b622-86b3d3c29329",
+      "name": "Language and Grammar",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kwTwxynkf7YLmp2t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-haiku-4.5",
+        "options": {
+          "responseFormat": "json_object",
+          "temperature": 0.2,
+          "maxRetries": 1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        736
+      ],
+      "id": "f62ef92b-439d-49fd-a2d2-a03eabbca8d0",
+      "name": "Sonnet 4.5",
+      "credentials": {
+        "openRouterApi": {
+          "id": "x0LG52oVRDHGvw9B",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "x-ai/grok-4.1-fast",
+        "options": {
+          "maxRetries": 1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        624
+      ],
+      "id": "7155869f-db19-43c2-bb3f-0e2a9de403a7",
+      "name": "Grok fast 4.1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "x0LG52oVRDHGvw9B",
+          "name": "OpenRouter account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "On form submission1": [
+      {
+        "json": {
+          "Property Name": "BesTEST Hotel's",
+          "Sitemap link in XML format": "https://preview.simplotel.com/1E19D27F8DBF790A/sitemap.xml",
+          "Specify Language": "UK English",
+          "Is it a child property?": "No",
+          "If child, specify child URL": "",
+          "submittedAt": "2026-02-09T07:38:28.205-05:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Create spreadsheet": [
+      {
+        "json": {
+          "spreadsheetId": "1qCX3BhYGTHly-Q9a7PPe1iHblv4tt82iNDli3e1govY",
+          "properties": {
+            "title": "BesTEST Hotel's Website QC",
+            "locale": "en_US",
+            "autoRecalc": "ON_CHANGE",
+            "timeZone": "Etc/GMT",
+            "defaultFormat": {
+              "backgroundColor": {
+                "red": 1,
+                "green": 1,
+                "blue": 1
+              },
+              "padding": {
+                "top": 2,
+                "right": 3,
+                "bottom": 2,
+                "left": 3
+              },
+              "verticalAlignment": "BOTTOM",
+              "wrapStrategy": "OVERFLOW_CELL",
+              "textFormat": {
+                "foregroundColor": {},
+                "fontFamily": "arial,sans,sans-serif",
+                "fontSize": 10,
+                "bold": false,
+                "italic": false,
+                "strikethrough": false,
+                "underline": false,
+                "foregroundColorStyle": {
+                  "rgbColor": {}
+                }
+              },
+              "backgroundColorStyle": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 1,
+                  "blue": 1
+                }
+              }
+            },
+            "spreadsheetTheme": {
+              "primaryFontFamily": "Arial",
+              "themeColors": [
+                {
+                  "colorType": "TEXT",
+                  "color": {
+                    "rgbColor": {}
+                  }
+                },
+                {
+                  "colorType": "BACKGROUND",
+                  "color": {
+                    "rgbColor": {
+                      "red": 1,
+                      "green": 1,
+                      "blue": 1
+                    }
+                  }
+                },
+                {
+                  "colorType": "ACCENT1",
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.25882354,
+                      "green": 0.52156866,
+                      "blue": 0.95686275
+                    }
+                  }
+                },
+                {
+                  "colorType": "ACCENT2",
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.91764706,
+                      "green": 0.2627451,
+                      "blue": 0.20784314
+                    }
+                  }
+                },
+                {
+                  "colorType": "ACCENT3",
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.9843137,
+                      "green": 0.7372549,
+                      "blue": 0.015686275
+                    }
+                  }
+                },
+                {
+                  "colorType": "ACCENT4",
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.20392157,
+                      "green": 0.65882355,
+                      "blue": 0.3254902
+                    }
+                  }
+                },
+                {
+                  "colorType": "ACCENT5",
+                  "color": {
+                    "rgbColor": {
+                      "red": 1,
+                      "green": 0.42745098,
+                      "blue": 0.003921569
+                    }
+                  }
+                },
+                {
+                  "colorType": "ACCENT6",
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.27450982,
+                      "green": 0.7411765,
+                      "blue": 0.7764706
+                    }
+                  }
+                },
+                {
+                  "colorType": "LINK",
+                  "color": {
+                    "rgbColor": {
+                      "red": 0.06666667,
+                      "green": 0.33333334,
+                      "blue": 0.8
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "sheets": [
+            {
+              "properties": {
+                "sheetId": 294862221,
+                "title": "Test",
+                "index": 0,
+                "sheetType": "GRID",
+                "gridProperties": {
+                  "rowCount": 1000,
+                  "columnCount": 26
+                }
+              }
+            }
+          ],
+          "spreadsheetUrl": "https://docs.google.com/spreadsheets/d/1qCX3BhYGTHly-Q9a7PPe1iHblv4tt82iNDli3e1govY/edit?ouid=114625840653697605736"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Split Out1": [
+      {
+        "json": {
+          "markdown": "# hello traveller to the kovalam hot el. Welcome\n# this hotel should be un hotel\n## heading towards the beacch\nLorem Ipsum\n## About Our beautiful Hotel\nWelcome to one of India's most luxurious beach resorts! Our stunning 5-Star property offers unparalleled comfort and world-class amenities. We have Twenty Three rooms spread across 4.000 square feet of pristine beachfront property.\n**Contact Details:**\n  * Phones: +1 234 5678 9012 / +971-55-123-4567\n  * EMAILS: RESERVATIONS@SUNSETBAY.COM / iNFO@SUNSETBAY.COM\n\n\n**Address:** sunset bay beach road, kovalam, kerala\n## Our Accommodations\n### suite with ocean view\nSpans 250-sq feet And Features A Private Balcony With Breathtaking Sea Views.\n**Amenities:**\n  * King Size Bed\n  * Air Conditioning\n  * 55\" television\n  * mini bar\n  * bath tub\n\n\nThis luxurious 3bhk suite features a queen sized bed, twin-beds in the second bedroom, and audiovisual equipment throughout.\n### Deluxe Room Above The Clouds\nArea: 180 sq. feat | Max Occupancy: 2 ghost\nOur deluxe room above the clouds offers spectacular views and premium comfort. Features include airconditioning, WiFi, and turn down service.\n## Dining Experiences\n### Rider's Cafe\nEnjoy al fresco dining at our beachfront cafe with spectacular sunset views.\n**Timing:** 7:00 AM to 11:00 PM **Breakfast Timing:** 10:00 A.M. to 7:00 A.M.\n### The Ocean Loungi\nOpen for high-tea service and evening cocktails.\n**Timings:** 3:00 PM to 6:00 PM | 7:30 pm to 11:00 p.m.\n## Amenities & Services\nOur hotel features:\n  * Twenty Four Seven Room Service\n  * Twenty Four Seven Swimming Pool\n  * Doctor On Calling\n  * A/C Throughout The Property\n  * Camplimentary wi fi\n  * Audio Visual Equipment In Conference Rooms\n\n\n## Nearby Attractions\n### Kovallam Beach\nThis hotel at the Kovalam near the The famous Kovalam Beach, also known as the \"Paradise of the South,\" is just 200 km away. This beautiful beach stretches along the coastline and offers pristine waters.\n### Ancient Temple\nBuilt in the 12th century, this magnificent structure showcases dravids architecture. The temple features intricate carvings and is a must-visit destination.\n#### Continue your booking\n",
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "markdown": "[Home](https://preview.simplotel.com/1E19D27F8DBF790A/) > Random page1\n## Our vRooms\nWe offer 4 distinct room categories to suit every traveler's needs:\n**Premiume Ocean Suite** Premium Ocean Suite with Balcony spans four hundred square feet and accommodates up to 4 Guests. The room features mountain views, a private balcony, and a minibar.\nRoom amenities include king-size bed, bathtub, air conditioning, and turning-down service.\n**Family Villa** This spacious 4-bHK accommodation offers 800 square-feet of living space.\n  * Spans 800 sq ft and features a private garden\n  * Queen Size Beds In Master Bedroom.\n  * Turn-Down Service Available.\n  * Mini-Bar Stocked Daily.\n\n\n## Special Experiences\nExplore our curated experiences designed for the discerning traveler. know more about our packages by contacting our concierge team.\n**Sunset Cruise Package** Embark on a romantic journey along the coast—sailing through pristine waters and witnessing breathtaking sunsets. The cruise operates daily from 5:00 PM to 8:00 PM.\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n## Location & Connectivity\n**Distance from Key Points:**\n  * Trivandrum Airport: twenty three km (approximately 45 minutes)\n  * Railway Station: 15-km\n  * City Center: 10000 kmeters\n\n\n**Travel Route:** Trivandrum–Kovalam Beach Road NH47\n## Why book direct\n  * best rate guaran tea\n  * complimentary breakfast\n  * free airport transfers\n  * late check-out subject to availability\n  * exclusive spa discounts\n\n\n## Gallery\nview all our stunning property photos in the gallery section.\n## CONTACT USA\nFor reservations and enquiries, reach out to us:\n**Phone:** +977 1234567890 **Email:** bookings@sunsetbay.com\n**Breakfast Timings:** 7 AM to 10:30 AM | 11 AM to 12 PM\n**Restaurant Hours:** 12:00 pm to 3:00 pm to 6:00 pm to 10:00 pm\n**Book now** and experience luxury redefined at Sunset Bay Resort, Goa!\n#### Continue your booking\n",
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/random-page1"
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      },
+      {
+        "json": {
+          "markdown": "[Home](https://preview.simplotel.com/1E19D27F8DBF790A/) > bets htoel page in treevandrum\n# Guest Sir vices & Experiences\n## Wellness & Recreation\nOur award-winning spa offers a comprehensiv range of treatements designed to rejuvinate your mind, body and soul. Experience traditional Ayurvedic therapys administered by certified practioners, or indulge in our signature massages using organic oils sourced localy from Kerala. The wellness centre spans 1200 sq. ft. and features seperate facilities for men and women, including steam rooms, saunas, and relaxtion lounges. Our experianced therapists will customise each session to meet your individuol needs, ensuring a truely transformative experiance.\nThe infinity pool overlooks the Arabian Sea and is equiped with underwater lighting for evening swims. Complimentary towels, loungers, and refreshments are availible throughout the day. Our fitness centre operates around-the-clock and features state-of-the-dance cardio equipment, free weights, and dedicated yoga studio. Personal trainers are availabe upon request to help you maintian your wellness routine during your stay.\n## cultural Immersions & Local Experiences\nImmerse yourself in the rich tapestry of Karela's cultural heritage through our bespoke experiences. Partipate in traditional Kadakali dance performances held every evening at 7:00 P.M. in your open-air amphitheatre. Our culinary team organises cooking classes where guests can learn to prepare authentic Karala delicacies using locally sourced spices and ingredients. Visit nearby fishing villages to witness age-old techniques still practised by local communities, or embark on a backwater cruise through the serene canals that characterise this beautiful region.\nWe also organise guided tours to historical landmarks, including ancient temples and colonial-era architecture that reflect Kerala's diverse post. Our concierge team can arrange visits to spice plantations where you'll discover how carda mom, pepper, and cinnamon are cultivated and processed. For adventure enthusiasts, we offer trekking expeditions to nearby hills, providing breathtaking views of the coastline and opportunities to spot endemice wildlife species unique to the Western jatts ecosystem.\n#### Continue your booking\n",
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/bets-htoel-page-in-treevandrum"
+        },
+        "pairedItem": {
+          "item": 2
+        }
+      }
+    ],
+    "Delete extra row (keep only header)": [
+      {
+        "json": {
+          "success": true
+        },
+        "pairedItem": [
+          {
+            "item": 0
+          }
+        ]
+      }
+    ],
+    "Append row in sheet": [
+      {
+        "json": {
+          "Property/Page Name": "Property/Page Name",
+          "QC Parameters": "QC Parameters",
+          "Action Item": "Action Item"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Crawl4AI": [
+      {
+        "json": {
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/",
+          "filter": "fit",
+          "query": null,
+          "cache": "0",
+          "markdown": "# hello traveller to the kovalam hot el. Welcome\n# this hotel should be un hotel\n## heading towards the beacch\nLorem Ipsum\n## About Our beautiful Hotel\nWelcome to one of India's most luxurious beach resorts! Our stunning 5-Star property offers unparalleled comfort and world-class amenities. We have Twenty Three rooms spread across 4.000 square feet of pristine beachfront property.\n**Contact Details:**\n  * Phones: +1 234 5678 9012 / +971-55-123-4567\n  * EMAILS: RESERVATIONS@SUNSETBAY.COM / iNFO@SUNSETBAY.COM\n\n\n**Address:** sunset bay beach road, kovalam, kerala\n## Our Accommodations\n### suite with ocean view\nSpans 250-sq feet And Features A Private Balcony With Breathtaking Sea Views.\n**Amenities:**\n  * King Size Bed\n  * Air Conditioning\n  * 55\" television\n  * mini bar\n  * bath tub\n\n\nThis luxurious 3bhk suite features a queen sized bed, twin-beds in the second bedroom, and audiovisual equipment throughout.\n### Deluxe Room Above The Clouds\nArea: 180 sq. feat | Max Occupancy: 2 ghost\nOur deluxe room above the clouds offers spectacular views and premium comfort. Features include airconditioning, WiFi, and turn down service.\n## Dining Experiences\n### Rider's Cafe\nEnjoy al fresco dining at our beachfront cafe with spectacular sunset views.\n**Timing:** 7:00 AM to 11:00 PM **Breakfast Timing:** 10:00 A.M. to 7:00 A.M.\n### The Ocean Loungi\nOpen for high-tea service and evening cocktails.\n**Timings:** 3:00 PM to 6:00 PM | 7:30 pm to 11:00 p.m.\n## Amenities & Services\nOur hotel features:\n  * Twenty Four Seven Room Service\n  * Twenty Four Seven Swimming Pool\n  * Doctor On Calling\n  * A/C Throughout The Property\n  * Camplimentary wi fi\n  * Audio Visual Equipment In Conference Rooms\n\n\n## Nearby Attractions\n### Kovallam Beach\nThis hotel at the Kovalam near the The famous Kovalam Beach, also known as the \"Paradise of the South,\" is just 200 km away. This beautiful beach stretches along the coastline and offers pristine waters.\n### Ancient Temple\nBuilt in the 12th century, this magnificent structure showcases dravids architecture. The temple features intricate carvings and is a must-visit destination.\n#### Continue your booking\n",
+          "success": true
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/random-page1",
+          "filter": "fit",
+          "query": null,
+          "cache": "0",
+          "markdown": "[Home](https://preview.simplotel.com/1E19D27F8DBF790A/) > Random page1\n## Our vRooms\nWe offer 4 distinct room categories to suit every traveler's needs:\n**Premiume Ocean Suite** Premium Ocean Suite with Balcony spans four hundred square feet and accommodates up to 4 Guests. The room features mountain views, a private balcony, and a minibar.\nRoom amenities include king-size bed, bathtub, air conditioning, and turning-down service.\n**Family Villa** This spacious 4-bHK accommodation offers 800 square-feet of living space.\n  * Spans 800 sq ft and features a private garden\n  * Queen Size Beds In Master Bedroom.\n  * Turn-Down Service Available.\n  * Mini-Bar Stocked Daily.\n\n\n## Special Experiences\nExplore our curated experiences designed for the discerning traveler. know more about our packages by contacting our concierge team.\n**Sunset Cruise Package** Embark on a romantic journey along the coast—sailing through pristine waters and witnessing breathtaking sunsets. The cruise operates daily from 5:00 PM to 8:00 PM.\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n## Location & Connectivity\n**Distance from Key Points:**\n  * Trivandrum Airport: twenty three km (approximately 45 minutes)\n  * Railway Station: 15-km\n  * City Center: 10000 kmeters\n\n\n**Travel Route:** Trivandrum–Kovalam Beach Road NH47\n## Why book direct\n  * best rate guaran tea\n  * complimentary breakfast\n  * free airport transfers\n  * late check-out subject to availability\n  * exclusive spa discounts\n\n\n## Gallery\nview all our stunning property photos in the gallery section.\n## CONTACT USA\nFor reservations and enquiries, reach out to us:\n**Phone:** +977 1234567890 **Email:** bookings@sunsetbay.com\n**Breakfast Timings:** 7 AM to 10:30 AM | 11 AM to 12 PM\n**Restaurant Hours:** 12:00 pm to 3:00 pm to 6:00 pm to 10:00 pm\n**Book now** and experience luxury redefined at Sunset Bay Resort, Goa!\n#### Continue your booking\n",
+          "success": true
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      },
+      {
+        "json": {
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/bets-htoel-page-in-treevandrum",
+          "filter": "fit",
+          "query": null,
+          "cache": "0",
+          "markdown": "[Home](https://preview.simplotel.com/1E19D27F8DBF790A/) > bets htoel page in treevandrum\n# Guest Sir vices & Experiences\n## Wellness & Recreation\nOur award-winning spa offers a comprehensiv range of treatements designed to rejuvinate your mind, body and soul. Experience traditional Ayurvedic therapys administered by certified practioners, or indulge in our signature massages using organic oils sourced localy from Kerala. The wellness centre spans 1200 sq. ft. and features seperate facilities for men and women, including steam rooms, saunas, and relaxtion lounges. Our experianced therapists will customise each session to meet your individuol needs, ensuring a truely transformative experiance.\nThe infinity pool overlooks the Arabian Sea and is equiped with underwater lighting for evening swims. Complimentary towels, loungers, and refreshments are availible throughout the day. Our fitness centre operates around-the-clock and features state-of-the-dance cardio equipment, free weights, and dedicated yoga studio. Personal trainers are availabe upon request to help you maintian your wellness routine during your stay.\n## cultural Immersions & Local Experiences\nImmerse yourself in the rich tapestry of Karela's cultural heritage through our bespoke experiences. Partipate in traditional Kadakali dance performances held every evening at 7:00 P.M. in your open-air amphitheatre. Our culinary team organises cooking classes where guests can learn to prepare authentic Karala delicacies using locally sourced spices and ingredients. Visit nearby fishing villages to witness age-old techniques still practised by local communities, or embark on a backwater cruise through the serene canals that characterise this beautiful region.\nWe also organise guided tours to historical landmarks, including ancient temples and colonial-era architecture that reflect Kerala's diverse post. Our concierge team can arrange visits to spice plantations where you'll discover how carda mom, pepper, and cinnamon are cultivated and processed. For adventure enthusiasts, we offer trekking expeditions to nearby hills, providing breathtaking views of the coastline and opportunities to spot endemice wildlife species unique to the Western jatts ecosystem.\n#### Continue your booking\n",
+          "success": true
+        },
+        "pairedItem": {
+          "item": 2
+        }
+      }
+    ]
+  },
+  "repo_name": "n8n-workflows-backup",
+  "repo_owner": "sidhartha1s",
+  "repo_path": "backups",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-04T17:00:20.225Z",
+      "createdAt": "2026-02-04T17:00:20.225Z",
+      "role": "workflow:owner",
+      "workflowId": "LWzxtqy0wMcjWSluzGQxK",
+      "projectId": "RL6dq3Iv75Grec4D"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-02-04T17:01:16.332Z",
+      "createdAt": "2026-02-04T17:01:16.332Z",
+      "id": "wSeDmR8kXxrLb8oE",
+      "name": "Website"
+    },
+    {
+      "updatedAt": "2026-02-04T17:01:11.917Z",
+      "createdAt": "2026-02-04T17:01:11.917Z",
+      "id": "klkqhZdZfanmTWju",
+      "name": "TEST ENV"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-10T13:41:45.283Z",
+  "versionId": "963b7894-d355-4b12-9bfe-3bd6987bb906"
+}
