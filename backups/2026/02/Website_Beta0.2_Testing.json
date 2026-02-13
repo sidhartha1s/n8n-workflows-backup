@@ -1,7 +1,1300 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-13T10:06:13.215Z",
+    "createdAt": "2026-02-12T13:59:27.529Z",
+    "versionId": "bbc6596f-ae1d-45d6-a791-9a2a0e3c6dfd",
+    "workflowId": "6zg7UF_gIMisNOytwoSZc",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "={{ $('On form submission1').first().json['Sitemap link in XML format'] }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0"
+              },
+              {
+                "name": "Accept",
+                "value": "application/xml,text/xml,*/*"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 30000
+          }
+        },
+        "id": "86e2e666-dddc-48f4-a046-90cfc64ac2d1",
+        "name": "6. HTTP Fetch Sitemap",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          224,
+          112
+        ],
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "amount": 2.5
+        },
+        "id": "cbe7f3d5-4846-4e0f-b593-9d973035a9eb",
+        "name": "10.5. ⏱️ Wait (Rate Limit)",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1200,
+          96
+        ],
+        "webhookId": "02a5c864-8ffc-4c73-8bd7-038fd848d65a"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.xml",
+        "typeVersion": 1,
+        "position": [
+          384,
+          112
+        ],
+        "id": "c30acd6d-e292-424c-9ce0-8ec25174a07a",
+        "name": "XML"
+      },
+      {
+        "parameters": {
+          "batchSize": 5,
+          "options": {}
+        },
+        "id": "b9622675-7bc7-4364-af38-2bd1d7e9d61c",
+        "name": "9.5. 📦 Split in Batches (5 URLs)",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          880,
+          96
+        ]
+      },
+      {
+        "parameters": {
+          "resource": "spreadsheet",
+          "title": "={{ $json['Property Name'] }} Website QC",
+          "sheetsUi": {
+            "sheetValues": [
+              {
+                "title": "Test"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -96,
+          -32
+        ],
+        "id": "19dc3362-29bd-4ea7-b073-dba7739384db",
+        "name": "Create spreadsheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "5766eb19-4fcf-4216-8dbb-023b42d18185",
+                "name": "columns",
+                "value": "Property/Page Name, QC Parameters, Action Item",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          224,
+          -32
+        ],
+        "id": "76a5b4ee-4cdd-4520-8955-32a700f025f1",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "markdown, url",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -576,
+          432
+        ],
+        "id": "42984534-df96-4766-a7d8-faa9bd12a7d2",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=# You are the Director of Content Operations, who have great expertise working with high-conversion Hotel websites, In-depth SEO, AI-engine optimisation and a great eye for details. You **only output Valid JSON**\n\n- You have absolute mastery over the \"31 Content Rules\", from the Google Sheets **n8n tool node**, that **you must follow** at all times. They are the \"Bible\" you follow, and must adhere strictly - NO DEVIATION.\n\nTHE 31 Language and Grammar (LG) RULES: \n\nLG01 | Phone Number | format:+[country_code] [area_code] [number] | country_codes: India=+91 | USA=+1 | Jamaica=+1 | Dubai=+971 | Nepal=+977 | pattern: +[code] xx xxxx xxxx (digits only, no other chars)\nLG02 | Hotel Name | casing:capitalised | punctuation:none | accept: [Brand] OR [Brand], [Location] | location_allowed: only the location that is part of the hotel name | applies_regardless: brand_only OR brand+location hotel names\nLG03 | Email | format:lowercase | applies_to:entire_email_address\nLG04 | Timings - Format | format:[H]:[MM] [AM/PM] to [H]:[MM] [AM/PM] | no_leading_zero:hours | minutes_if_absent:00 | am_pm:consistent_across_entire_site | exception: inherit:parent\nLG05 | Timings - Label | single_time:use \"Timing\" | multiple_times:use \"Timings\" | multiple_separator: pipe \" | \" between time ranges | valid: Breakfast Timing: 9:00 AM to 11:00 AM | valid: Breakfast Timings: 9:00 AM to 10:00 AM | 10:30 AM to 11:30 AM | exception: inherit:parent\nLG06 | 24/7 Service Labels | format: 24/7 [Service Name] | valid: 24/7 Room Service | 24/7 Swimming Pool | 24/7 Front Desk\nLG07 | Diacritics | rule: add diacritics ONLY if the word is a proper noun (e.g. outlet name) | valid: Rider's Café (proper noun — outlet name) | invalid: Visit our café in Bangalore (common noun usage) | known_exception: \"à la carte\" — always use diacritics\nLG08 | Al Fresco Dining | forbidden_phrase: \"al fresco\" | use_instead: \"open air\" or synonyms that clearly reflect open-air dining\nLG09 | Short Descriptions | include: area + max_occupancy(total_guests) + USPs | exclude: room_count (unless client specified) | room_name (if label already above)\nLG10 | Content Body | must_include: distance_or_walk_time_from_hotel | include: key_facts | who_built | year_or_century | how_far_from_hotel | tone: simple | content must fit the space\nLG11 | Header & Content | rule: location page snippet already has location name as header | do_not_repeat: travel hub or tourist attraction name in the content box below header | if_place_has_2_names: begin with \"Also known as...\" or its synonyms\nLG12 | Phone & Email Labels | rule: use SINGULAR label even if multiple values are listed | valid: Email: abc@hotel.com bcd@hotel.com | invalid: Emails: abc@hotel.com bcd@hotel.com | applies_to: Phone and Email labels\nLG13 | Room Names | casing: Title Case | valid: Suite With Balcony | invalid: Suite with Balcony\nLG14 | CTA Labels | rule: labels must be consistent across entire site | allowed_set: | Book Now → booking actions | Contact Us → enquiries | Know More → descriptive cards (card, header & text) | Explore → non-descriptive & descriptive cards | View More / View All → galleries, amenities, expandable lists | casing: consistent across site (Title Case)\nLG15 | General Grammar | check: spelling | grammar | awkward_phrasing | run-on_sentences | check: punctuation | capitalisation | spacing | check: prepositions | pronouns | articles\nLG16 | Headers (Title Case) | rule: words with >4 characters = Capitalised | rule: words with ≤4 characters = lowercase | exception: Personal Pronouns & Proper Nouns = always Capitalised | valid: Rooms Above the Clouds | invalid: Rooms Above The Clouds (if \"The\" ≤4)\nLG17 | BHK | format: [N]BHK (no space, no hyphen) | valid: 2BHK | 4BHK | note: N is a placeholder, any number is acceptable\nLG18 | Approved Word List | rule: in paragraphs, ONLY these exact forms are acceptable: | king size bed | queen size bed | twin beds | single bed | sq. ft. | air-conditioning | bathtub | turndown service | minibar | Wi-Fi | audiovisual | AV | A/C | TV | high tea | doctor on call | in_headers_or_title_case: Doctor on Call | casing: first letter can capitalise if word starts a paragraph | no_other_versions: flag any variant not in this list\nLG19 | Compound Words & Hyphens | rule: ALL compound words must be hyphenated (including in alt text) | hyphen_spacing: space before and after hyphen in general usage | exception: compound words themselves have NO space — just hyphen (e.g. air-conditioning)\nLG20 | Dashes (En / Em / Range) | en_dash: FORBIDDEN — avoid entirely | em_dash: allowed, but NO spaces before or after | valid: flying—all the way up | hyphen_for_ranges: allowed with spaces | valid: Bangalore - Mysore NH6\nLG21 | Bullet Points | rule: do NOT capitalise first letter | do NOT add period at end | exception: if bullet is a complete sentence → capitalise + add period | valid: spans 400 sq. ft. and features a balcony | invalid: Spans 400 sq. ft. and features a balcony. (unless full sentence)\nLG22 | Numbers & Units - Hyphen | rule: do NOT hyphenate between number and unit | valid: 250 sq. ft. | 23 km | invalid: 250-sq. ft. | 23-km\nLG23 | Units & Measurements | casing: lowercase unless unit is named after a person | lowercase: km | m | sq. ft. | uppercase: °C (Celsius — named after Anders Celsius) | numerals: measurements and quantities must ALWAYS be written as numerals | valid: 4 rooms | 5 oranges | 400 sq. ft. | general_text_numbers: write in words (not numerals) | valid: We offer one of the best hotels in Delhi (not 1). | tv_measurement: always write as [N]-inch format | valid: 55-inch | invalid: 55\"\nLG24 | Lorem Ipsum | rule: ZERO tolerance — flag any Lorem Ipsum placeholder text anywhere on site\nLG25 | Why Book Direct | rule: casing of all pointers/labels in Why Book Direct section = Title Case\nLG26 | Number + Text Combos | rule: when a number and text appear together (e.g. 4-star): | in_paragraph: use lowercase → \"4-star hotel\" | in_header: capitalise appropriately → \"A 4-Star Hotel on NH6\"\nLG27 | Amenities | rule: every room must have an amenities section | casing: consistent across all rooms\nLG28 | Room Name | rule: summary page snippet already shows room name as header | do_not_repeat: room name in the content box below or beside that header\nLG29 | Room USP | must_include: room_size | max_occupancy | special_features | special_features_examples: mountain views | balconies\nLG30 | Address | casing: Title Case\nLG31 | Numbers >3 Digits | rule: add comma as thousands separator | valid: 1,000 | 10,000 | invalid: 1000 | 10000\n\n## instructions\n- With respect to the 31 rules, which are further categorised under the below names, You are required to find errors/mismatches against the attached content that you should check.\n\n## CRITICAL: Never output conversational text. Never narrate what you are about to do. Your ONLY output must be the final JSON object. Do not write \"I'll analyze\", \"Let me\", \"I will\", or any sentence before or after the JSON. Silence before and after the JSON. Raw JSON only.\n\n### For every issue you find, you *MUST categorise it into exactly one of the following 2 categories:*\n1. Language and Grammar\n2. AI Suggestions\n\n## Danger zone\n- Do not invent issues which are out of scope of the 125 rules.\n## Output Format\nDo not write a summary paragraph. **You must ONLY OUTPUT a valid JSON object matching the Structure Definition.**\n- **You MUST include the \"url\" field in your output exactly as provided in the input below.**\n- Structure the output like \"Rule_Code | Distinct issue\".\nexample output: \"LG01 | Country code is wrong. Property is in India, while country code reads +1 which is for US numbers.\" \n- Put all and every distinct issue into the `qc_breakdown` list.\n- Always Output *1. Language and Grammar* first. If no grammar/language issues found, output \"No issues found\".\n- Use the exact category names listed above.\n- If a category has no issues, do not invent them.\n- List out any and all grammatical errors of the particular page under the \"1. Language and Grammar\" section.\n- Explicitly list any enhancements and suggestions you noticed on the page under \"2. AI Suggestions\" only.\n\n### You must analyse the content of the page and make sure it aligns with {{ $('On form submission1').first().json['Specify Language'] }} Spelling, and also, if the 31 rules of the sheet are being followed.\n\n#### Examples of UK vs US English spellings include, but are not limited to.\n\nUK: colour, favourite, centre, metre, litre, organise, personalise, recognise, analyse, travelling, cancelled, labelled, programme, catalogue, licence, defence, aluminium, jewellery, cosy, mould, grey, cheque, tyre, neighbourhood, manoeuvre\n\nUS: color, favorite, center, meter, liter, organize, personalize, recognize, analyze, traveling, canceled, labeled, program, catalog, license, defense, aluminum, jewelry, cozy, mold, gray, check, tire, neighborhood, maneuver\n\nPAGE URL: {{ $('Loop Over Items').item.json.url }}\nCONTENT TO CHECK: \n{{ $('Loop Over Items').item.json.markdown }}",
+          "hasOutputParser": true,
+          "options": {
+            "returnIntermediateSteps": false
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          -112,
+          336
+        ],
+        "id": "2fc61716-e6ad-45d6-a77a-85b78fcde6d6",
+        "name": "AI Agent1",
+        "retryOnFail": true,
+        "maxTries": 2,
+        "waitBetweenTries": 2000
+      },
+      {
+        "parameters": {
+          "jsCode": "// Split the comma-separated string from $json.rows\nconst headersArray = $json.columns.split(',');\n\n// Create an object where each key is a header (trimmed) and its value is the header text\nconst headersObject = {};\nheadersArray.forEach(header => {\nconst trimmedHeader = header.trim();\nheadersObject[trimmedHeader] = trimmedHeader;\n});\n\n// Return the object so that each header becomes a column in the first row of your sheet\nreturn [\n{\njson: headersObject\n}\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          384,
+          -32
+        ],
+        "id": "bb4b682a-932d-47bb-bafd-07be26fa22a5",
+        "name": "Inject Columns to sheet"
+      },
+      {
+        "parameters": {
+          "amount": 2
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          64,
+          -32
+        ],
+        "id": "f016da2a-ec19-47e1-9e0a-94ec482ff003",
+        "name": "Wait",
+        "webhookId": "7cc60e64-97cf-4664-a914-ab1a8328ff95"
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "documentId": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+            "mode": "url"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.sheets[0].properties.sheetId }}",
+            "mode": "id"
+          }
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          64,
+          112
+        ],
+        "id": "88f64ac1-592e-4d44-8218-d4c846d8cac4",
+        "name": "Delete extra row (keep only header)",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').item.json.spreadsheetUrl }}",
+            "mode": "url"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').item.json.sheets[0].properties.sheetId }}",
+            "mode": "id"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "S no",
+                "displayName": "S no",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Page URL",
+                "displayName": "Page URL",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "QC Remarks",
+                "displayName": "QC Remarks",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Suggestions",
+                "displayName": "Suggestions",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "QC Score",
+                "displayName": "QC Score",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -96,
+          112
+        ],
+        "id": "e2366fef-d698-45fd-9b68-f829d3487a59",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "# 1. Initialisation ",
+          "height": 384,
+          "width": 880
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -288,
+          -96
+        ],
+        "id": "02220164-e6b2-442e-80a3-b59d122ea703",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -384,
+          336
+        ],
+        "id": "407d73a8-cddc-49b5-8e07-34b53c73563c",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n  \"url\": \"Extract the dynamic URL from the prompt here\",\n  \"qc_breakdown\": [\n    {\n      \"category\": \"Language and Grammar\",\n      \"issue\": \"LG01 | Specific issue details\"\n    }\n  ]\n}",
+          "autoFix": true
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          -384,
+          496
+        ],
+        "id": "87ee144b-a7d3-47e0-8636-591e50856269",
+        "name": "Structured Output Parser",
+        "retryOnFail": true,
+        "waitBetweenTries": 1000,
+        "maxTries": 2
+      },
+      {
+        "parameters": {
+          "content": "# Start w/ Form submission\n",
+          "height": 112,
+          "width": 288,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -608,
+          48
+        ],
+        "id": "36d0d39b-c3ac-4aef-8d64-4a463ef9e71c",
+        "name": "Sticky Note6"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://crawl4ai:11235/md",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"url\": \"{{ $json.loc }}\",\n  \"f\": \"fit\",\n  \"q\": null,\n  \"c\": \"0\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1040,
+          96
+        ],
+        "id": "3fda09ca-372c-493c-bb63-ed4fa063e94a",
+        "name": "Crawl4AI"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          720,
+          432
+        ],
+        "id": "dba78f82-0ea6-415b-856c-469f3d41c35e",
+        "name": "Rest OPS - Pending."
+      },
+      {
+        "parameters": {
+          "jsCode": "/**\n * Senior Engineer Logic: Flattening AI output and appending \n * a separator row (\"---\") to conclude the page report.\n */\n\nconst input = $input.all();\nconst results = [];\n\nfor (const item of input) {\n  // Point to the AI Agent's \"output\" wrapper\n  const data = item.json.output;\n\n  if (data && Array.isArray(data.qc_breakdown)) {\n    data.qc_breakdown.forEach(entry => {\n      \n      // Handling the double-nested structure seen in the input schema\n      const entryData = entry.qc_breakdown || entry;\n\n      results.push({\n        \"Property/Page Name\": data.url || \"URL Not Found\",\n        \"QC Parameters\": entryData.category || \"N/A\",\n        \"Action Item\": entryData.issue || \"No issues found\"\n      });\n    });\n  }\n}\n\n// Push the visual separator row after all QC entries for the current page are added\nif (results.length > 0) {\n  results.push({\n    \"Property/Page Name\": \"---\",\n    \"QC Parameters\": \"---\",\n    \"Action Item\": \"---\"\n  });\n}\n\nreturn results;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          256,
+          336
+        ],
+        "id": "11d67563-5f0e-47e7-b794-387693e55d37",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+            "mode": "url"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "={{ $('Create spreadsheet').first().json.sheets[0].properties.sheetId }}",
+            "mode": "id"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Property/Page Name": "={{ $json[\"Property/Page Name\"] }}",
+              "Action Item": "={{ $json[\"Action Item\"] }}",
+              "QC Parameters": "={{ $json[\"QC Parameters\"] }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Property/Page Name",
+                "displayName": "Property/Page Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "QC Parameters",
+                "displayName": "QC Parameters",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Action Item",
+                "displayName": "Action Item",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          496,
+          336
+        ],
+        "id": "97099ae8-e2ce-4d2e-9368-17f9053d5b95",
+        "name": "Append row in sheet1",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          512,
+          496
+        ],
+        "id": "43a4a2c2-986e-49ab-9c9a-d35e7e24e83c",
+        "name": "Wait1",
+        "webhookId": "7533690a-9ac1-4c49-98b6-1b6ff456851a"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.limit",
+        "typeVersion": 1,
+        "position": [
+          928,
+          432
+        ],
+        "id": "ffa02261-afd5-491e-a8e5-b83681aa6fdf",
+        "name": "Limit"
+      },
+      {
+        "parameters": {
+          "select": "channel",
+          "channelId": {
+            "__rl": true,
+            "value": "C0A81V933SA",
+            "mode": "list",
+            "cachedResultName": "n8n-automation"
+          },
+          "text": "=AI Website QC for {{ $('On form submission1').first().json['Property Name'] }} property has finished. \n\nPlease review the pointers below: {{ $('Create spreadsheet').first().json.spreadsheetUrl }}",
+          "otherOptions": {}
+        },
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.4,
+        "position": [
+          1152,
+          432
+        ],
+        "id": "d0e141e3-dc5c-4b73-98b8-11e486b69b29",
+        "name": "Send a message",
+        "webhookId": "a1cf1ecf-e1b1-4e80-8259-598d0300676a",
+        "credentials": {
+          "slackApi": {
+            "id": "O62AlOYXuAYiMczt",
+            "name": "Slack account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "0c764118-ca56-4a6a-9d65-f8062829b749"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "cd615b2e-4c0f-410f-ae5a-b81515c61fd1",
+                      "leftValue": "",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          -1008,
+          400
+        ],
+        "id": "8c6f55fc-8e87-42b8-9d17-6aaf90ad8f5c",
+        "name": "Switch",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "content": "# 2. Crawl n Scrape\n",
+          "height": 384,
+          "width": 736,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          608,
+          -96
+        ],
+        "id": "0b6cff81-9bb6-4c5d-89a9-f28c89a80221",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "# 4. Output",
+          "height": 336,
+          "width": 672,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          672,
+          304
+        ],
+        "id": "28005a59-a4e8-46f1-a029-c164108196df",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "# 3. QC ",
+          "height": 480,
+          "width": 1280,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -624,
+          304
+        ],
+        "id": "da07027a-12eb-4767-badf-b0269072509c",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "content": "# Header footer - later",
+          "height": 224,
+          "width": 464
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -1184,
+          336
+        ],
+        "id": "a9e5f9d9-afda-4d81-b8f4-c11805ced72a",
+        "name": "Sticky Note4",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "formTitle": "Submit Website Details for QC",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Property Name",
+                "placeholder": "eg: Sarovar Hotels",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Sitemap link in XML format",
+                "placeholder": "Eg: https://www.sarovarhotels.com/sitemap.xml",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Specify Language",
+                "placeholder": "Eg: \"UK English\"",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Is it a child property?",
+                "placeholder": "\"Yes\" or \"No\"",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "If child, specify child URL",
+                "placeholder": "eg: \"./sarovar-premiere-alwar/\""
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.5,
+        "position": [
+          -256,
+          32
+        ],
+        "id": "ab4ffcf7-5810-458a-bf48-c45599e3457f",
+        "name": "On form submission1",
+        "webhookId": "7a5e107c-61dd-413c-88c5-644899402bd3"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "64bee07a-c781-425b-8019-56bdb343d123",
+                "leftValue": "={{ $('On form submission1').item.json['Is it a child property?'] }}",
+                "rightValue": "yes",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          704,
+          48
+        ],
+        "id": "71238851-654f-4c23-8e17-c5159f4ee0d9",
+        "name": "If its a Child Prop"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "urlset.url",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          544,
+          48
+        ],
+        "id": "de9f57b1-50b7-4a93-82a7-6b177edb7dd9",
+        "name": "Split Out URLs"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "fbf37fbb-4f7e-4cdc-b1c7-ef01f2d5f9bf",
+                "leftValue": "={{ $('Split Out URLs').item.json.loc }}",
+                "rightValue": "={{ $('On form submission1').first().json['If child, specify child URL'] }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1200,
+          -64
+        ],
+        "id": "3991a5e1-8a61-41d9-9468-6b2aad5a3693",
+        "name": "Filter Only Child URLs"
+      },
+      {
+        "parameters": {
+          "model": "mistral-large-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          -1376,
+          784
+        ],
+        "id": "a5947a56-fabe-4ba2-8f55-b6a1ae516977",
+        "name": "Mistral Cloud Chat Model2",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "zVNIevhGxwl3AEol",
+            "name": "Mistral Cloud account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw",
+            "mode": "list",
+            "cachedResultName": "Content QC",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 798831405,
+            "mode": "list",
+            "cachedResultName": "Language and Grammar",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit#gid=798831405"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheetsTool",
+        "typeVersion": 4.7,
+        "position": [
+          -1120,
+          736
+        ],
+        "id": "833b9670-364e-4c65-b3c7-85dcff6b79b9",
+        "name": "Language and Grammar",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "x-ai/grok-4.1-fast",
+          "options": {
+            "maxRetries": 1
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          -336,
+          656
+        ],
+        "id": "7420d5f4-10fe-437d-877e-3efe6d6b13de",
+        "name": "Grok fast 4.1",
+        "credentials": {
+          "openRouterApi": {
+            "id": "x0LG52oVRDHGvw9B",
+            "name": "OpenRouter account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw",
+            "mode": "list",
+            "cachedResultName": "Content QC",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 798831405,
+            "mode": "list",
+            "cachedResultName": "Language and Grammar",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xYNYO8p3oBwHW_kCUz_EggaI4izwYvX42o0Ke33KTvw/edit#gid=798831405"
+          },
+          "options": {
+            "outputFormatting": {
+              "values": {
+                "general": "UNFORMATTED_VALUE",
+                "date": "FORMATTED_STRING"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -896,
+          752
+        ],
+        "id": "e8b51cf2-7731-434f-b9eb-bf1a695107b7",
+        "name": "LangGrammar",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "kwTwxynkf7YLmp2t",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## tool\n",
+          "height": 240
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -1184,
+          688
+        ],
+        "id": "c1ec1c2e-03ce-4aa8-8f57-fa0794be10f6",
+        "name": "Sticky Note5"
+      },
+      {
+        "parameters": {
+          "content": "## Node before AI\n",
+          "height": 224
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -928,
+          688
+        ],
+        "id": "0eb5f649-94dc-4bd8-be55-68334f6971cc",
+        "name": "Sticky Note7"
+      },
+      {
+        "parameters": {
+          "content": "## Prev Output Parser - now errrors",
+          "height": 272,
+          "width": 288
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -1488,
+          672
+        ],
+        "id": "353aa799-6b0b-41a2-ae2d-9aa880cd6b3d",
+        "name": "Sticky Note8"
+      },
+      {
+        "parameters": {
+          "model": "anthropic/claude-opus-4.6",
+          "options": {
+            "maxRetries": 1
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          -32,
+          560
+        ],
+        "id": "afea19e1-9809-4a47-809c-e53a6a6b5e42",
+        "name": "Opus",
+        "retryOnFail": true,
+        "maxTries": 2,
+        "credentials": {
+          "openRouterApi": {
+            "id": "x0LG52oVRDHGvw9B",
+            "name": "OpenRouter account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "6. HTTP Fetch Sitemap": {
+        "main": [
+          [
+            {
+              "node": "XML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "10.5. ⏱️ Wait (Rate Limit)": {
+        "main": [
+          [
+            {
+              "node": "9.5. 📦 Split in Batches (5 URLs)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "XML": {
+        "main": [
+          [
+            {
+              "node": "Split Out URLs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "9.5. 📦 Split in Batches (5 URLs)": {
+        "main": [
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Crawl4AI",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create spreadsheet": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Inject Columns to sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Inject Columns to sheet": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Delete extra row (keep only header)": {
+        "main": [
+          [
+            {
+              "node": "6. HTTP Fetch Sitemap",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet": {
+        "main": [
+          [
+            {
+              "node": "Delete extra row (keep only header)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Rest OPS - Pending.",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "AI Agent1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Crawl4AI": {
+        "main": [
+          [
+            {
+              "node": "10.5. ⏱️ Wait (Rate Limit)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Rest OPS - Pending.": {
+        "main": [
+          [
+            {
+              "node": "Limit",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet1": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "On form submission1": {
+        "main": [
+          [
+            {
+              "node": "Create spreadsheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If its a Child Prop": {
+        "main": [
+          [
+            {
+              "node": "Filter Only Child URLs",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "9.5. 📦 Split in Batches (5 URLs)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out URLs": {
+        "main": [
+          [
+            {
+              "node": "If its a Child Prop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter Only Child URLs": {
+        "main": [
+          [
+            {
+              "node": "9.5. 📦 Split in Batches (5 URLs)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mistral Cloud Chat Model2": {
+        "ai_languageModel": [
+          []
+        ]
+      },
+      "Language and Grammar": {
+        "ai_tool": [
+          []
+        ]
+      },
+      "Grok fast 4.1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Structured Output Parser",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "LangGrammar": {
+        "main": [
+          []
+        ]
+      },
+      "Opus": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "sid sid",
+    "name": "Version bbc6596f",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "bbc6596f-ae1d-45d6-a791-9a2a0e3c6dfd",
   "connections": {
     "6. HTTP Fetch Sitemap": {
       "main": [
@@ -453,8 +1746,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -576,
-        432
+        -240,
+        416
       ],
       "id": "42984534-df96-4766-a7d8-faa9bd12a7d2",
       "name": "Split Out1"
@@ -462,7 +1755,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=# You are the Director of Content Operations, who have great expertise working with high-conversion Hotel websites, In-depth SEO, AI-engine optimisation and a great eye for details. You **only output Valid JSON**\n\n- You have absolute mastery over the \"31 Content Rules\", from the Google Sheets **n8n tool node**, that **you must follow** at all times. They are the \"Bible\" you follow, and must adhere strictly - NO DEVIATION.\n\nTHE 31 Language and Grammar (LG) RULES: \n\nLG01 | Phone Number | format:+[country_code] [area_code] [number] | country_codes: India=+91 | USA=+1 | Jamaica=+1 | Dubai=+971 | Nepal=+977 | pattern: +[code] xx xxxx xxxx (digits only, no other chars)\nLG02 | Hotel Name | casing:capitalised | punctuation:none | accept: [Brand] OR [Brand], [Location] | location_allowed: only the location that is part of the hotel name | applies_regardless: brand_only OR brand+location hotel names\nLG03 | Email | format:lowercase | applies_to:entire_email_address\nLG04 | Timings - Format | format:[H]:[MM] [AM/PM] to [H]:[MM] [AM/PM] | no_leading_zero:hours | minutes_if_absent:00 | am_pm:consistent_across_entire_site | exception: inherit:parent\nLG05 | Timings - Label | single_time:use \"Timing\" | multiple_times:use \"Timings\" | multiple_separator: pipe \" | \" between time ranges | valid: Breakfast Timing: 9:00 AM to 11:00 AM | valid: Breakfast Timings: 9:00 AM to 10:00 AM | 10:30 AM to 11:30 AM | exception: inherit:parent\nLG06 | 24/7 Service Labels | format: 24/7 [Service Name] | valid: 24/7 Room Service | 24/7 Swimming Pool | 24/7 Front Desk\nLG07 | Diacritics | rule: add diacritics ONLY if the word is a proper noun (e.g. outlet name) | valid: Rider's Café (proper noun — outlet name) | invalid: Visit our café in Bangalore (common noun usage) | known_exception: \"à la carte\" — always use diacritics\nLG08 | Al Fresco Dining | forbidden_phrase: \"al fresco\" | use_instead: \"open air\" or synonyms that clearly reflect open-air dining\nLG09 | Short Descriptions | include: area + max_occupancy(total_guests) + USPs | exclude: room_count (unless client specified) | room_name (if label already above)\nLG10 | Content Body | must_include: distance_or_walk_time_from_hotel | include: key_facts | who_built | year_or_century | how_far_from_hotel | tone: simple | content must fit the space\nLG11 | Header & Content | rule: location page snippet already has location name as header | do_not_repeat: travel hub or tourist attraction name in the content box below header | if_place_has_2_names: begin with \"Also known as...\" or its synonyms\nLG12 | Phone & Email Labels | rule: use SINGULAR label even if multiple values are listed | valid: Email: abc@hotel.com bcd@hotel.com | invalid: Emails: abc@hotel.com bcd@hotel.com | applies_to: Phone and Email labels\nLG13 | Room Names | casing: Title Case | valid: Suite With Balcony | invalid: Suite with Balcony\nLG14 | CTA Labels | rule: labels must be consistent across entire site | allowed_set: | Book Now → booking actions | Contact Us → enquiries | Know More → descriptive cards (card, header & text) | Explore → non-descriptive & descriptive cards | View More / View All → galleries, amenities, expandable lists | casing: consistent across site (Title Case)\nLG15 | General Grammar | check: spelling | grammar | awkward_phrasing | run-on_sentences | check: punctuation | capitalisation | spacing | check: prepositions | pronouns | articles\nLG16 | Headers (Title Case) | rule: words with >4 characters = Capitalised | rule: words with ≤4 characters = lowercase | exception: Personal Pronouns & Proper Nouns = always Capitalised | valid: Rooms Above the Clouds | invalid: Rooms Above The Clouds (if \"The\" ≤4)\nLG17 | BHK | format: [N]BHK (no space, no hyphen) | valid: 2BHK | 4BHK | note: N is a placeholder, any number is acceptable\nLG18 | Approved Word List | rule: in paragraphs, ONLY these exact forms are acceptable: | king size bed | queen size bed | twin beds | single bed | sq. ft. | air-conditioning | bathtub | turndown service | minibar | Wi-Fi | audiovisual | AV | A/C | TV | high tea | doctor on call | in_headers_or_title_case: Doctor on Call | casing: first letter can capitalise if word starts a paragraph | no_other_versions: flag any variant not in this list\nLG19 | Compound Words & Hyphens | rule: ALL compound words must be hyphenated (including in alt text) | hyphen_spacing: space before and after hyphen in general usage | exception: compound words themselves have NO space — just hyphen (e.g. air-conditioning)\nLG20 | Dashes (En / Em / Range) | en_dash: FORBIDDEN — avoid entirely | em_dash: allowed, but NO spaces before or after | valid: flying—all the way up | hyphen_for_ranges: allowed with spaces | valid: Bangalore - Mysore NH6\nLG21 | Bullet Points | rule: do NOT capitalise first letter | do NOT add period at end | exception: if bullet is a complete sentence → capitalise + add period | valid: spans 400 sq. ft. and features a balcony | invalid: Spans 400 sq. ft. and features a balcony. (unless full sentence)\nLG22 | Numbers & Units - Hyphen | rule: do NOT hyphenate between number and unit | valid: 250 sq. ft. | 23 km | invalid: 250-sq. ft. | 23-km\nLG23 | Units & Measurements | casing: lowercase unless unit is named after a person | lowercase: km | m | sq. ft. | uppercase: °C (Celsius — named after Anders Celsius) | numerals: measurements and quantities must ALWAYS be written as numerals | valid: 4 rooms | 5 oranges | 400 sq. ft. | general_text_numbers: write in words (not numerals) | valid: We offer one of the best hotels in Delhi (not 1). | tv_measurement: always write as [N]-inch format | valid: 55-inch | invalid: 55\"\nLG24 | Lorem Ipsum | rule: ZERO tolerance — flag any Lorem Ipsum placeholder text anywhere on site\nLG25 | Why Book Direct | rule: casing of all pointers/labels in Why Book Direct section = Title Case\nLG26 | Number + Text Combos | rule: when a number and text appear together (e.g. 4-star): | in_paragraph: use lowercase → \"4-star hotel\" | in_header: capitalise appropriately → \"A 4-Star Hotel on NH6\"\nLG27 | Amenities | rule: every room must have an amenities section | casing: consistent across all rooms\nLG28 | Room Name | rule: summary page snippet already shows room name as header | do_not_repeat: room name in the content box below or beside that header\nLG29 | Room USP | must_include: room_size | max_occupancy | special_features | special_features_examples: mountain views | balconies\nLG30 | Address | casing: Title Case\nLG31 | Numbers >3 Digits | rule: add comma as thousands separator | valid: 1,000 | 10,000 | invalid: 1000 | 10000\n\n## instructions\n- With respect to the 31 rules, which are further categorised under the below names, You are required to find errors/mismatches against the attached content that you should check.\n\n## CRITICAL: Never output conversational text. Never narrate what you are about to do. Your ONLY output must be the final JSON object. Do not write \"I'll analyze\", \"Let me\", \"I will\", or any sentence before or after the JSON. Silence before and after the JSON. Raw JSON only.\n\n### For every issue you find, you *MUST categorise it into exactly one of the following 2 categories:*\n1. Language and Grammar\n2. AI Suggestions\n\n## Danger zone\n- Do not invent issues which are out of scope of the 125 rules.\n## Output Format\nDo not write a summary paragraph. **You must ONLY OUTPUT a valid JSON object matching the Structure Definition.**\n- **You MUST include the \"url\" field in your output exactly as provided in the input below.**\n- Structure the output like \"Rule_Code | Distinct issue\".\nexample output: \"LG01 | Country code is wrong. Property is in India, while country code reads +1 which is for US numbers.\" \n- Put all and every distinct issue into the `qc_breakdown` list.\n- Always Output *1. Language and Grammar* first. If no grammar/language issues found, output \"No issues found\".\n- Use the exact category names listed above.\n- If a category has no issues, do not invent them.\n- List out any and all grammatical errors of the particular page under the \"1. Language and Grammar\" section.\n- Explicitly list any enhancements and suggestions you noticed on the page under \"2. AI Suggestions\" only.\n\n### You must analyse the content of the page and make sure it aligns with {{ $('On form submission1').first().json['Specify Language'] }} Spelling, and also, if the 31 rules of the sheet are being followed.\n\n#### Examples of UK vs US English spellings include, but are not limited to.\n\nUK: colour, favourite, centre, metre, litre, organise, personalise, recognise, analyse, travelling, cancelled, labelled, programme, catalogue, licence, defence, aluminium, jewellery, cosy, mould, grey, cheque, tyre, neighbourhood, manoeuvre\n\nUS: color, favorite, center, meter, liter, organize, personalize, recognize, analyze, traveling, canceled, labeled, program, catalog, license, defense, aluminum, jewelry, cozy, mold, gray, check, tire, neighborhood, maneuver\n\nPAGE URL: {{ $('Loop Over Items').item.json.url }}\nCONTENT TO CHECK: \n{{ $('Loop Over Items').item.json.markdown }}",
+        "text": "=# You are the Director of Content Operations, who have great expertise working with high-conversion Hotel websites, In-depth SEO, AI-engine optimisation and a great eye for details. You **only output Valid JSON**\n\n- You have absolute mastery over the below shared \"31 Content Rules\" and **you must follow it at all times**. They are the \"Bible\" you follow, and must adhere strictly - NO DEVIATION.\n\nTHE 31 Language and Grammar (LG) RULES:\n\nLG01 | Phone Number | format:+[country_code] [area_code] [number] | country_codes: India=+91 | USA=+1 | Jamaica=+1 | Dubai=+971 | Nepal=+977 | pattern: +[code] xx xxxx xxxx (digits only, no other chars)\nLG02 | Hotel Name | casing:capitalised | punctuation:none | accept: [Brand] OR [Brand], [Location] | location_allowed: only the location that is part of the hotel name | applies_regardless: brand_only OR brand+location hotel names\nLG03 | Email | format:lowercase | applies_to:entire_email_address\nLG04 | Timings - Format | format:[H]:[MM] [AM/PM] to [H]:[MM] [AM/PM] | no_leading_zero:hours | minutes_if_absent:00 | am_pm:consistent_across_entire_site | exception: inherit:parent\nLG05 | Timings - Label | single_time:use \"Timing\" | multiple_times:use \"Timings\" | multiple_separator: pipe \" | \" between time ranges | valid: Breakfast Timing: 9:00 AM to 11:00 AM | valid: Breakfast Timings: 9:00 AM to 10:00 AM | 10:30 AM to 11:30 AM | exception: inherit:parent\nLG06 | 24/7 Service Labels | format: 24/7 [Service Name] | valid: 24/7 Room Service | 24/7 Swimming Pool | 24/7 Front Desk\nLG07 | Diacritics | rule: add diacritics ONLY if the word is a proper noun (e.g. outlet name) | valid: Rider's Café (proper noun — outlet name) | invalid: Visit our café in Bangalore (common noun usage) | known_exception: \"à la carte\" — always use diacritics\nLG08 | Al Fresco Dining | forbidden_phrase: \"al fresco\" | use_instead: \"open air\" or synonyms that clearly reflect open-air dining\nLG09 | Short Descriptions | include: area + max_occupancy(total_guests) + USPs | exclude: room_count (unless client specified) | room_name (if label already above)\nLG10 | Content Body | must_include: distance_or_walk_time_from_hotel | include: key_facts | who_built | year_or_century | how_far_from_hotel | tone: simple | content must fit the space\nLG11 | Header & Content | rule: location page snippet already has location name as header | do_not_repeat: travel hub or tourist attraction name in the content box below header | if_place_has_2_names: begin with \"Also known as...\" or its synonyms\nLG12 | Phone & Email Labels | rule: use SINGULAR label even if multiple values are listed | valid: Email: abc@hotel.com bcd@hotel.com | invalid: Emails: abc@hotel.com bcd@hotel.com | applies_to: Phone and Email labels\nLG13 | Room Names | casing: Title Case | valid: Suite With Balcony | invalid: Suite with Balcony\nLG14 | CTA Labels | rule: labels must be consistent across entire site | allowed_set: | Book Now → booking actions | Contact Us → enquiries | Know More → descriptive cards (card, header & text) | Explore → non-descriptive & descriptive cards | View More / View All → galleries, amenities, expandable lists | casing: consistent across site (Title Case)\nLG15 | General Grammar | check: spelling | grammar | awkward_phrasing | run-on_sentences | check: punctuation | capitalisation | spacing | check: prepositions | pronouns | articles\nLG16 | Headers (Title Case) | rule: words with >4 characters = Capitalised | rule: words with ≤4 characters = lowercase | exception: Personal Pronouns & Proper Nouns = always Capitalised | valid: Rooms Above the Clouds | invalid: Rooms Above The Clouds (if \"The\" ≤4)\nLG17 | BHK | format: [N]BHK (no space, no hyphen) | valid: 2BHK | 4BHK | note: N is a placeholder, any number is acceptable\nLG18 | Approved Word List (Not limited to) | rule: in paragraphs, ONLY these exact forms are acceptable: | king size bed | queen size bed | twin beds | single bed | sq. ft. | air-conditioning | bathtub | turndown service | minibar | Wi-Fi | audiovisual | AV | A/C | TV | high tea | doctor on call | in_headers_or_title_case: Doctor on Call | casing: first letter can capitalise if word starts a paragraph | no_other_versions: flag any variant not in this list\nLG19 | Compound Words & Hyphens | rule: ALL compound words must be hyphenated (including in alt text) | hyphen_spacing: space before and after hyphen in general usage | exception: compound words themselves have NO space — just hyphen (e.g. air-conditioning)\nLG20 | Dashes (En / Em / Range) | en_dash: FORBIDDEN — avoid entirely | em_dash: allowed, but NO spaces before or after | valid: flying—all the way up | hyphen_for_ranges: allowed with spaces | valid: Bangalore - Mysore NH6\nLG21 | Bullet Points | rule: do NOT capitalise first letter | do NOT add period at end | exception: if bullet is a complete sentence → capitalise + add period | valid: spans 400 sq. ft. and features a balcony | invalid: Spans 400 sq. ft. and features a balcony. (unless full sentence)\nLG22 | Numbers & Units - Hyphen | rule: do NOT hyphenate between number and unit | valid: 250 sq. ft. | 23 km | invalid: 250-sq. ft. | 23-km\nLG23 | Units & Measurements | casing: lowercase unless unit is named after a person | lowercase: km | m | sq. ft. | uppercase: °C (Celsius — named after Anders Celsius) | numerals: measurements and quantities must ALWAYS be written as numerals | valid: 4 rooms | 5 oranges | 400 sq. ft. | general_text_numbers: write in words (not numerals) | valid: We offer one of the best hotels in Delhi (not 1). | tv_measurement: always write as [N]-inch format | valid: 55-inch | invalid: 55\"\nLG24 | Lorem Ipsum | rule: ZERO tolerance — flag any Lorem Ipsum placeholder text anywhere on site\nLG25 | Why Book Direct | rule: casing of all pointers/labels in Why Book Direct section = Title Case\nLG26 | Number + Text Combos | rule: when a number and text appear together (e.g. 4-star): | in_paragraph: use lowercase → \"4-star hotel\" | in_header: capitalise appropriately → \"A 4-Star Hotel on NH6\"\nLG27 | Amenities | rule: every room must have an amenities section | casing: consistent across all rooms\nLG28 | Room Name | rule: summary page snippet already shows room name as header | do_not_repeat: room name in the content box below or beside that header\nLG29 | Room USP | must_include: room_size | max_occupancy | special_features | special_features_examples: mountain views | balconies\nLG30 | Address | casing: Title Case\nLG31 | Numbers >3 Digits | rule: add comma as thousands separator | valid: 1,000 | 10,000 | 1,00,000 if UK | 100,000 if US | invalid: 1000 | 10000\n\n## instructions\n\n### CRITICAL: Never output conversational text. Never narrate what you are about to do. Your ONLY output must be the final JSON object. Do not write \"I'll analyze\", \"Let me\", \"I will\", or any sentence before or after the JSON. Silence before and after the JSON. Raw JSON only.\n\n### With respect to the 31 rules, which are further categorised under the below names, You are required to find errors/mismatches against the attached content that you should check.\n\n#### For every issue you find, you *MUST categorise it into exactly one of the following 2 categories:*\n1. Language and Grammar\n2. AI Suggestions\n\n## Danger zone\n- Do not invent issues which are out of scope of the 125 rules.\n## Output Format\nDo not write a summary paragraph. **You must ONLY OUTPUT a valid JSON object matching the Structure Definition.**\n- **You MUST include the \"url\" field in your output exactly as provided in the input below.**\n- Structure the output like \"Rule_Code | Distinct issue\" | Language and Grammar becomes LG[n] | AI suggestions becomes AI[n] and so on.\n-- example output: \"LG01 | Wrong country code. Property is in India, while phone country code reads +1 which is for US numbers.\"\n- Put all and every distinct issue into the `qc_breakdown` list.\n- Always Output *1. Language and Grammar* first. If no grammar/language issues found, output \"No issues found\".\n- Use the exact category names listed above.\n- If a category has no issues, do not invent them.\n- List out any and all grammatical errors of the particular page under the \"1. Language and Grammar\" section.\n- Explicitly list any enhancements and suggestions you noticed on the page under \"2. AI Suggestions\" only.\n\n### Please include any suggestions you have to improve our Website QC model, prompts, or any further suggestions at the end as \"2.1 Model Suggestions\" as a SINGLE OUTPUT. Would help a lot.\n\n### You must analyse the content of the page and make sure it aligns with {{ $('On form submission1').first().json['Specify Language'] }} Spelling, and also, if the 31 rules of the sheet are being followed.\n\n#### Examples of UK vs US English spellings include, but are not limited to.\n\nUK: colour, favourite, centre, metre, litre, organise, personalise, recognise, analyse, travelling, cancelled, labelled, programme, catalogue, licence, defence, aluminium, jewellery, cosy, mould, grey, cheque, tyre, neighbourhood, manoeuvre\n\nUS: color, favorite, center, meter, liter, organize, personalize, recognize, analyze, traveling, canceled, labeled, program, catalog, license, defense, aluminum, jewelry, cozy, mold, gray, check, tire, neighborhood, maneuver\n\nPAGE URL: {{ $('Loop Over Items').item.json.url }}\nCONTENT TO CHECK:\n{{ $('Loop Over Items').item.json.markdown }}",
         "hasOutputParser": true,
         "options": {
           "returnIntermediateSteps": false
@@ -471,8 +1764,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -112,
-        336
+        304,
+        352
       ],
       "id": "2fc61716-e6ad-45d6-a77a-85b78fcde6d6",
       "name": "AI Agent1",
@@ -629,12 +1922,12 @@
       "parameters": {
         "content": "# 1. Initialisation ",
         "height": 384,
-        "width": 880
+        "width": 960
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -288,
+        -368,
         -96
       ],
       "id": "02220164-e6b2-442e-80a3-b59d122ea703",
@@ -647,8 +1940,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -384,
-        336
+        -80,
+        320
       ],
       "id": "407d73a8-cddc-49b5-8e07-34b53c73563c",
       "name": "Loop Over Items"
@@ -661,8 +1954,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        -384,
-        496
+        -80,
+        480
       ],
       "id": "87ee144b-a7d3-47e0-8636-591e50856269",
       "name": "Structured Output Parser",
@@ -680,8 +1973,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -608,
-        48
+        -688,
+        32
       ],
       "id": "36d0d39b-c3ac-4aef-8d64-4a463ef9e71c",
       "name": "Sticky Note6"
@@ -709,7 +2002,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        720,
+        736,
         432
       ],
       "id": "dba78f82-0ea6-415b-856c-469f3d41c35e",
@@ -722,8 +2015,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        256,
-        336
+        192,
+        608
       ],
       "id": "11d67563-5f0e-47e7-b794-387693e55d37",
       "name": "Code in JavaScript"
@@ -789,8 +2082,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        496,
-        336
+        384,
+        608
       ],
       "id": "97099ae8-e2ce-4d2e-9368-17f9053d5b95",
       "name": "Append row in sheet1",
@@ -808,8 +2101,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        512,
-        496
+        528,
+        608
       ],
       "id": "43a4a2c2-986e-49ab-9c9a-d35e7e24e83c",
       "name": "Wait1",
@@ -820,7 +2113,7 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        928,
+        944,
         432
       ],
       "id": "ffa02261-afd5-491e-a8e5-b83681aa6fdf",
@@ -841,7 +2134,7 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.4,
       "position": [
-        1152,
+        1168,
         432
       ],
       "id": "d0e141e3-dc5c-4b73-98b8-11e486b69b29",
@@ -936,14 +2229,14 @@
     {
       "parameters": {
         "content": "# 4. Output",
-        "height": 336,
-        "width": 672,
+        "height": 480,
+        "width": 656,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        672,
+        688,
         304
       ],
       "id": "28005a59-a4e8-46f1-a029-c164108196df",
@@ -953,13 +2246,13 @@
       "parameters": {
         "content": "# 3. QC ",
         "height": 480,
-        "width": 1280,
+        "width": 1040,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -624,
+        -368,
         304
       ],
       "id": "da07027a-12eb-4767-badf-b0269072509c",
@@ -1104,8 +2397,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        1200,
-        -64
+        1040,
+        -48
       ],
       "id": "3991a5e1-8a61-41d9-9468-6b2aad5a3693",
       "name": "Filter Only Child URLs"
@@ -1128,7 +2421,8 @@
           "id": "zVNIevhGxwl3AEol",
           "name": "Mistral Cloud account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -1161,7 +2455,8 @@
           "id": "kwTwxynkf7YLmp2t",
           "name": "Google Sheets account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -1173,8 +2468,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -336,
-        656
+        -32,
+        640
       ],
       "id": "7420d5f4-10fe-437d-877e-3efe6d6b13de",
       "name": "Grok fast 4.1",
@@ -1223,7 +2518,8 @@
           "id": "kwTwxynkf7YLmp2t",
           "name": "Google Sheets account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -1237,7 +2533,8 @@
         688
       ],
       "id": "c1ec1c2e-03ce-4aa8-8f57-fa0794be10f6",
-      "name": "Sticky Note5"
+      "name": "Sticky Note5",
+      "disabled": true
     },
     {
       "parameters": {
@@ -1251,7 +2548,8 @@
         688
       ],
       "id": "0eb5f649-94dc-4bd8-be55-68334f6971cc",
-      "name": "Sticky Note7"
+      "name": "Sticky Note7",
+      "disabled": true
     },
     {
       "parameters": {
@@ -1266,11 +2564,12 @@
         672
       ],
       "id": "353aa799-6b0b-41a2-ae2d-9aa880cd6b3d",
-      "name": "Sticky Note8"
+      "name": "Sticky Note8",
+      "disabled": true
     },
     {
       "parameters": {
-        "model": "anthropic/claude-opus-4.6",
+        "model": "anthropic/claude-sonnet-4.5",
         "options": {
           "maxRetries": 1
         }
@@ -1278,8 +2577,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -32,
-        560
+        160,
+        368
       ],
       "id": "afea19e1-9809-4a47-809c-e53a6a6b5e42",
       "name": "Opus",
@@ -1818,6 +3117,76 @@
           "item": 0
         }
       }
+    ],
+    "Split Out1": [
+      {
+        "json": {
+          "markdown": "# hello traveller to the kovalam hot el. Welcome\n# this hotel should be un hotel\n## heading towards the beacch\nLorem Ipsum\n## About Our beautiful Hotel\nWelcome to one of India's most luxurious beach resorts! Our stunning 5-Star property offers unparalleled comfort and world-class amenities. We have Twenty Three rooms spread across 4.000 square feet of pristine beachfront property.\n**Contact Details:**\n  * Phones: +1 234 5678 9012 / +971-55-123-4567\n  * EMAILS: RESERVATIONS@SUNSETBAY.COM / iNFO@SUNSETBAY.COM\n\n\n**Address:** sunset bay beach road, kovalam, kerala\n## Our Accommodations\n### suite with ocean view\nsingle room Spans 250000-sq feet And Features A Private Balcony With Breathtaking Sea Views.\n**Amenities:**\n  * King Size Bed\n  * Air Conditioning\n  * 55\" television\n  * mini bar\n  * bath tub\n\n\nThis luxurious 3bhk suite features a queen sized bed, twin-beds in the second bedroom, and audiovisual equipment throughout.\n### Deluxe Room Above The Clouds\nArea: 180000 sq. feat | Max Occupancy: 2 ghost\nOur deluxe room above the clouds offers spectacular views and premium comfort. Features include airconditioning, WiFi, and turn down service.\n## Dining Experiences\n### Rider's Cafe\nEnjoy al fresco dining at our beachfront cafe with spectacular sunset views.\n**Timing:** 7:00 AM to 11:00 PM **Breakfast Timing:** 10:00 A.M. to 7:00 A.M.\n### The Ocean Loungi\nOpen for high-tea service and evening cocktails.\n**Timings:** 3:00 PM to 6:00 PM | 7:30 pm to 11:00 p.m.\n## Amenities & Services\nOur hotel features:\n  * Twenty Four Seven Room Service\n  * Twenty Four Seven Swimming Pool\n  * Doctor On Calling\n  * A/C Throughout The Property\n  * Camplimentary wi fi\n  * Audio Visual Equipment In Conference Rooms\n\n\n## Nearby Attractions\n### Kovallam Beach\nThis hotel at the Kovalam near the The famous Kovalam Beach, also known as the \"Paradise of the South,\" is just 200 km away. This beautiful beach stretches along the coastline and offers pristine waters.\n### Ancient Temple\nBuilt in the 12th century, this magnificent structure showcases dravids architecture. The temple features intricate carvings and is a must-visit destination.\n#### Continue your booking\n",
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "markdown": "[Home](https://preview.simplotel.com/1E19D27F8DBF790A/) > Random page1\n## Our vRooms\nWe offer 4 distinct room categories to suit every traveler's needs:\n**Premiume Ocean Suite** Premium Ocean Suite with Balcony spans four hundred square feet and accommodates up to 4 Guests. The room features mountain views, a private balcony, and a minibar.\nRoom amenities include king-size bed, bathtub, air conditioning, and turning-down service.\n**Family Villa** This spacious 4-bHK accommodation offers 800 square-feet of living space.\n  * Spans 800 sq ft and features a private garden\n  * Queen Size Beds In Master Bedroom.\n  * Turn-Down Service Available.\n  * Mini-Bar Stocked Daily.\n\n\n## Special Experiences\nExplore our curated experiences designed for the discerning traveler. know more about our packages by contacting our concierge team.\n**Sunset Cruise Package** Embark on a romantic journey along the coast—sailing through pristine waters and witnessing breathtaking sunsets. The cruise operates daily from 5:00 PM to 8:00 PM.\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n## Location & Connectivity\n**Distance from Key Points:**\n  * Trivandrum Airport: twenty three km (approximately 45 minutes)\n  * Railway Station: 15-km\n  * City Center: 100000- kmeters\n\n\n**Travel Route:** Trivandrum–Kovalam Beach Road NH47\n## Why book direct\n  * best rate guaran tea\n  * complimentary breakfast\n  * free airport transfers\n  * late check-out subject to availability\n  * exclusive spa discounts\n\n\n## Gallery\nview all our stunning property photos in the gallery section.\n## CONTACT USA\nFor reservations and enquiries, reach out to us:\n**Phone:** +977 123456789990 **Esmail:** fom@sunsetbay.com\n**Breakfast Timings:** 7 AM to 10:30 AM | 11 AM to 12 PM\n**Restaurant Hours:** 12:00 pm to 3:00 pm to 6:00 pm to 10:00 pm\n**Book now** and experience luxury redefined at Sunset Bay Resort, Goa!\n#### Continue your booking\n",
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/random-page1"
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      },
+      {
+        "json": {
+          "markdown": "[Home](https://preview.simplotel.com/1E19D27F8DBF790A/) > bets htoel page in treevandrum\n# Guest Sir vices & Experiences\n## Wellness & Recreation\nOur award-winning spa offers a comprehensiv range of treatements designed to rejuvinate your mind, body and soul. Experience traditional Ayurvedic therapys administered by certified practioners, or indulge in our signature massages using organic oils sourced localy from Kerala. The wellness centre spans 1200 sq. ft. and features seperate facilities for men and women, including steam rooms, saunas, and relaxtion lounges. Our experianced therapists will customise each session to meet your individuol needs, ensuring a truely transformative experiance.\nThe infinity pool overlooks the Arabian Sea and is equiped with underwater lighting for evening swims. Complimentary towels, loungers, and refreshments are availible throughout the day. Our fitness centre operates around-the-clock and features state-of-the-dance cardio equipment, free weights, and dedicated yoga studio. Personal trainers are availabe upon request to help you maintian your wellness routine during your stay.\n## cultural Immersions & Local Experiences\nImmerse yourself in the rich tapestry of Karela's cultural heritage through our bespoke experiences. Partipate in traditional Kadakali dance performances held every evening at 7:00 P.M. in your open-air amphitheatre. Our culinary team organises cooking classes where guests can learn to prepare authentic Karala delicacies using locally sourced spices and ingredients. Visit nearby fishing villages to witness age-old techniques still practised by local communities, or embark on a backwater cruise through the serene canals that characterise this beautiful region.\nWe also organise guided tours to historical landmarks, including ancient temples and colonial-era architecture that reflect Kerala's diverse post. Our concierge team can arrange visits to spice plantations where you'll discover how carda mom, pepper, and cinnamon are cultivated and processed. For adventure enthusiasts, we offer trekking expeditions to nearby hills, providing breathtaking views of the coastline and opportunities to spot endemice wildlife species unique to the Western jatts ecosystem.\n#### Continue your booking\n",
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/bets-htoel-page-in-treevandrum"
+        },
+        "pairedItem": {
+          "item": 2
+        }
+      }
+    ],
+    "Crawl4AI": [
+      {
+        "json": {
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/",
+          "filter": "fit",
+          "query": null,
+          "cache": "0",
+          "markdown": "# hello traveller to the kovalam hot el. Welcome\n# this hotel should be un hotel\n## heading towards the beacch\nLorem Ipsum\n## About Our beautiful Hotel\nWelcome to one of India's most luxurious beach resorts! Our stunning 5-Star property offers unparalleled comfort and world-class amenities. We have Twenty Three rooms spread across 4.000 square feet of pristine beachfront property.\n**Contact Details:**\n  * Phones: +1 234 5678 9012 / +971-55-123-4567\n  * EMAILS: RESERVATIONS@SUNSETBAY.COM / iNFO@SUNSETBAY.COM\n\n\n**Address:** sunset bay beach road, kovalam, kerala\n## Our Accommodations\n### suite with ocean view\nsingle room Spans 250000-sq feet And Features A Private Balcony With Breathtaking Sea Views.\n**Amenities:**\n  * King Size Bed\n  * Air Conditioning\n  * 55\" television\n  * mini bar\n  * bath tub\n\n\nThis luxurious 3bhk suite features a queen sized bed, twin-beds in the second bedroom, and audiovisual equipment throughout.\n### Deluxe Room Above The Clouds\nArea: 180000 sq. feat | Max Occupancy: 2 ghost\nOur deluxe room above the clouds offers spectacular views and premium comfort. Features include airconditioning, WiFi, and turn down service.\n## Dining Experiences\n### Rider's Cafe\nEnjoy al fresco dining at our beachfront cafe with spectacular sunset views.\n**Timing:** 7:00 AM to 11:00 PM **Breakfast Timing:** 10:00 A.M. to 7:00 A.M.\n### The Ocean Loungi\nOpen for high-tea service and evening cocktails.\n**Timings:** 3:00 PM to 6:00 PM | 7:30 pm to 11:00 p.m.\n## Amenities & Services\nOur hotel features:\n  * Twenty Four Seven Room Service\n  * Twenty Four Seven Swimming Pool\n  * Doctor On Calling\n  * A/C Throughout The Property\n  * Camplimentary wi fi\n  * Audio Visual Equipment In Conference Rooms\n\n\n## Nearby Attractions\n### Kovallam Beach\nThis hotel at the Kovalam near the The famous Kovalam Beach, also known as the \"Paradise of the South,\" is just 200 km away. This beautiful beach stretches along the coastline and offers pristine waters.\n### Ancient Temple\nBuilt in the 12th century, this magnificent structure showcases dravids architecture. The temple features intricate carvings and is a must-visit destination.\n#### Continue your booking\n",
+          "success": true
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/random-page1",
+          "filter": "fit",
+          "query": null,
+          "cache": "0",
+          "markdown": "[Home](https://preview.simplotel.com/1E19D27F8DBF790A/) > Random page1\n## Our vRooms\nWe offer 4 distinct room categories to suit every traveler's needs:\n**Premiume Ocean Suite** Premium Ocean Suite with Balcony spans four hundred square feet and accommodates up to 4 Guests. The room features mountain views, a private balcony, and a minibar.\nRoom amenities include king-size bed, bathtub, air conditioning, and turning-down service.\n**Family Villa** This spacious 4-bHK accommodation offers 800 square-feet of living space.\n  * Spans 800 sq ft and features a private garden\n  * Queen Size Beds In Master Bedroom.\n  * Turn-Down Service Available.\n  * Mini-Bar Stocked Daily.\n\n\n## Special Experiences\nExplore our curated experiences designed for the discerning traveler. know more about our packages by contacting our concierge team.\n**Sunset Cruise Package** Embark on a romantic journey along the coast—sailing through pristine waters and witnessing breathtaking sunsets. The cruise operates daily from 5:00 PM to 8:00 PM.\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n## Location & Connectivity\n**Distance from Key Points:**\n  * Trivandrum Airport: twenty three km (approximately 45 minutes)\n  * Railway Station: 15-km\n  * City Center: 100000- kmeters\n\n\n**Travel Route:** Trivandrum–Kovalam Beach Road NH47\n## Why book direct\n  * best rate guaran tea\n  * complimentary breakfast\n  * free airport transfers\n  * late check-out subject to availability\n  * exclusive spa discounts\n\n\n## Gallery\nview all our stunning property photos in the gallery section.\n## CONTACT USA\nFor reservations and enquiries, reach out to us:\n**Phone:** +977 123456789990 **Esmail:** fom@sunsetbay.com\n**Breakfast Timings:** 7 AM to 10:30 AM | 11 AM to 12 PM\n**Restaurant Hours:** 12:00 pm to 3:00 pm to 6:00 pm to 10:00 pm\n**Book now** and experience luxury redefined at Sunset Bay Resort, Goa!\n#### Continue your booking\n",
+          "success": true
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      },
+      {
+        "json": {
+          "url": "https://preview.simplotel.com/1E19D27F8DBF790A/bets-htoel-page-in-treevandrum",
+          "filter": "fit",
+          "query": null,
+          "cache": "0",
+          "markdown": "[Home](https://preview.simplotel.com/1E19D27F8DBF790A/) > bets htoel page in treevandrum\n# Guest Sir vices & Experiences\n## Wellness & Recreation\nOur award-winning spa offers a comprehensiv range of treatements designed to rejuvinate your mind, body and soul. Experience traditional Ayurvedic therapys administered by certified practioners, or indulge in our signature massages using organic oils sourced localy from Kerala. The wellness centre spans 1200 sq. ft. and features seperate facilities for men and women, including steam rooms, saunas, and relaxtion lounges. Our experianced therapists will customise each session to meet your individuol needs, ensuring a truely transformative experiance.\nThe infinity pool overlooks the Arabian Sea and is equiped with underwater lighting for evening swims. Complimentary towels, loungers, and refreshments are availible throughout the day. Our fitness centre operates around-the-clock and features state-of-the-dance cardio equipment, free weights, and dedicated yoga studio. Personal trainers are availabe upon request to help you maintian your wellness routine during your stay.\n## cultural Immersions & Local Experiences\nImmerse yourself in the rich tapestry of Karela's cultural heritage through our bespoke experiences. Partipate in traditional Kadakali dance performances held every evening at 7:00 P.M. in your open-air amphitheatre. Our culinary team organises cooking classes where guests can learn to prepare authentic Karala delicacies using locally sourced spices and ingredients. Visit nearby fishing villages to witness age-old techniques still practised by local communities, or embark on a backwater cruise through the serene canals that characterise this beautiful region.\nWe also organise guided tours to historical landmarks, including ancient temples and colonial-era architecture that reflect Kerala's diverse post. Our concierge team can arrange visits to spice plantations where you'll discover how carda mom, pepper, and cinnamon are cultivated and processed. For adventure enthusiasts, we offer trekking expeditions to nearby hills, providing breathtaking views of the coastline and opportunities to spot endemice wildlife species unique to the Western jatts ecosystem.\n#### Continue your booking\n",
+          "success": true
+        },
+        "pairedItem": {
+          "item": 2
+        }
+      }
     ]
   },
   "repo_name": "n8n-workflows-backup",
@@ -1826,7 +3195,9 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": true,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "shared": [
     {
@@ -1858,7 +3229,7 @@
       "name": "OPUS ENABLED"
     }
   ],
-  "triggerCount": 0,
-  "updatedAt": "2026-02-13T06:29:26.311Z",
-  "versionId": "bbc6596f-ae1d-45d6-a791-9a2a0e3c6dfd"
+  "triggerCount": 1,
+  "updatedAt": "2026-02-13T11:04:43.208Z",
+  "versionId": "aeef4e62-0f66-4aaa-bdbf-d222cfad48d2"
 }
