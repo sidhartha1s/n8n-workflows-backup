@@ -2203,8 +2203,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        -1008,
-        400
+        -1184,
+        448
       ],
       "id": "8c6f55fc-8e87-42b8-9d17-6aaf90ad8f5c",
       "name": "Switch",
@@ -2267,8 +2267,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1184,
-        336
+        -1344,
+        352
       ],
       "id": "a9e5f9d9-afda-4d81-b8f4-c11805ced72a",
       "name": "Sticky Note4",
@@ -3230,6 +3230,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-02-13T11:04:43.208Z",
-  "versionId": "aeef4e62-0f66-4aaa-bdbf-d222cfad48d2"
+  "updatedAt": "2026-02-17T07:09:47.102Z",
+  "versionId": "f8f5c055-4d4d-40c5-9b88-18aef05bc014"
 }
