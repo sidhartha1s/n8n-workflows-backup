@@ -2028,13 +2028,7 @@
     },
     "Mistral Cloud Chat Model2": {
       "ai_languageModel": [
-        [
-          {
-            "node": "Structured Output Parser",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Split Out": {
@@ -2169,6 +2163,17 @@
         [
           {
             "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Grok fast 4.": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -3065,8 +3070,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        448,
-        464
+        -448,
+        912
       ],
       "id": "21a2aad3-f334-4eb3-a051-2a10ea687224",
       "name": "Mistral Cloud Chat Model2",
@@ -3424,11 +3429,33 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -208,
-        736
+        -576,
+        912
       ],
       "id": "f62ef92b-439d-49fd-a2d2-a03eabbca8d0",
       "name": "Sonnet 4.5",
+      "credentials": {
+        "openRouterApi": {
+          "id": "x0LG52oVRDHGvw9B",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-opus-4.6",
+        "options": {
+          "maxRetries": 1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        624
+      ],
+      "id": "7155869f-db19-43c2-bb3f-0e2a9de403a7",
+      "name": "Grok fast 4.1",
       "credentials": {
         "openRouterApi": {
           "id": "x0LG52oVRDHGvw9B",
@@ -3446,11 +3473,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -48,
-        624
+        -320,
+        656
       ],
-      "id": "7155869f-db19-43c2-bb3f-0e2a9de403a7",
-      "name": "Grok fast 4.1",
+      "id": "198ca24c-5a53-4dfc-b60f-5f0eb9536492",
+      "name": "Grok fast 4.",
       "credentials": {
         "openRouterApi": {
           "id": "x0LG52oVRDHGvw9B",
@@ -3760,6 +3787,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-02-12T10:17:11.250Z",
-  "versionId": "963b7894-d355-4b12-9bfe-3bd6987bb906"
+  "updatedAt": "2026-02-17T13:15:09.840Z",
+  "versionId": "d8a7b9bf-68e4-4362-976d-3eda8309b07b"
 }
