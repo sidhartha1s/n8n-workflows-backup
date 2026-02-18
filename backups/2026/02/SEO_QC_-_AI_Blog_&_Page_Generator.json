@@ -1,0 +1,2080 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "1. Form Trigger": {
+      "main": [
+        [
+          {
+            "node": "2. Fetch SEO Doc",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "9. Fetch Sitemap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Fetch SEO Doc": {
+      "main": [
+        [
+          {
+            "node": "3. Extract Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Extract Text": {
+      "main": [
+        [
+          {
+            "node": "4. Check Gaps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Check Gaps": {
+      "main": [
+        [
+          {
+            "node": "5. IF Needs Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. IF Needs Search": {
+      "main": [
+        [
+          {
+            "node": "6. Web Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13. Generate Blog": {
+      "main": [
+        [
+          {
+            "node": "14. Format Blog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO QC Form": {
+      "main": [
+        [
+          {
+            "node": "Normalize Inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Inputs": {
+      "main": [
+        [
+          {
+            "node": "Fetch Sitemap XML",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Google Doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Sitemap XML": {
+      "main": [
+        [
+          {
+            "node": "Parse Sitemap XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Sitemap XML": {
+      "main": [
+        [
+          {
+            "node": "Extract Sitemap URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Sitemap URLs": {
+      "main": [
+        [
+          {
+            "node": "Merge Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Google Doc": {
+      "main": [
+        [
+          {
+            "node": "Normalize Doc Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Doc Content": {
+      "main": [
+        [
+          {
+            "node": "Merge Context",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Context": {
+      "main": [
+        [
+          {
+            "node": "Build AI Context & Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build AI Context & Prompt": {
+      "main": [
+        [
+          {
+            "node": "SEO AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Format SEO Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web Search (SerpAPI)": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Window Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "SEO AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format SEO Output": {
+      "main": [
+        [
+          {
+            "node": "Respond with SEO Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Format Error Details1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Error Details": {
+      "main": [
+        [
+          {
+            "node": "Respond with Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "SEO AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "SEO AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO QC Form1": {
+      "main": [
+        [
+          {
+            "node": "Normalize Inputs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Inputs1": {
+      "main": [
+        [
+          {
+            "node": "Fetch Sitemap XML1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Google Doc1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Sitemap XML1": {
+      "main": [
+        [
+          {
+            "node": "Parse Sitemap XML1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Google Doc1": {
+      "main": [
+        [
+          {
+            "node": "Normalize Doc Content1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Sitemap XML1": {
+      "main": [
+        [
+          {
+            "node": "Extract Sitemap URLs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Sitemap URLs1": {
+      "main": [
+        [
+          {
+            "node": "Merge Context1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Doc Content1": {
+      "main": [
+        [
+          {
+            "node": "Merge Context1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Context1": {
+      "main": [
+        [
+          {
+            "node": "Build AI Context & Prompt1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build AI Context & Prompt1": {
+      "main": [
+        [
+          {
+            "node": "SEO AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Format SEO Output1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "SEO AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "SEO AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "SEO AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format SEO Output1": {
+      "main": [
+        [
+          {
+            "node": "Respond with SEO Report1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Error Details1": {
+      "main": [
+        [
+          {
+            "node": "Respond with Error1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-18T08:31:16.880Z",
+  "id": "S1RtTN6U1j2Ee2TG",
+  "isArchived": false,
+  "meta": null,
+  "name": "SEO QC - AI Blog & Page Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "85d075f0-3de5-42cd-8374-5f3d10f7881e",
+        "options": {}
+      },
+      "id": "6b8e773a-c446-4e36-b64f-04f2c4e497ae",
+      "name": "1. Form Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        160
+      ],
+      "webhookId": "85d075f0-3de5-42cd-8374-5f3d10f7881e",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.seo_doc_url }}",
+        "options": {}
+      },
+      "id": "b4c58c4c-7b29-49b7-8ae1-f06bf25ac3a4",
+      "name": "2. Fetch SEO Doc",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -656,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "dataPropertyName": "html",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "text",
+              "cssSelector": "body"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "26635255-8614-4c29-b8d5-9bf508e9c398",
+      "name": "3. Extract Text",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "6acfd82d-ec7c-48c8-b56d-186b87ace9d5",
+      "name": "4. Check Gaps",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition1",
+              "leftValue": "={{ $json.choices[0].message.content }}",
+              "rightValue": "YES",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "0287619e-60d1-48f7-8a46-7b0692d054a3",
+      "name": "5. IF Needs Search",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        0,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "=https://serpapi.com/search.json?engine=google&q={{ $json.project_name }}+monthly+SEO+activities+site:{{ new URL($node[\"1. Form Trigger\"].json[\"sitemap_url\"]).hostname }}&api_key=YOUR_SERPAPI_KEY",
+        "options": {}
+      },
+      "id": "11a07e4a-7e14-456c-b24d-36339a468b5e",
+      "name": "6. Web Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "99822e6f-d04d-4066-b81e-0ed9f605ac15",
+      "name": "7. Merge Search",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "7af50bfe-1092-4f9d-be47-283b31bffb87",
+      "name": "8. Extract Context",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.sitemap_url }}",
+        "options": {}
+      },
+      "id": "1a8fbaf3-e973-41dc-a46a-85922aa23e4a",
+      "name": "9. Fetch Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "f3ecb06f-5038-4bfb-beb3-cce4d9f9dc86",
+      "name": "10. Parse XML",
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Limit to 50 URLs, summarize top pages & structure\nconst urls = $input.all().map(item => item.json.loc || item.json.url);\nconst topUrls = urls.slice(0, 50);\nconst domain = new URL($('1. Form Trigger').item.json.sitemap_url).hostname;\nreturn [{ json: { top_urls: topUrls, structure: `~${topUrls.length} pages on ${domain}, key paths: ${topUrls.slice(0,10).map(u=>new URL(u).pathname).join(', ')}` } }];"
+      },
+      "id": "0ebb774c-be80-456d-969d-b30fa91f244c",
+      "name": "11. Sitemap Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "56111661-674a-4472-9c17-316012415b50",
+      "name": "12. Merge Insights",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.3,
+      "position": [
+        1328,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "5a6380e9-7806-45be-aae2-925261e51a25",
+      "name": "13. Generate Blog",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.1,
+      "position": [
+        1552,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Add meta, citations\nlet blog = $json.choices[0].message.content;\nblog = `---\\ntitle: SEO QC Blog - {{ $json.project_name }}\\ndate: ${new Date().toISOString()}\\n---\\n\\n${blog}\\n\\nSources: SEO Doc, Sitemap analysis.`;\nreturn { json: { formatted_blog: blog, project_name: $('1. Form Trigger').item.json.project_name, blog_doc_link: '' } };"
+      },
+      "id": "249956ad-e5f8-408f-9c6f-24634ccb3cde",
+      "name": "14. Format Blog",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        160
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "53f23fc4-6bba-4453-aceb-d399553bdbae",
+      "name": "15. Create Google Doc",
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 3.2,
+      "position": [
+        1984,
+        160
+      ],
+      "credentials": {},
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "id": "c70c559f-b23e-4258-8d8a-3c8f3606357b",
+      "name": "16. Log to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        2208,
+        112
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "3c8308bc-ed5a-410e-8397-d3f7c8a3e13b",
+      "name": "17. Send Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 3.2,
+      "position": [
+        2208,
+        224
+      ],
+      "credentials": {},
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "formTitle": "SEO QC — AI Content Generator",
+        "formDescription": "Submit your property details and SEO plan link. Our AI will analyse your sitemap, read your SEO strategy doc, and generate an optimised blog post or landing page.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Project Name",
+              "placeholder": "e.g. Sunset Villas Bali",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Property Website URL",
+              "placeholder": "https://yourproperty.com",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Sitemap XML URL",
+              "placeholder": "https://yourproperty.com/sitemap.xml",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Google Doc Link (SEO Plan)",
+              "placeholder": "https://docs.google.com/document/d/YOUR_DOC_ID/edit",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Target Month",
+              "placeholder": "e.g. July 2025"
+            },
+            {
+              "fieldLabel": "Content Type",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "SEO Blog Post"
+                  },
+                  {
+                    "option": "New Landing Page"
+                  },
+                  {
+                    "option": "Location Guide"
+                  },
+                  {
+                    "option": "Property Feature Page"
+                  },
+                  {
+                    "option": "FAQ Page"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Primary Target Keyword (optional)",
+              "placeholder": "e.g. luxury villa Bali with pool"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "de849fdd-925b-43c8-b814-c059aefbeb98",
+      "name": "SEO QC Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        912
+      ],
+      "webhookId": "f529563d-a87a-4052-bdbc-a09ba128f5ec",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-project-name",
+              "name": "projectName",
+              "value": "={{ $json['Project Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "field-website-url",
+              "name": "websiteUrl",
+              "value": "={{ $json['Property Website URL'].replace(/\\/$/, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "field-sitemap-url",
+              "name": "sitemapUrl",
+              "value": "={{ $json['Sitemap XML URL'] }}",
+              "type": "string"
+            },
+            {
+              "id": "field-google-doc-link",
+              "name": "googleDocLink",
+              "value": "={{ $json['Google Doc Link (SEO Plan)'] }}",
+              "type": "string"
+            },
+            {
+              "id": "field-google-doc-id",
+              "name": "googleDocId",
+              "value": "={{ $json['Google Doc Link (SEO Plan)'].match(/\\/document\\/d\\/([a-zA-Z0-9_-]+)/)?.[1] ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-google-doc-export-url",
+              "name": "googleDocExportUrl",
+              "value": "=https://docs.google.com/document/d/{{ $json['Google Doc Link (SEO Plan)'].match(/\\/document\\/d\\/([a-zA-Z0-9_-]+)/)?.[1] ?? '' }}/export?format=txt",
+              "type": "string"
+            },
+            {
+              "id": "field-target-month",
+              "name": "targetMonth",
+              "value": "={{ $json['Target Month'] || $now.toFormat('MMMM yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "field-content-type",
+              "name": "contentType",
+              "value": "={{ $json['Content Type'] }}",
+              "type": "string"
+            },
+            {
+              "id": "field-primary-keyword",
+              "name": "primaryKeyword",
+              "value": "={{ $json['Primary Target Keyword (optional)'] || '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b7690100-6391-4c22-aa0e-bbb81ba2ebb4",
+      "name": "Normalize Inputs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        592,
+        912
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.sitemapUrl }}",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "maxRedirects": 5
+            }
+          },
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "a3a52bdb-a001-43c8-ba69-8fbd1b0d2cee",
+      "name": "Fetch Sitemap XML",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        848,
+        768
+      ],
+      "disabled": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Normalize Inputs').item.json.googleDocExportUrl }}",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "maxRedirects": 5
+            }
+          },
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "60adaa5a-f2ab-431d-9849-45a2bc7ec21e",
+      "name": "Fetch Google Doc",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        848,
+        1056
+      ],
+      "disabled": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "c9f8b0bf-0761-47a9-8f12-9e0617877eb1",
+      "name": "Parse Sitemap XML",
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        768
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-sitemap-urls",
+              "name": "sitemapUrls",
+              "value": "={{ ($json.data?.urlset?.url || []).map(u => typeof u === 'string' ? u : (u.loc?.[0] || u.loc || '')).filter(u => u).join(', ') }}",
+              "type": "string"
+            },
+            {
+              "id": "field-sitemap-count",
+              "name": "totalPages",
+              "value": "={{ ($json.data?.urlset?.url || []).length }}",
+              "type": "number"
+            },
+            {
+              "id": "field-sitemap-sample",
+              "name": "sitemapSample",
+              "value": "={{ ($json.data?.urlset?.url || []).slice(0, 30).map(u => typeof u === 'string' ? u : (u.loc?.[0] || u.loc || '')).filter(u => u).join('\\n') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "df9852c4-6f33-47e7-8086-1a5d24a5c3b6",
+      "name": "Extract Sitemap URLs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1376,
+        768
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-seo-plan-text",
+              "name": "seoPlanText",
+              "value": "={{ $json.data || $json.body || 'No SEO plan document content retrieved.' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "603515b7-30e5-4fc9-be6b-5a54eb846a15",
+      "name": "Normalize Doc Content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        1056
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "options": {}
+      },
+      "id": "fa91ef1c-9a8f-43ee-a486-cda18465ae57",
+      "name": "Merge Context",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1632,
+        912
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-project-name-ctx",
+              "name": "projectName",
+              "value": "={{ $('Normalize Inputs').item.json.projectName }}",
+              "type": "string"
+            },
+            {
+              "id": "field-website-url-ctx",
+              "name": "websiteUrl",
+              "value": "={{ $('Normalize Inputs').item.json.websiteUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "field-content-type-ctx",
+              "name": "contentType",
+              "value": "={{ $('Normalize Inputs').item.json.contentType }}",
+              "type": "string"
+            },
+            {
+              "id": "field-target-month-ctx",
+              "name": "targetMonth",
+              "value": "={{ $('Normalize Inputs').item.json.targetMonth }}",
+              "type": "string"
+            },
+            {
+              "id": "field-primary-keyword-ctx",
+              "name": "primaryKeyword",
+              "value": "={{ $('Normalize Inputs').item.json.primaryKeyword }}",
+              "type": "string"
+            },
+            {
+              "id": "field-total-pages-ctx",
+              "name": "totalPages",
+              "value": "={{ $('Extract Sitemap URLs').item.json.totalPages }}",
+              "type": "number"
+            },
+            {
+              "id": "field-sitemap-sample-ctx",
+              "name": "sitemapSample",
+              "value": "={{ $('Extract Sitemap URLs').item.json.sitemapSample }}",
+              "type": "string"
+            },
+            {
+              "id": "field-seo-plan-text-ctx",
+              "name": "seoPlanText",
+              "value": "={{ $('Normalize Doc Content').item.json.seoPlanText.substring(0, 8000) }}",
+              "type": "string"
+            },
+            {
+              "id": "field-ai-prompt",
+              "name": "aiPrompt",
+              "value": "=You are a senior SEO strategist and content writer specialising in property and hospitality websites.\n\n## PROJECT BRIEFING\n- **Project / Property Name:** {{ $('Normalize Inputs').item.json.projectName }}\n- **Website:** {{ $('Normalize Inputs').item.json.websiteUrl }}\n- **Target Month:** {{ $('Normalize Inputs').item.json.targetMonth }}\n- **Content Type Requested:** {{ $('Normalize Inputs').item.json.contentType }}\n- **Primary Target Keyword (if provided):** {{ $('Normalize Inputs').item.json.primaryKeyword || 'Not specified — derive from SEO plan context' }}\n\n## WEBSITE SITEMAP SNAPSHOT\nThe property website currently has **{{ $('Extract Sitemap URLs').item.json.totalPages }} indexed pages**. Here is a sample of existing URLs (first 30):\n{{ $('Extract Sitemap URLs').item.json.sitemapSample }}\n\nUse this to:\n1. Understand what content already exists and AVOID duplicating topics.\n2. Find internal linking opportunities for the new content.\n3. Spot content gaps the new page/post should fill.\n\n## SEO PLAN DOCUMENT (Monthly Activity Context)\nThe following is the property's SEO strategy document. Extract the relevant monthly activities, focus keywords, content themes, and any specific instructions for {{ $('Normalize Inputs').item.json.targetMonth }}:\n\n---\n{{ $('Normalize Doc Content').item.json.seoPlanText.substring(0, 8000) }}\n---\n\n## YOUR TASKS\n1. **Analyse** the SEO plan to identify the exact content brief for {{ $('Normalize Inputs').item.json.targetMonth }}.\n2. **Research** using web search: validate keyword search volumes, check top-ranking competitor pages, identify LSI keywords and questions people ask.\n3. **Audit** the sitemap: identify the best internal pages to link FROM and TO.\n4. **Write** a complete, publication-ready {{ $('Normalize Inputs').item.json.contentType }} following SEO best practices.\n\n## OUTPUT REQUIREMENTS\nReturn a fully structured JSON object with all SEO content fields as specified. The content must be:\n- Minimum 800 words for blog posts, 600 words for landing pages\n- Naturally optimised (keyword density 1-2%, no stuffing)\n- Structured with proper H2/H3 hierarchy\n- Include a compelling meta title (50-60 chars) and meta description (145-160 chars)\n- Include 3-5 internal link suggestions with anchor text\n- Include a FAQ section with 4-6 questions\n- End with a strong CTA relevant to the property",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "24ce5e0e-0f9f-42b4-924b-0bb59be08206",
+      "name": "Build AI Context & Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1888,
+        912
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.aiPrompt }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a world-class SEO content strategist with 15+ years of experience in property, hospitality, and travel niches. You write content that ranks on Google and converts visitors into guests.\n\nCore principles:\n- Always research before writing — use web search to validate keywords and competitor strategies\n- Write for humans first, search engines second\n- Every piece of content must serve a clear search intent\n- Internal linking is critical — always suggest relevant internal links\n- CTAs must be compelling and property-specific\n- Output MUST be valid JSON matching the structured schema exactly\n\nAlways use the web search tool to:\n1. Check what's currently ranking for the target keyword\n2. Find related questions (People Also Ask)\n3. Identify LSI keywords and semantic terms to include\n4. Validate that the content angle is competitive"
+        }
+      },
+      "id": "7e1492f2-b2a9-4107-bf45-78813cfecd1d",
+      "name": "SEO AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        2160,
+        912
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "1af9917f-6760-4b6b-b470-081cd0ad0d31",
+      "name": "Web Search (SerpAPI)",
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        752,
+        1872
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Normalize Inputs').item.json.projectName + '-seo-session' }}",
+        "contextWindowLength": 10
+      },
+      "id": "2d4fb584-6aad-4287-b10e-c38c00b6a501",
+      "name": "Window Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2176,
+        1168
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"meta_title\": {\n      \"type\": \"string\",\n      \"description\": \"SEO meta title, 50-60 characters\"\n    },\n    \"meta_description\": {\n      \"type\": \"string\",\n      \"description\": \"SEO meta description, 145-160 characters\"\n    },\n    \"slug\": {\n      \"type\": \"string\",\n      \"description\": \"URL-friendly slug, lowercase, hyphens only\"\n    },\n    \"h1_title\": {\n      \"type\": \"string\",\n      \"description\": \"Main H1 heading for the page\"\n    },\n    \"primary_keyword\": {\n      \"type\": \"string\",\n      \"description\": \"Primary target keyword for this content\"\n    },\n    \"secondary_keywords\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"3-5 secondary / LSI keywords\"\n    },\n    \"content_type\": {\n      \"type\": \"string\",\n      \"description\": \"Type of content produced\"\n    },\n    \"word_count_estimate\": {\n      \"type\": \"number\",\n      \"description\": \"Estimated word count of the body content\"\n    },\n    \"introduction\": {\n      \"type\": \"string\",\n      \"description\": \"Engaging introduction paragraph (100-150 words)\"\n    },\n    \"body_content\": {\n      \"type\": \"string\",\n      \"description\": \"Full body content with H2/H3 markdown headings, minimum 600 words\"\n    },\n    \"faq_section\": {\n      \"type\": \"array\",\n      \"description\": \"4-6 FAQ items with question and answer\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"question\": { \"type\": \"string\" },\n          \"answer\": { \"type\": \"string\" }\n        },\n        \"required\": [\"question\", \"answer\"]\n      }\n    },\n    \"cta_section\": {\n      \"type\": \"string\",\n      \"description\": \"Compelling call-to-action paragraph\"\n    },\n    \"internal_links\": {\n      \"type\": \"array\",\n      \"description\": \"3-5 internal link recommendations\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"anchor_text\": { \"type\": \"string\" },\n          \"suggested_url\": { \"type\": \"string\" },\n          \"placement_hint\": { \"type\": \"string\" }\n        },\n        \"required\": [\"anchor_text\", \"suggested_url\", \"placement_hint\"]\n      }\n    },\n    \"schema_markup_type\": {\n      \"type\": \"string\",\n      \"description\": \"Recommended schema.org type, e.g. Article, FAQPage, LodgingBusiness\"\n    },\n    \"competitor_insights\": {\n      \"type\": \"string\",\n      \"description\": \"Brief summary of what top-ranking competitors are doing for this keyword\"\n    },\n    \"seo_notes\": {\n      \"type\": \"string\",\n      \"description\": \"QC notes: any gaps found, recommendations, or warnings about the content strategy\"\n    }\n  },\n  \"required\": [\n    \"meta_title\",\n    \"meta_description\",\n    \"slug\",\n    \"h1_title\",\n    \"primary_keyword\",\n    \"secondary_keywords\",\n    \"content_type\",\n    \"word_count_estimate\",\n    \"introduction\",\n    \"body_content\",\n    \"faq_section\",\n    \"cta_section\",\n    \"internal_links\",\n    \"schema_markup_type\",\n    \"competitor_insights\",\n    \"seo_notes\"\n  ]\n}"
+      },
+      "id": "8e5a2a81-1641-4055-9020-0c616d50f588",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        2416,
+        1136
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-output-project",
+              "name": "projectName",
+              "value": "={{ $('Normalize Inputs').item.json.projectName }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-website",
+              "name": "websiteUrl",
+              "value": "={{ $('Normalize Inputs').item.json.websiteUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-target-month",
+              "name": "targetMonth",
+              "value": "={{ $('Normalize Inputs').item.json.targetMonth }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-content-type",
+              "name": "contentType",
+              "value": "={{ $('Normalize Inputs').item.json.contentType }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-generated-at",
+              "name": "generatedAt",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-meta-title",
+              "name": "metaTitle",
+              "value": "={{ $json.output.meta_title }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-meta-desc",
+              "name": "metaDescription",
+              "value": "={{ $json.output.meta_description }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-slug",
+              "name": "slug",
+              "value": "={{ $json.output.slug }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-h1",
+              "name": "h1Title",
+              "value": "={{ $json.output.h1_title }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-primary-kw",
+              "name": "primaryKeyword",
+              "value": "={{ $json.output.primary_keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-secondary-kw",
+              "name": "secondaryKeywords",
+              "value": "={{ $json.output.secondary_keywords }}",
+              "type": "array"
+            },
+            {
+              "id": "field-output-word-count",
+              "name": "wordCountEstimate",
+              "value": "={{ $json.output.word_count_estimate }}",
+              "type": "number"
+            },
+            {
+              "id": "field-output-intro",
+              "name": "introduction",
+              "value": "={{ $json.output.introduction }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-body",
+              "name": "bodyContent",
+              "value": "={{ $json.output.body_content }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-faq",
+              "name": "faqSection",
+              "value": "={{ $json.output.faq_section }}",
+              "type": "array"
+            },
+            {
+              "id": "field-output-cta",
+              "name": "ctaSection",
+              "value": "={{ $json.output.cta_section }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-internal-links",
+              "name": "internalLinks",
+              "value": "={{ $json.output.internal_links }}",
+              "type": "array"
+            },
+            {
+              "id": "field-output-schema",
+              "name": "schemaMarkupType",
+              "value": "={{ $json.output.schema_markup_type }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-competitor",
+              "name": "competitorInsights",
+              "value": "={{ $json.output.competitor_insights }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-seo-notes",
+              "name": "seoNotes",
+              "value": "={{ $json.output.seo_notes }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-total-pages",
+              "name": "sitemapTotalPages",
+              "value": "={{ $('Build AI Context & Prompt').item.json.totalPages }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "35deb2bb-ac01-45ff-a8f4-08c65a243972",
+      "name": "Format SEO Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2528,
+        928
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>SEO QC Report — {{ $json.projectName }}</title>\n  <style>\n    * { box-sizing: border-box; margin: 0; padding: 0; }\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a202c; }\n    .header { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: white; padding: 40px; text-align: center; }\n    .header h1 { font-size: 2rem; margin-bottom: 8px; }\n    .header p { opacity: 0.85; font-size: 1rem; }\n    .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 0.85rem; margin-top: 12px; }\n    .container { max-width: 960px; margin: 0 auto; padding: 32px 20px; }\n    .card { background: white; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }\n    .card h2 { font-size: 1.1rem; color: #2b6cb0; border-bottom: 2px solid #ebf4ff; padding-bottom: 10px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }\n    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }\n    .meta-item { background: #f7fafc; border-radius: 8px; padding: 14px; }\n    .meta-item label { font-size: 0.75rem; color: #718096; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }\n    .meta-item .value { font-weight: 600; color: #1a202c; font-size: 0.95rem; }\n    .char-count { font-size: 0.7rem; color: #a0aec0; margin-top: 4px; }\n    .slug-box { background: #f0fff4; border: 1px solid #c6f6d5; border-radius: 6px; padding: 10px 14px; font-family: monospace; font-size: 0.9rem; color: #276749; }\n    .keywords-list { display: flex; flex-wrap: wrap; gap: 8px; }\n    .keyword-tag { background: #ebf4ff; color: #2b6cb0; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; }\n    .keyword-tag.primary { background: #2b6cb0; color: white; }\n    .content-block { background: #f7fafc; border-radius: 8px; padding: 20px; white-space: pre-wrap; line-height: 1.75; font-size: 0.95rem; border-left: 4px solid #2b6cb0; }\n    .faq-item { border-bottom: 1px solid #e2e8f0; padding: 16px 0; }\n    .faq-item:last-child { border-bottom: none; }\n    .faq-item .q { font-weight: 700; color: #1a365d; margin-bottom: 8px; }\n    .faq-item .a { color: #4a5568; line-height: 1.6; }\n    .link-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px; background: #f7fafc; border-radius: 8px; margin-bottom: 10px; }\n    .link-item .anchor { font-weight: 700; color: #2b6cb0; min-width: 160px; }\n    .link-item .url { font-family: monospace; font-size: 0.82rem; color: #4a5568; }\n    .link-item .hint { font-size: 0.82rem; color: #718096; margin-top: 2px; }\n    .insight-box { background: #fffaf0; border-left: 4px solid #ed8936; padding: 16px; border-radius: 0 8px 8px 0; line-height: 1.65; }\n    .notes-box { background: #fff5f5; border-left: 4px solid #fc8181; padding: 16px; border-radius: 0 8px 8px 0; line-height: 1.65; }\n    .cta-box { background: linear-gradient(135deg, #ebf4ff, #f0fff4); border-radius: 8px; padding: 20px; line-height: 1.65; font-size: 0.95rem; }\n    .stats-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }\n    .stat-chip { background: white; border-radius: 10px; padding: 16px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.07); flex: 1; min-width: 140px; text-align: center; }\n    .stat-chip .num { font-size: 1.8rem; font-weight: 800; color: #2b6cb0; }\n    .stat-chip .lbl { font-size: 0.75rem; color: #718096; margin-top: 4px; }\n    .schema-badge { display: inline-block; background: #553c9a; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }\n    .footer { text-align: center; padding: 32px; color: #a0aec0; font-size: 0.82rem; }\n  </style>\n</head>\n<body>\n\n<div class=\"header\">\n  <h1>🏡 SEO QC Report</h1>\n  <p>{{ $json.projectName }} &mdash; {{ $json.websiteUrl }}</p>\n  <span class=\"badge\">{{ $json.contentType }} &bull; {{ $json.targetMonth }} &bull; Generated {{ $json.generatedAt.substring(0,10) }}</span>\n</div>\n\n<div class=\"container\">\n\n  <!-- Stats Row -->\n  <div class=\"stats-row\">\n    <div class=\"stat-chip\"><div class=\"num\">{{ $json.wordCountEstimate }}</div><div class=\"lbl\">Est. Words</div></div>\n    <div class=\"stat-chip\"><div class=\"num\">{{ $json.sitemapTotalPages }}</div><div class=\"lbl\">Sitemap Pages</div></div>\n    <div class=\"stat-chip\"><div class=\"num\">{{ $json.faqSection.length }}</div><div class=\"lbl\">FAQs</div></div>\n    <div class=\"stat-chip\"><div class=\"num\">{{ $json.internalLinks.length }}</div><div class=\"lbl\">Internal Links</div></div>\n  </div>\n\n  <!-- Meta SEO -->\n  <div class=\"card\">\n    <h2>🔍 Meta SEO</h2>\n    <div class=\"meta-grid\">\n      <div class=\"meta-item\">\n        <label>Meta Title</label>\n        <div class=\"value\">{{ $json.metaTitle }}</div>\n        <div class=\"char-count\">{{ $json.metaTitle.length }} characters</div>\n      </div>\n      <div class=\"meta-item\">\n        <label>Meta Description</label>\n        <div class=\"value\">{{ $json.metaDescription }}</div>\n        <div class=\"char-count\">{{ $json.metaDescription.length }} characters</div>\n      </div>\n    </div>\n    <div style=\"margin-top:16px\">\n      <label style=\"font-size:0.75rem;color:#718096;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:6px\">URL Slug</label>\n      <div class=\"slug-box\">/{{ $json.slug }}</div>\n    </div>\n  </div>\n\n  <!-- Keywords -->\n  <div class=\"card\">\n    <h2>🎯 Target Keywords</h2>\n    <div class=\"keywords-list\">\n      <span class=\"keyword-tag primary\">⭐ {{ $json.primaryKeyword }}</span>\n      {{ $json.secondaryKeywords.map(kw => '<span class=\"keyword-tag\">' + kw + '</span>').join('') }}\n    </div>\n    <div style=\"margin-top:16px\">\n      <label style=\"font-size:0.75rem;color:#718096;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:6px\">Recommended Schema Markup</label>\n      <span class=\"schema-badge\">schema.org/{{ $json.schemaMarkupType }}</span>\n    </div>\n  </div>\n\n  <!-- H1 & Introduction -->\n  <div class=\"card\">\n    <h2>📝 H1 &amp; Introduction</h2>\n    <div style=\"font-size:1.4rem;font-weight:800;color:#1a365d;margin-bottom:16px\">{{ $json.h1Title }}</div>\n    <div class=\"content-block\">{{ $json.introduction }}</div>\n  </div>\n\n  <!-- Body Content -->\n  <div class=\"card\">\n    <h2>📄 Full Body Content</h2>\n    <div class=\"content-block\">{{ $json.bodyContent }}</div>\n  </div>\n\n  <!-- FAQ -->\n  <div class=\"card\">\n    <h2>❓ FAQ Section</h2>\n    {{ $json.faqSection.map(faq => '<div class=\"faq-item\"><div class=\"q\">Q: ' + faq.question + '</div><div class=\"a\">' + faq.answer + '</div></div>').join('') }}\n  </div>\n\n  <!-- CTA -->\n  <div class=\"card\">\n    <h2>🚀 Call to Action</h2>\n    <div class=\"cta-box\">{{ $json.ctaSection }}</div>\n  </div>\n\n  <!-- Internal Links -->\n  <div class=\"card\">\n    <h2>🔗 Internal Link Recommendations</h2>\n    {{ $json.internalLinks.map(link => '<div class=\"link-item\"><div class=\"anchor\">' + link.anchor_text + '</div><div><div class=\"url\">' + link.suggested_url + '</div><div class=\"hint\">' + link.placement_hint + '</div></div></div>').join('') }}\n  </div>\n\n  <!-- Competitor Insights -->\n  <div class=\"card\">\n    <h2>🔭 Competitor Research Insights</h2>\n    <div class=\"insight-box\">{{ $json.competitorInsights }}</div>\n  </div>\n\n  <!-- SEO QC Notes -->\n  <div class=\"card\">\n    <h2>⚠️ SEO QC Notes &amp; Recommendations</h2>\n    <div class=\"notes-box\">{{ $json.seoNotes }}</div>\n  </div>\n\n</div>\n\n<div class=\"footer\">Generated by SEO QC AI Workflow &bull; {{ $json.generatedAt }}</div>\n\n</body>\n</html>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "f6570d94-fa6b-425c-918a-25c1dd7f0c09",
+      "name": "Respond with SEO Report",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2800,
+        928
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "2ff40e5c-6764-4303-aa99-7369292e004b",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -3184,
+        1168
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-error-message",
+              "name": "errorMessage",
+              "value": "={{ $json.execution.error.message || 'An unknown error occurred.' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-error-node",
+              "name": "errorNode",
+              "value": "={{ $json.execution.lastNodeExecuted || 'Unknown node' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-error-time",
+              "name": "errorTime",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "78811f8e-f53b-4976-a63b-080b87e0f1f6",
+      "name": "Format Error Details",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        1424
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html><head><meta charset=\"UTF-8\"><title>SEO QC Error</title>\n<style>body{font-family:sans-serif;background:#fff5f5;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}.card{background:white;border-radius:12px;padding:40px;max-width:500px;box-shadow:0 4px 20px rgba(0,0,0,0.1);text-align:center}.icon{font-size:3rem;margin-bottom:16px}h1{color:#c53030;margin-bottom:12px}p{color:#4a5568;line-height:1.6}.meta{margin-top:20px;background:#f7fafc;border-radius:8px;padding:14px;font-size:0.85rem;color:#718096;text-align:left}</style>\n</head><body>\n<div class=\"card\">\n  <div class=\"icon\">⚠️</div>\n  <h1>SEO QC Error</h1>\n  <p>{{ $json.errorMessage }}</p>\n  <div class=\"meta\">\n    <strong>Failed at:</strong> {{ $json.errorNode }}<br>\n    <strong>Time:</strong> {{ $json.errorTime }}<br><br>\n    Common fixes:<br>\n    • Ensure the sitemap URL returns valid XML<br>\n    • Make sure the Google Doc is publicly accessible (View access)<br>\n    • Verify all required form fields are filled\n  </div>\n</div>\n</body></html>",
+        "options": {
+          "responseCode": 500,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "bbc5ecaf-c897-4e6e-b4f8-c2e6f318bdf9",
+      "name": "Respond with Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        1424
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": "x-ai/grok-4.1-fast",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        1088
+      ],
+      "id": "f9852a75-e6aa-475a-b227-0e22f4b90f18",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "x0LG52oVRDHGvw9B",
+          "name": "OpenRouter account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "formTitle": "SEO QC — AI Content Generator",
+        "formDescription": "Submit your property details and SEO plan link. Our AI will analyse your sitemap, read your SEO strategy doc, and generate an optimised blog post or landing page.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Project Name",
+              "placeholder": "e.g. Sunset Villas Bali",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Property Website URL",
+              "placeholder": "https://yourproperty.com",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Sitemap XML URL",
+              "placeholder": "https://yourproperty.com/sitemap.xml",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Google Doc Link (SEO Plan)",
+              "placeholder": "https://docs.google.com/document/d/YOUR_DOC_ID/edit",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Target Month",
+              "placeholder": "e.g. July 2025"
+            },
+            {
+              "fieldLabel": "Content Type",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "SEO Blog Post"
+                  },
+                  {
+                    "option": "New Landing Page"
+                  },
+                  {
+                    "option": "Location Guide"
+                  },
+                  {
+                    "option": "Property Feature Page"
+                  },
+                  {
+                    "option": "FAQ Page"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Primary Target Keyword (optional)",
+              "placeholder": "e.g. luxury villa Bali with pool"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c3762d70-347d-46b5-a5fa-785831389b03",
+      "name": "SEO QC Form1",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -3200,
+        752
+      ],
+      "webhookId": "acb64f00-fb11-4445-8b1f-d3c9ff254c88"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-project-name",
+              "name": "projectName",
+              "value": "={{ $json['Project Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "field-website-url",
+              "name": "websiteUrl",
+              "value": "={{ $json['Property Website URL'].replace(/\\/$/, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "field-sitemap-url",
+              "name": "sitemapUrl",
+              "value": "={{ $json['Sitemap XML URL'] }}",
+              "type": "string"
+            },
+            {
+              "id": "field-google-doc-link",
+              "name": "googleDocLink",
+              "value": "={{ $json['Google Doc Link (SEO Plan)'] }}",
+              "type": "string"
+            },
+            {
+              "id": "field-google-doc-id",
+              "name": "googleDocId",
+              "value": "={{ $json['Google Doc Link (SEO Plan)'].match(/\\/document\\/d\\/([a-zA-Z0-9_-]+)/)?.[1] ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-google-doc-export-url",
+              "name": "googleDocExportUrl",
+              "value": "=https://docs.google.com/document/d/{{ $json['Google Doc Link (SEO Plan)'].match(/\\/document\\/d\\/([a-zA-Z0-9_-]+)/)?.[1] ?? '' }}/export?format=txt",
+              "type": "string"
+            },
+            {
+              "id": "field-target-month",
+              "name": "targetMonth",
+              "value": "={{ $json['Target Month'] || $now.toFormat('MMMM yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "field-content-type",
+              "name": "contentType",
+              "value": "={{ $json['Content Type'] }}",
+              "type": "string"
+            },
+            {
+              "id": "field-primary-keyword",
+              "name": "primaryKeyword",
+              "value": "={{ $json['Primary Target Keyword (optional)'] || '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "85bf0608-2b20-42c9-940a-dccdde9bba7b",
+      "name": "Normalize Inputs1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2944,
+        752
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.sitemapUrl }}",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "maxRedirects": 5
+            }
+          },
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "3f1a8dc1-3a22-4cb6-af8d-20b1a6636bb9",
+      "name": "Fetch Sitemap XML1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2688,
+        608
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Normalize Inputs1').item.json.googleDocExportUrl }}",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "maxRedirects": 5
+            }
+          },
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "id": "46f9f15b-5bca-452d-b5b3-2ecb1aadf3d6",
+      "name": "Fetch Google Doc1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2688,
+        896
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "06921d6b-fe1a-4c5e-b0fc-af7e166ef24d",
+      "name": "Parse Sitemap XML1",
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        -2416,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-sitemap-urls",
+              "name": "sitemapUrls",
+              "value": "={{ ($json.data?.urlset?.url || []).map(u => typeof u === 'string' ? u : (u.loc?.[0] || u.loc || '')).filter(u => u).join(', ') }}",
+              "type": "string"
+            },
+            {
+              "id": "field-sitemap-count",
+              "name": "totalPages",
+              "value": "={{ ($json.data?.urlset?.url || []).length }}",
+              "type": "number"
+            },
+            {
+              "id": "field-sitemap-sample",
+              "name": "sitemapSample",
+              "value": "={{ ($json.data?.urlset?.url || []).slice(0, 30).map(u => typeof u === 'string' ? u : (u.loc?.[0] || u.loc || '')).filter(u => u).join('\\n') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5d9cb95b-e7fb-455d-ac16-290ab97a1685",
+      "name": "Extract Sitemap URLs1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2160,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-seo-plan-text",
+              "name": "seoPlanText",
+              "value": "={{ $json.data || $json.body || 'No SEO plan document content retrieved.' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c39fc42b-a5f2-4e50-9871-1411e6f3254e",
+      "name": "Normalize Doc Content1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2416,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "options": {}
+      },
+      "id": "40b049f7-5132-4342-95f6-7542e9efbe0a",
+      "name": "Merge Context1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        -1904,
+        752
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-project-name-ctx",
+              "name": "projectName",
+              "value": "={{ $('Normalize Inputs1').item.json.projectName }}",
+              "type": "string"
+            },
+            {
+              "id": "field-website-url-ctx",
+              "name": "websiteUrl",
+              "value": "={{ $('Normalize Inputs1').item.json.websiteUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "field-content-type-ctx",
+              "name": "contentType",
+              "value": "={{ $('Normalize Inputs1').item.json.contentType }}",
+              "type": "string"
+            },
+            {
+              "id": "field-target-month-ctx",
+              "name": "targetMonth",
+              "value": "={{ $('Normalize Inputs1').item.json.targetMonth }}",
+              "type": "string"
+            },
+            {
+              "id": "field-primary-keyword-ctx",
+              "name": "primaryKeyword",
+              "value": "={{ $('Normalize Inputs1').item.json.primaryKeyword }}",
+              "type": "string"
+            },
+            {
+              "id": "field-total-pages-ctx",
+              "name": "totalPages",
+              "value": "={{ $('Extract Sitemap URLs1').item.json.totalPages }}",
+              "type": "number"
+            },
+            {
+              "id": "field-sitemap-sample-ctx",
+              "name": "sitemapSample",
+              "value": "={{ $('Extract Sitemap URLs1').item.json.sitemapSample }}",
+              "type": "string"
+            },
+            {
+              "id": "field-seo-plan-text-ctx",
+              "name": "seoPlanText",
+              "value": "={{ $('Normalize Doc Content1').item.json.seoPlanText.substring(0, 8000) }}",
+              "type": "string"
+            },
+            {
+              "id": "field-ai-prompt",
+              "name": "aiPrompt",
+              "value": "=You are a senior SEO strategist and content writer specialising in property and hospitality websites.\n\n## PROJECT BRIEFING\n- **Project / Property Name:** {{ $('Normalize Inputs1').item.json.projectName }}\n- **Website:** {{ $('Normalize Inputs1').item.json.websiteUrl }}\n- **Target Month:** {{ $('Normalize Inputs1').item.json.targetMonth }}\n- **Content Type Requested:** {{ $('Normalize Inputs1').item.json.contentType }}\n- **Primary Target Keyword (if provided):** {{ $('Normalize Inputs1').item.json.primaryKeyword || 'Not specified — derive from SEO plan context' }}\n\n## WEBSITE SITEMAP SNAPSHOT\nThe property website currently has **{{ $('Extract Sitemap URLs1').item.json.totalPages }} indexed pages**. Here is a sample of existing URLs (first 30):\n{{ $('Extract Sitemap URLs1').item.json.sitemapSample }}\n\nUse this to:\n1. Understand what content already exists and AVOID duplicating topics.\n2. Find internal linking opportunities for the new content.\n3. Spot content gaps the new page/post should fill.\n\n## SEO PLAN DOCUMENT (Monthly Activity Context)\nThe following is the property's SEO strategy document. Extract the relevant monthly activities, focus keywords, content themes, and any specific instructions for {{ $('Normalize Inputs1').item.json.targetMonth }}:\n\n---\n{{ $('Normalize Doc Content1').item.json.seoPlanText.substring(0, 8000) }}\n---\n\n## YOUR TASKS\n1. **Analyse** the SEO plan to identify the exact content brief for {{ $('Normalize Inputs1').item.json.targetMonth }}.\n2. **Research** using web search: validate keyword search volumes, check top-ranking competitor pages, identify LSI keywords and questions people ask.\n3. **Audit** the sitemap: identify the best internal pages to link FROM and TO.\n4. **Write** a complete, publication-ready {{ $('Normalize Inputs1').item.json.contentType }} following SEO best practices.\n\n## OUTPUT REQUIREMENTS\nReturn a fully structured JSON object with all SEO content fields as specified. The content must be:\n- Minimum 800 words for blog posts, 600 words for landing pages\n- Naturally optimised (keyword density 1-2%, no stuffing)\n- Structured with proper H2/H3 hierarchy\n- Include a compelling meta title (50-60 chars) and meta description (145-160 chars)\n- Include 3-5 internal link suggestions with anchor text\n- Include a FAQ section with 4-6 questions\n- End with a strong CTA relevant to the property",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3e19cb87-8e6d-4344-b020-df131cb6bf75",
+      "name": "Build AI Context & Prompt1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1648,
+        752
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.aiPrompt }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a world-class SEO content strategist with 15+ years of experience in property, hospitality, and travel niches. You write content that ranks on Google and converts visitors into guests.\n\nCore principles:\n- Always research before writing — use web search to validate keywords and competitor strategies\n- Write for humans first, search engines second\n- Every piece of content must serve a clear search intent\n- Internal linking is critical — always suggest relevant internal links\n- CTAs must be compelling and property-specific\n- Output MUST be valid JSON matching the structured schema exactly\n\nAlways use the web search tool to:\n1. Check what's currently ranking for the target keyword\n2. Find related questions (People Also Ask)\n3. Identify LSI keywords and semantic terms to include\n4. Validate that the content angle is competitive"
+        }
+      },
+      "id": "12a3d17e-f8d5-453d-a25b-887e735d2367",
+      "name": "SEO AI Agent1",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -1376,
+        752
+      ]
+    },
+    {
+      "parameters": {
+        "model": "x-ai/grok-4.1-fast",
+        "options": {}
+      },
+      "id": "518fa547-4fd6-4206-a4c8-572d2af4c8ff",
+      "name": "OpenRouter Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -1504,
+        928
+      ],
+      "credentials": {
+        "openRouterApi": {
+          "id": "x0LG52oVRDHGvw9B",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Normalize Inputs1').item.json.projectName + '-seo-session' }}",
+        "contextWindowLength": 10
+      },
+      "id": "50070bc3-04ae-4f7f-bc0f-551e7c09ba8e",
+      "name": "Window Memory1",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        1008
+      ]
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"meta_title\": {\n      \"type\": \"string\",\n      \"description\": \"SEO meta title, 50-60 characters\"\n    },\n    \"meta_description\": {\n      \"type\": \"string\",\n      \"description\": \"SEO meta description, 145-160 characters\"\n    },\n    \"slug\": {\n      \"type\": \"string\",\n      \"description\": \"URL-friendly slug, lowercase, hyphens only\"\n    },\n    \"h1_title\": {\n      \"type\": \"string\",\n      \"description\": \"Main H1 heading for the page\"\n    },\n    \"primary_keyword\": {\n      \"type\": \"string\",\n      \"description\": \"Primary target keyword for this content\"\n    },\n    \"secondary_keywords\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"3-5 secondary / LSI keywords\"\n    },\n    \"content_type\": {\n      \"type\": \"string\",\n      \"description\": \"Type of content produced\"\n    },\n    \"word_count_estimate\": {\n      \"type\": \"number\",\n      \"description\": \"Estimated word count of the body content\"\n    },\n    \"introduction\": {\n      \"type\": \"string\",\n      \"description\": \"Engaging introduction paragraph (100-150 words)\"\n    },\n    \"body_content\": {\n      \"type\": \"string\",\n      \"description\": \"Full body content with H2/H3 markdown headings, minimum 600 words\"\n    },\n    \"faq_section\": {\n      \"type\": \"array\",\n      \"description\": \"4-6 FAQ items with question and answer\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"question\": { \"type\": \"string\" },\n          \"answer\": { \"type\": \"string\" }\n        },\n        \"required\": [\"question\", \"answer\"]\n      }\n    },\n    \"cta_section\": {\n      \"type\": \"string\",\n      \"description\": \"Compelling call-to-action paragraph\"\n    },\n    \"internal_links\": {\n      \"type\": \"array\",\n      \"description\": \"3-5 internal link recommendations\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"anchor_text\": { \"type\": \"string\" },\n          \"suggested_url\": { \"type\": \"string\" },\n          \"placement_hint\": { \"type\": \"string\" }\n        },\n        \"required\": [\"anchor_text\", \"suggested_url\", \"placement_hint\"]\n      }\n    },\n    \"schema_markup_type\": {\n      \"type\": \"string\",\n      \"description\": \"Recommended schema.org type, e.g. Article, FAQPage, LodgingBusiness\"\n    },\n    \"competitor_insights\": {\n      \"type\": \"string\",\n      \"description\": \"Brief summary of what top-ranking competitors are doing for this keyword\"\n    },\n    \"seo_notes\": {\n      \"type\": \"string\",\n      \"description\": \"QC notes: any gaps found, recommendations, or warnings about the content strategy\"\n    }\n  },\n  \"required\": [\n    \"meta_title\",\n    \"meta_description\",\n    \"slug\",\n    \"h1_title\",\n    \"primary_keyword\",\n    \"secondary_keywords\",\n    \"content_type\",\n    \"word_count_estimate\",\n    \"introduction\",\n    \"body_content\",\n    \"faq_section\",\n    \"cta_section\",\n    \"internal_links\",\n    \"schema_markup_type\",\n    \"competitor_insights\",\n    \"seo_notes\"\n  ]\n}"
+      },
+      "id": "c18521b9-c84d-458e-88cd-dded49e6407e",
+      "name": "Structured Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -1120,
+        976
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-output-project",
+              "name": "projectName",
+              "value": "={{ $('Normalize Inputs1').item.json.projectName }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-website",
+              "name": "websiteUrl",
+              "value": "={{ $('Normalize Inputs1').item.json.websiteUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-target-month",
+              "name": "targetMonth",
+              "value": "={{ $('Normalize Inputs1').item.json.targetMonth }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-content-type",
+              "name": "contentType",
+              "value": "={{ $('Normalize Inputs1').item.json.contentType }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-generated-at",
+              "name": "generatedAt",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-meta-title",
+              "name": "metaTitle",
+              "value": "={{ $json.output.meta_title }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-meta-desc",
+              "name": "metaDescription",
+              "value": "={{ $json.output.meta_description }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-slug",
+              "name": "slug",
+              "value": "={{ $json.output.slug }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-h1",
+              "name": "h1Title",
+              "value": "={{ $json.output.h1_title }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-primary-kw",
+              "name": "primaryKeyword",
+              "value": "={{ $json.output.primary_keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-secondary-kw",
+              "name": "secondaryKeywords",
+              "value": "={{ $json.output.secondary_keywords }}",
+              "type": "array"
+            },
+            {
+              "id": "field-output-word-count",
+              "name": "wordCountEstimate",
+              "value": "={{ $json.output.word_count_estimate }}",
+              "type": "number"
+            },
+            {
+              "id": "field-output-intro",
+              "name": "introduction",
+              "value": "={{ $json.output.introduction }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-body",
+              "name": "bodyContent",
+              "value": "={{ $json.output.body_content }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-faq",
+              "name": "faqSection",
+              "value": "={{ $json.output.faq_section }}",
+              "type": "array"
+            },
+            {
+              "id": "field-output-cta",
+              "name": "ctaSection",
+              "value": "={{ $json.output.cta_section }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-internal-links",
+              "name": "internalLinks",
+              "value": "={{ $json.output.internal_links }}",
+              "type": "array"
+            },
+            {
+              "id": "field-output-schema",
+              "name": "schemaMarkupType",
+              "value": "={{ $json.output.schema_markup_type }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-competitor",
+              "name": "competitorInsights",
+              "value": "={{ $json.output.competitor_insights }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-seo-notes",
+              "name": "seoNotes",
+              "value": "={{ $json.output.seo_notes }}",
+              "type": "string"
+            },
+            {
+              "id": "field-output-total-pages",
+              "name": "sitemapTotalPages",
+              "value": "={{ $('Build AI Context & Prompt1').item.json.totalPages }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "46d21381-8c3a-404f-b6af-b0daaa4d6252",
+      "name": "Format SEO Output1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1008,
+        752
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>SEO QC Report — {{ $json.projectName }}</title>\n  <style>\n    * { box-sizing: border-box; margin: 0; padding: 0; }\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a202c; }\n    .header { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: white; padding: 40px; text-align: center; }\n    .header h1 { font-size: 2rem; margin-bottom: 8px; }\n    .header p { opacity: 0.85; font-size: 1rem; }\n    .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 0.85rem; margin-top: 12px; }\n    .container { max-width: 960px; margin: 0 auto; padding: 32px 20px; }\n    .card { background: white; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }\n    .card h2 { font-size: 1.1rem; color: #2b6cb0; border-bottom: 2px solid #ebf4ff; padding-bottom: 10px; margin-bottom: 18px; }\n    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }\n    .meta-item { background: #f7fafc; border-radius: 8px; padding: 14px; }\n    .meta-item label { font-size: 0.75rem; color: #718096; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }\n    .meta-item .value { font-weight: 600; color: #1a202c; font-size: 0.95rem; }\n    .char-count { font-size: 0.7rem; color: #a0aec0; margin-top: 4px; }\n    .slug-box { background: #f0fff4; border: 1px solid #c6f6d5; border-radius: 6px; padding: 10px 14px; font-family: monospace; font-size: 0.9rem; color: #276749; }\n    .keywords-list { display: flex; flex-wrap: wrap; gap: 8px; }\n    .keyword-tag { background: #ebf4ff; color: #2b6cb0; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; }\n    .keyword-tag.primary { background: #2b6cb0; color: white; }\n    .content-block { background: #f7fafc; border-radius: 8px; padding: 20px; white-space: pre-wrap; line-height: 1.75; font-size: 0.95rem; border-left: 4px solid #2b6cb0; }\n    .faq-item { border-bottom: 1px solid #e2e8f0; padding: 16px 0; }\n    .faq-item:last-child { border-bottom: none; }\n    .faq-item .q { font-weight: 700; color: #1a365d; margin-bottom: 8px; }\n    .faq-item .a { color: #4a5568; line-height: 1.6; }\n    .link-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px; background: #f7fafc; border-radius: 8px; margin-bottom: 10px; }\n    .link-item .anchor { font-weight: 700; color: #2b6cb0; min-width: 160px; }\n    .link-item .url { font-family: monospace; font-size: 0.82rem; color: #4a5568; }\n    .link-item .hint { font-size: 0.82rem; color: #718096; margin-top: 2px; }\n    .insight-box { background: #fffaf0; border-left: 4px solid #ed8936; padding: 16px; border-radius: 0 8px 8px 0; line-height: 1.65; }\n    .notes-box { background: #fff5f5; border-left: 4px solid #fc8181; padding: 16px; border-radius: 0 8px 8px 0; line-height: 1.65; }\n    .cta-box { background: linear-gradient(135deg, #ebf4ff, #f0fff4); border-radius: 8px; padding: 20px; line-height: 1.65; font-size: 0.95rem; }\n    .stats-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }\n    .stat-chip { background: white; border-radius: 10px; padding: 16px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.07); flex: 1; min-width: 140px; text-align: center; }\n    .stat-chip .num { font-size: 1.8rem; font-weight: 800; color: #2b6cb0; }\n    .stat-chip .lbl { font-size: 0.75rem; color: #718096; margin-top: 4px; }\n    .schema-badge { display: inline-block; background: #553c9a; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }\n    .footer { text-align: center; padding: 32px; color: #a0aec0; font-size: 0.82rem; }\n  </style>\n</head>\n<body>\n\n<div class=\"header\">\n  <h1>🏡 SEO QC Report</h1>\n  <p>{{ $json.projectName }} &mdash; {{ $json.websiteUrl }}</p>\n  <span class=\"badge\">{{ $json.contentType }} &bull; {{ $json.targetMonth }} &bull; Generated {{ $json.generatedAt.substring(0,10) }}</span>\n</div>\n\n<div class=\"container\">\n  <div class=\"stats-row\">\n    <div class=\"stat-chip\"><div class=\"num\">{{ $json.wordCountEstimate }}</div><div class=\"lbl\">Est. Words</div></div>\n    <div class=\"stat-chip\"><div class=\"num\">{{ $json.sitemapTotalPages }}</div><div class=\"lbl\">Sitemap Pages</div></div>\n    <div class=\"stat-chip\"><div class=\"num\">{{ $json.faqSection.length }}</div><div class=\"lbl\">FAQs</div></div>\n    <div class=\"stat-chip\"><div class=\"num\">{{ $json.internalLinks.length }}</div><div class=\"lbl\">Internal Links</div></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>🔍 Meta SEO</h2>\n    <div class=\"meta-grid\">\n      <div class=\"meta-item\"><label>Meta Title</label><div class=\"value\">{{ $json.metaTitle }}</div><div class=\"char-count\">{{ $json.metaTitle.length }} characters</div></div>\n      <div class=\"meta-item\"><label>Meta Description</label><div class=\"value\">{{ $json.metaDescription }}</div><div class=\"char-count\">{{ $json.metaDescription.length }} characters</div></div>\n    </div>\n    <div style=\"margin-top:16px\"><label style=\"font-size:0.75rem;color:#718096;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:6px\">URL Slug</label><div class=\"slug-box\">/{{ $json.slug }}</div></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>🎯 Target Keywords</h2>\n    <div class=\"keywords-list\">\n      <span class=\"keyword-tag primary\">⭐ {{ $json.primaryKeyword }}</span>\n      {{ $json.secondaryKeywords.map(kw => '<span class=\"keyword-tag\">' + kw + '</span>').join('') }}\n    </div>\n    <div style=\"margin-top:16px\"><label style=\"font-size:0.75rem;color:#718096;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:6px\">Recommended Schema Markup</label><span class=\"schema-badge\">schema.org/{{ $json.schemaMarkupType }}</span></div>\n  </div>\n\n  <div class=\"card\">\n    <h2>📝 H1 &amp; Introduction</h2>\n    <div style=\"font-size:1.4rem;font-weight:800;color:#1a365d;margin-bottom:16px\">{{ $json.h1Title }}</div>\n    <div class=\"content-block\">{{ $json.introduction }}</div>\n  </div>\n\n  <div class=\"card\">\n    <h2>📄 Full Body Content</h2>\n    <div class=\"content-block\">{{ $json.bodyContent }}</div>\n  </div>\n\n  <div class=\"card\">\n    <h2>❓ FAQ Section</h2>\n    {{ $json.faqSection.map(faq => '<div class=\"faq-item\"><div class=\"q\">Q: ' + faq.question + '</div><div class=\"a\">' + faq.answer + '</div></div>').join('') }}\n  </div>\n\n  <div class=\"card\">\n    <h2>🚀 Call to Action</h2>\n    <div class=\"cta-box\">{{ $json.ctaSection }}</div>\n  </div>\n\n  <div class=\"card\">\n    <h2>🔗 Internal Link Recommendations</h2>\n    {{ $json.internalLinks.map(link => '<div class=\"link-item\"><div class=\"anchor\">' + link.anchor_text + '</div><div><div class=\"url\">' + link.suggested_url + '</div><div class=\"hint\">' + link.placement_hint + '</div></div></div>').join('') }}\n  </div>\n\n  <div class=\"card\">\n    <h2>🔭 Competitor Research Insights</h2>\n    <div class=\"insight-box\">{{ $json.competitorInsights }}</div>\n  </div>\n\n  <div class=\"card\">\n    <h2>⚠️ SEO QC Notes &amp; Recommendations</h2>\n    <div class=\"notes-box\">{{ $json.seoNotes }}</div>\n  </div>\n</div>\n\n<div class=\"footer\">Generated by SEO QC AI Workflow &bull; {{ $json.generatedAt }}</div>\n</body>\n</html>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "423a74c2-c4ed-4b41-b42e-d8e4e7c6fed9",
+      "name": "Respond with SEO Report1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -736,
+        752
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-error-message",
+              "name": "errorMessage",
+              "value": "={{ $json.execution.error.message || 'An unknown error occurred.' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-error-node",
+              "name": "errorNode",
+              "value": "={{ $json.execution.lastNodeExecuted || 'Unknown node' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-error-time",
+              "name": "errorTime",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bb4556d7-6858-47da-b71f-9f670b103650",
+      "name": "Format Error Details1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2960,
+        1264
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html><head><meta charset=\"UTF-8\"><title>SEO QC Error</title>\n<style>body{font-family:sans-serif;background:#fff5f5;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}.card{background:white;border-radius:12px;padding:40px;max-width:500px;box-shadow:0 4px 20px rgba(0,0,0,0.1);text-align:center}.icon{font-size:3rem;margin-bottom:16px}h1{color:#c53030;margin-bottom:12px}p{color:#4a5568;line-height:1.6}.meta{margin-top:20px;background:#f7fafc;border-radius:8px;padding:14px;font-size:0.85rem;color:#718096;text-align:left}</style>\n</head><body>\n<div class=\"card\">\n  <div class=\"icon\">⚠️</div>\n  <h1>SEO QC Error</h1>\n  <p>{{ $json.errorMessage }}</p>\n  <div class=\"meta\">\n    <strong>Failed at:</strong> {{ $json.errorNode }}<br>\n    <strong>Time:</strong> {{ $json.errorTime }}<br><br>\n    Common fixes:<br>\n    • Ensure the sitemap URL returns valid XML<br>\n    • Make sure the Google Doc is publicly accessible (View access)<br>\n    • Verify all required form fields are filled\n  </div>\n</div>\n</body></html>",
+        "options": {
+          "responseCode": 500,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "fcd8d97b-9562-4855-990b-d2e5542f9557",
+      "name": "Respond with Error1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -2704,
+        1264
+      ]
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows-backup",
+  "repo_owner": "sidhartha1s",
+  "repo_path": "backups",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-18T08:31:16.880Z",
+      "createdAt": "2026-02-18T08:31:16.880Z",
+      "role": "workflow:owner",
+      "workflowId": "S1RtTN6U1j2Ee2TG",
+      "projectId": "RL6dq3Iv75Grec4D"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-18T10:23:49.664Z",
+  "versionId": "eb0efee2-8dc5-42bc-8a49-9bcdb0eba6d8"
+}
