@@ -1,0 +1,149 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Crawl4AI: Basic Crawler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crawl4AI": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-19T11:19:36.206Z",
+  "id": "2UtLExWIR1npaxmf",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "processRawHtml",
+        "crawlerOptions": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-crawl4ai-fork.crawl4aiBasicCrawler",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        -224
+      ],
+      "id": "3437a266-48ff-483b-aa19-7505b4a68a9a",
+      "name": "Crawl4AI: Basic Crawler",
+      "credentials": {
+        "crawl4aiApi": {
+          "id": "71tELXdMI8ke249J",
+          "name": "Crawl4AI account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        -224
+      ],
+      "id": "bf17fdff-c42e-4f0d-84d1-98e8e1b62c7b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fields": {
+          "fieldsValues": [
+            {}
+          ]
+        },
+        "browserOptions": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-crawl4ai-fork.crawl4aiContentExtractor",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -240
+      ],
+      "id": "e3809ca7-acab-4c4c-8e4e-ab1893d3bc72",
+      "name": "Crawl4AI: Content Extractor",
+      "credentials": {
+        "crawl4aiApi": {
+          "id": "71tELXdMI8ke249J",
+          "name": "Crawl4AI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://crawl4ai:11235/crawl",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"urls\": [\"https://www.karmachalets.co.in/\"],\n\"f\": \"fit\",\n  \"q\": null,\n  \"c\": \"0\",\n  \"crawler_config\": {\n    \"excluded_tags\": [\"style\", \"noscript\", \"path\", \"defs\"],\n    \"css_selector\": \"body\",\n    \"remove_overlay_elements\": true,\n    \"screenshot\": false\n  },\n  \"extraction_config\": {\n    \"type\": \"cosine\",\n    \"params\": {\n      \"semantic_filter\": \"content images video alt text navigation footer\"\n    }\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -288,
+        -32
+      ],
+      "id": "d3eebddd-3416-439d-b884-385d9ae17929",
+      "name": "Crawl4AI"
+    },
+    {
+      "parameters": {
+        "jsCode": "const result = $input.first().json.results[0];\n\nconst images = (result.media?.images || [])\n  .filter(img => img.alt && img.alt.trim() !== \"\")\n  .map(img => ({ src: img.src, alt: img.alt, score: img.score }));\n\nconst videos = (result.media?.videos || [])\n  .map(v => ({ src: v.src, poster: v.poster || null }));\n\nreturn [{\n  json: {\n    url: result.url,\n    metadata: result.metadata,\n    markdown: result.markdown,\n    images: images,\n    videos: videos,\n    links_internal: (result.links?.internal || []).map(l => l.href),\n    links_external: (result.links?.external || []).map(l => l.href)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -32
+      ],
+      "id": "13d14546-76e5-48c9-97bb-016df0718cd5",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows-backup",
+  "repo_owner": "sidhartha1s",
+  "repo_path": "backups",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-19T11:19:36.206Z",
+      "createdAt": "2026-02-19T11:19:36.206Z",
+      "role": "workflow:owner",
+      "workflowId": "2UtLExWIR1npaxmf",
+      "projectId": "RL6dq3Iv75Grec4D"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-19T12:49:39.772Z",
+  "versionId": "8dbcba6d-1c2f-4ae0-a3e7-c48db1658344"
+}
