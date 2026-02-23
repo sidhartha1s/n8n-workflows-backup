@@ -2052,6 +2052,21 @@
         -2704,
         1264
       ]
+    },
+    {
+      "parameters": {
+        "content": "# TESTING ON CLAUDE",
+        "height": 1328,
+        "width": 3056
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -3376,
+        384
+      ],
+      "id": "6e98bd4f-e0b4-4ea2-a414-1941fddab51f",
+      "name": "Sticky Note"
     }
   ],
   "pinData": {},
@@ -2073,8 +2088,21 @@
     }
   ],
   "staticData": null,
-  "tags": [],
+  "tags": [
+    {
+      "updatedAt": "2026-02-04T17:01:11.917Z",
+      "createdAt": "2026-02-04T17:01:11.917Z",
+      "id": "klkqhZdZfanmTWju",
+      "name": "TEST ENV"
+    },
+    {
+      "updatedAt": "2026-02-23T10:48:54.297Z",
+      "createdAt": "2026-02-23T10:48:54.297Z",
+      "id": "0NROcRnUZhVUqZxU",
+      "name": "Claude Chat"
+    }
+  ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-18T10:23:49.664Z",
-  "versionId": "eb0efee2-8dc5-42bc-8a49-9bcdb0eba6d8"
+  "updatedAt": "2026-02-23T10:48:55.364Z",
+  "versionId": "3a0e1c4e-3f61-4c0c-8c34-b7aa399ab0e0"
 }
