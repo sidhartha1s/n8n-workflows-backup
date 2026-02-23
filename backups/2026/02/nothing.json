@@ -1,0 +1,37 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {},
+  "createdAt": "2026-02-19T07:08:22.188Z",
+  "id": "APPKjfy89zgjXIwT",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "nothing",
+  "nodes": [],
+  "pinData": {},
+  "repo_name": "n8n-workflows-backup",
+  "repo_owner": "sidhartha1s",
+  "repo_path": "backups",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-19T07:08:22.188Z",
+      "createdAt": "2026-02-19T07:08:22.188Z",
+      "role": "workflow:owner",
+      "workflowId": "APPKjfy89zgjXIwT",
+      "projectId": "RL6dq3Iv75Grec4D"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-23T10:42:31.892Z",
+  "versionId": "6a8f8501-5aae-4d25-b00a-dba5f4209737"
+}
