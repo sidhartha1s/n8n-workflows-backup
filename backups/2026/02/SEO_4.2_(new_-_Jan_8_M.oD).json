@@ -381,6 +381,33 @@
         ]
       ]
     },
+    "Mistral Cloud Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "13.5 Context Refiner",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "16. AI Generate Content",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "16. AI Generate Content",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "path NO-OP": {
       "main": [
         [
@@ -391,32 +418,10 @@
           }
         ]
       ]
-    },
-    "OpenRouter Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "13.5 Context Refiner",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenRouter Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "16. AI Generate Content",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
-  "createdAt": "2026-02-04T16:59:39.513Z",
-  "id": "ORKMeqIjUHR8BV0YGFqoY",
+  "createdAt": "2026-02-12T06:41:04.493Z",
+  "id": "QN6r7AQvFGeM2YcC",
   "isArchived": true,
   "meta": null,
   "name": "SEO 4.2 (new - Jan 8 M.oD)",
@@ -427,27 +432,27 @@
         "path": "seo-content-webhook",
         "options": {}
       },
-      "id": "cfa11f38-ba0b-46da-b71f-9a33501a9011",
+      "id": "8ba21b0b-7952-4e21-80b2-b0ec8ada5bb3",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1.1,
       "position": [
-        -1680,
-        208
+        -848,
+        912
       ],
       "webhookId": "90517383-9c60-43cb-95a1-0b8f192314e9"
     },
     {
       "parameters": {
-        "jsCode": "const webhookPayload = $input.first().json;\nconst rowData = webhookPayload.body || webhookPayload;\nconst requiredFields = ['Project Name', 'Status', 'Sitemap URL', 'SEO Plan Doc Link'];\nconst missingFields = requiredFields.filter(field => !rowData[field] || !rowData[field].trim());\n\nif (missingFields.length > 0) {\n  throw new Error(`❌ WEBHOOK DATA VALIDATION FAILED: ${missingFields.join(', ')}`);\n}\n\nreturn [{\n  json: {\n    'Project Name': String(rowData['Project Name']).trim(),\n    'Status': String(rowData['Status']).trim(),\n    'Sitemap URL': String(rowData['Sitemap URL']).trim(),\n    'SEO Plan Doc Link': String(rowData['SEO Plan Doc Link']).trim(),\n    'Language Variant': String(rowData['Language Variant'] || 'UK English').trim(),\n    'Approx Word Count': String(rowData['Approx Word Count'] || '').trim(),\n    'Content Type': String(rowData['Content Type'] || 'New Page').trim(),\n    'On Chain References (other than homepage)': String(rowData['On Chain References (other than homepage)'] || '').trim(),\n    'External Reference Links for Blogs': String(rowData['External Reference Links for Blogs'] || '').trim(),\n    'Child Property URL': String(rowData['Child Property URL'] || '').trim(),\n    '_executionId': new Date().getTime(),\n    '_projectId': String(rowData['Project Name']).trim() + '_' + Date.now(),\n    'attemptNumber': 1,\n    'maxAttempts': 3\n  }\n}];\n"
+        "jsCode": "const webhookPayload = $input.first().json;\nconst rowData = webhookPayload.body || webhookPayload;\nconst requiredFields = ['Project Name', 'Status', 'Sitemap URL', 'SEO Plan Doc Link'];\nconst missingFields = requiredFields.filter(field => !rowData[field] || !rowData[field].trim());\n\nif (missingFields.length > 0) {\n  throw new Error(`❌ WEBHOOK DATA VALIDATION FAILED: ${missingFields.join(', ')}`);\n}\n\nreturn [{\n  json: {\n    'Project Name': String(rowData['Project Name']).trim(),\n    'Status': String(rowData['Status']).trim(),\n    'Sitemap URL': String(rowData['Sitemap URL']).trim(),\n    'SEO Plan Doc Link': String(rowData['SEO Plan Doc Link']).trim(),\n    'Language Variant': String(rowData['Language Variant'] || 'UK English').trim(),\n    'Content Type': String(rowData['Content Type'] || 'New Page').trim(),\n    'On Chain References (other than homepage)': String(rowData['On Chain References (other than homepage)'] || '').trim(),\n    'External Reference Links for Blogs': String(rowData['External Reference Links for Blogs'] || '').trim(),\n    'Child Property URL': String(rowData['Child Property URL'] || '').trim(),\n    '_executionId': new Date().getTime(),\n    '_projectId': String(rowData['Project Name']).trim() + '_' + Date.now(),\n    'attemptNumber': 1,\n    'maxAttempts': 3\n  }\n}];\n"
       },
-      "id": "3fa09b5d-41f5-4300-949a-b436e5b10764",
+      "id": "4bf6b256-6399-4a47-b728-73934437e497",
       "name": "1. Transform Webhook Data",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1472,
-        208
+        -640,
+        912
       ]
     },
     {
@@ -473,13 +478,13 @@
         },
         "options": {}
       },
-      "id": "23eb452b-b697-4186-9853-90da75051b41",
+      "id": "403b3b05-0025-4795-b735-93487e19c37f",
       "name": "2. Check Status Ready",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1280,
-        208
+        -448,
+        912
       ]
     },
     {
@@ -500,234 +505,21 @@
           "value": {
             "Project Name": "={{ $json['Project Name'] }}",
             "Status": "Processing",
-            "Processing Timestamp": "={{ $now.toISO() }}",
-            "row_number": 0
+            "Processing Timestamp": "={{ $now.toISO() }}"
           },
           "matchingColumns": [
             "Project Name"
-          ],
-          "schema": [
-            {
-              "id": "Project Name",
-              "displayName": "Project Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Sitemap URL",
-              "displayName": "Sitemap URL",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "SEO Plan Doc Link",
-              "displayName": "SEO Plan Doc Link",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Language Variant",
-              "displayName": "Language Variant",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Approx Word Count",
-              "displayName": "Approx Word Count",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "On Chain References (other than homepage)",
-              "displayName": "On Chain References (other than homepage)",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "External Reference Links for Blogs",
-              "displayName": "External Reference Links for Blogs",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Child Property URL",
-              "displayName": "Child Property URL",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Additional Context for Target Page\n",
-              "displayName": "Additional Context for Target Page\n",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Content Type",
-              "displayName": "Content Type",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Meta Title",
-              "displayName": "Meta Title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Meta Description",
-              "displayName": "Meta Description",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "AI Generated Blog Post",
-              "displayName": "AI Generated Blog Post",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "FAQ + Hyperlinks",
-              "displayName": "FAQ + Hyperlinks",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Keywords Used",
-              "displayName": "Keywords Used",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "QC Status",
-              "displayName": "QC Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "QC Feedback",
-              "displayName": "QC Feedback",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Processing Timestamp",
-              "displayName": "Processing Timestamp",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Details",
-              "displayName": "Error Details",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "row_number",
-              "displayName": "row_number",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": true,
-              "readOnly": true,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
+          ]
         },
         "options": {}
       },
-      "id": "80cb397c-3ac5-47fa-8d12-4db1797eb8aa",
+      "id": "7a80a17d-1d1e-4555-b55e-562392fcb8b3",
       "name": "1.5 Update Status Processing",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1072,
-        208
+        -240,
+        912
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -738,16 +530,50 @@
     },
     {
       "parameters": {
-        "jsCode": "const originalData = $('2. Check Status Ready').first().json;\n\nreturn [{\n  json: {\n    ...originalData,\n    projectName: originalData['Project Name'],\n    sitemapUrl: originalData['Sitemap URL'],\n    docLink: originalData['SEO Plan Doc Link'],\n    languageVariant: originalData['Language Variant'] || 'UK English',\n    approxWordCount: originalData['Approx Word Count'] || '',\n    contentType: originalData['Content Type'] || 'New Page',\n    onChainReferences: originalData['On Chain References (other than homepage)'] || '',\n    externalReferences: originalData['External Reference Links for Blogs'] || '',\n    childPropertyUrl: originalData['Child Property URL'] || '',\n    executionId: originalData._executionId,\n    attemptNumber: originalData.attemptNumber || 1,\n    maxAttempts: 3\n  }\n}];\n"
+        "jsCode": "const originalData = $('2. Check Status Ready').first().json;\n\nreturn [{\n  json: {\n    ...originalData,\n    projectName: originalData['Project Name'],\n    sitemapUrl: originalData['Sitemap URL'],\n    docLink: originalData['SEO Plan Doc Link'],\n    languageVariant: originalData['Language Variant'] || 'UK English',\n    contentType: originalData['Content Type'] || 'New Page',\n    onChainReferences: originalData['On Chain References (other than homepage)'] || '',\n    externalReferences: originalData['External Reference Links for Blogs'] || '',\n    childPropertyUrl: originalData['Child Property URL'] || '',\n    executionId: originalData._executionId,\n    attemptNumber: originalData.attemptNumber || 1,\n    maxAttempts: 3\n  }\n}];\n"
       },
-      "id": "2df6a459-4d0b-4b1c-bff3-7f3f7c0ca11a",
+      "id": "dfc65b71-5acd-41bd-ab2b-1bad21293cf7",
       "name": "3. Extract Sheet Data",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -880,
-        208
+        -48,
+        912
       ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "doc-link-exists",
+              "leftValue": "={{ $json.docLink }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "isNotEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1e1feef4-3586-440b-b304-94434b9327a6",
+      "name": "3.5 Filter Invalid Docs",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        592
+      ],
+      "disabled": true
     },
     {
       "parameters": {
@@ -772,13 +598,13 @@
           "timeout": 30000
         }
       },
-      "id": "c3c70055-9082-4214-91ec-da465900f63e",
+      "id": "a268b1e7-f7c3-48c9-a441-cbf40f5c7c26",
       "name": "4. HTTP Export Google Doc",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -624,
-        144
+        208,
+        848
       ],
       "alwaysOutputData": false,
       "credentials": {
@@ -792,26 +618,26 @@
       "parameters": {
         "jsCode": "const inputData = $input.first();\n\nif (!inputData || !inputData.json) {\n  throw new Error('❌ GOOGLE DOC EXPORT FAILED: No data received');\n}\n\nlet rawContent = inputData.json.data || inputData.json.body || inputData.json;\n\nif (typeof rawContent !== 'string') {\n  rawContent = JSON.stringify(rawContent);\n}\n\nif (!rawContent || rawContent.length < 100) {\n  throw new Error(`❌ SEO PLAN DOCUMENT TOO SHORT: ${rawContent.length} chars`);\n}\n\nrawContent = rawContent.replace(/\\r/g, '').replace(/\\n{3,}/g, '\\n\\n').trim();\n\nconst keywordPatterns = [\n  /keywords?:([\\s\\S]*?)(?:target page|action pointers?)/i\n];\n\nconst keywords = [];\n\nfor (const pattern of keywordPatterns) {\n  const match = rawContent.match(pattern);\n  if (match) {\n    const keywordSection = match[1];\n    const lines = keywordSection.split('\\n').filter(l => l.trim());\n    \n    for (const line of lines) {\n      if (line.match(/target page|action pointers?|page title/i)) continue;\n      \n      const extracted = line\n        .split(/[,\\-]/)\n        .map(k => k.trim())\n        .filter(k => k.length >= 3);\n      \n      keywords.push(...extracted);\n    }\n    break;\n  }\n}\n\nconst uniqueKeywords = [...new Set(keywords)];\n\nif (uniqueKeywords.length === 0) {\n  throw new Error('❌ NO KEYWORDS FOUND IN SEO PLAN');\n}\n\nlet seoGuidelines = '';\nconst actionPointersMatch = rawContent.match(/action\\s*pointers?:([\\s\\S]*)/i);\n\nif (actionPointersMatch && actionPointersMatch[1].trim().length >= 50) {\n  seoGuidelines = actionPointersMatch[1].trim();\n}\n\nif (!seoGuidelines || seoGuidelines.length < 100) {\n  seoGuidelines = rawContent;\n}\n\nreturn [{\n  json: {\n    keywords: uniqueKeywords.slice(0, 15),\n    keywordsRaw: uniqueKeywords.join(', '),\n    seoGuidelines: seoGuidelines.substring(0, 2500),\n    fullDocContent: rawContent.substring(0, 4000)\n  }\n}];\n"
       },
-      "id": "ffc394f5-7980-4a97-ab1c-f47845beb092",
+      "id": "928448f1-a295-43c5-ad07-c059daab30de",
       "name": "5. Parse SEO Plan Doc",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -416,
-        144
+        416,
+        848
       ]
     },
     {
       "parameters": {
         "jsCode": "const data = $input.first().json;\nconst keywords = data.keywords;\nconst seoGuidelines = data.seoGuidelines;\n\nconst validationErrors = [];\n\nif (!keywords || keywords.length === 0) {\n  validationErrors.push('No keywords extracted');\n}\n\nif (!seoGuidelines || seoGuidelines.length < 20) {\n  validationErrors.push('SEO guidelines too short');\n}\n\nif (validationErrors.length > 0) {\n  throw new Error(`❌ SEO PLAN VALIDATION FAILED: ${validationErrors.join('; ')}`);\n}\n\nreturn [{json: data}];\n"
       },
-      "id": "a6e876ee-4ae5-4981-9a27-fd91fe6f689a",
+      "id": "7d9901c1-c392-45af-a2b0-b214d6035627",
       "name": "5.5. Validate SEO Context",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -224,
-        144
+        608,
+        848
       ]
     },
     {
@@ -834,13 +660,13 @@
           "timeout": 30000
         }
       },
-      "id": "e9fc521d-4415-4a20-85ca-cbc4c3152519",
+      "id": "12effb05-aa83-4006-a766-552e2137b50e",
       "name": "6. HTTP Fetch Sitemap",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -640,
-        336
+        192,
+        1040
       ],
       "alwaysOutputData": false
     },
@@ -848,39 +674,39 @@
       "parameters": {
         "jsCode": "const inputData = $input.first().json;\nconst statusCode = inputData.statusCode || 200;\n\nif (statusCode !== 200) {\n  throw new Error(`❌ SITEMAP FETCH FAILED: Status ${statusCode}`);\n}\n\nreturn [{json: inputData}];\n"
       },
-      "id": "6c6be63a-ba51-44b5-9aa1-56a3fc26eaca",
+      "id": "adb9a02c-d1be-4ea7-8053-ea7e3dacda53",
       "name": "7. Validate Sitemap",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -432,
-        336
+        400,
+        1040
       ]
     },
     {
       "parameters": {
         "jsCode": "const inputData = $input.first().json;\nconst htmlBody = inputData.body || inputData.data;\nconst urlPattern = /<loc>([^<]+)<\\/loc>/g;\nconst urls = [];\nlet match;\n\nwhile ((match = urlPattern.exec(htmlBody)) !== null) {\n  const url = match[1].trim();\n  if (url && url.startsWith('http')) {\n    urls.push({json: {url: url}});\n  }\n}\n\nif (urls.length === 0) {\n  throw new Error('❌ NO URLS FOUND IN SITEMAP');\n}\n\nconsole.log(`📊 Sitemap contains ${urls.length} URLs`);\n\nreturn urls;\n"
       },
-      "id": "da1572ad-7ff2-49ab-933b-3cf3b5d9bad1",
+      "id": "20489cfe-43f5-4bf6-ae7b-628dc45fa438",
       "name": "8. Parse Sitemap",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -224,
-        336
+        608,
+        1040
       ]
     },
     {
       "parameters": {
         "jsCode": "const sitemapUrls = $input.all();\nconst sheetData = $('3. Extract Sheet Data').first().json;\n\nconst MAX_URLS = 12;\nconst allUrls = [];\n\nconst isHomepage = (url) => {\n  try {\n    const parsed = new URL(url);\n    return parsed.pathname === '/' || parsed.pathname === '';\n  } catch {\n    return false;\n  }\n};\n\nconst childPropertyUrl = (sheetData.childPropertyUrl || '').trim();\n\nif (childPropertyUrl && childPropertyUrl.startsWith('http')) {\n  allUrls.push({\n    json: {\n      url: childPropertyUrl,\n      source: 'childproperty',\n      priority: 'high',\n      weight: 0.6\n    }\n  });\n  console.log(`✅ Priority URL: Child Property (weight=0.6) - ${childPropertyUrl}`);\n} else {\n  const homepage = sitemapUrls.find(item => isHomepage(item.json.url));\n  if (homepage) {\n    allUrls.push({\n      json: {\n        url: homepage.json.url,\n        source: 'homepage',\n        priority: 'high',\n        weight: 0.6\n      }\n    });\n    console.log(`✅ Priority URL: Homepage (weight=0.6) - ${homepage.json.url}`);\n  }\n}\n\nconst remainingSlots = MAX_URLS - allUrls.length;\n\nconst remainingUrls = sitemapUrls.filter(item => {\n  const urlToCheck = item.json.url;\n  const alreadyAdded = allUrls.find(u => u.json.url === urlToCheck);\n  return !alreadyAdded;\n}).slice(0, remainingSlots);\n\nconst weightPerUrl = remainingSlots > 0 ? 0.4 / remainingSlots : 0;\n\nremainingUrls.forEach(item => {\n  allUrls.push({\n    json: {\n      url: item.json.url,\n      source: 'sitemap',\n      priority: 'normal',\n      weight: weightPerUrl\n    }\n  });\n});\n\nconsole.log(`📊 Weight Distribution: 1 priority (0.6) + ${remainingUrls.length} regular (${weightPerUrl.toFixed(4)} each) = ${0.6 + (remainingUrls.length * weightPerUrl).toFixed(4)}`);\nconsole.log(`✅ Total URLs selected: ${allUrls.length}/${MAX_URLS}`);\n\nreturn allUrls;\n"
       },
-      "id": "b81af4c8-0d0e-4a6b-a269-5bd06c74dc16",
+      "id": "96f3e885-c1d4-479f-b868-a2b9bf065407",
       "name": "8.5. 🔒 Limit URLs (Max 12)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1200,
-        560
+        -368,
+        1264
       ]
     },
     {
@@ -888,13 +714,13 @@
         "batchSize": 3,
         "options": {}
       },
-      "id": "b2210203-7558-4687-8655-dd76bf1046c4",
+      "id": "4b5682a2-5008-4208-86c9-e6df53497439",
       "name": "9.5. 📦 Split in Batches (3 URLs)",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -976,
-        560
+        -144,
+        1264
       ]
     },
     {
@@ -918,13 +744,13 @@
           "timeout": 30000
         }
       },
-      "id": "57c74a99-6dd6-4279-92ee-9d21ad1188d0",
+      "id": "afd5f3e5-1ffc-4223-b46f-f29de4d10834",
       "name": "10. Jina AI Scraper",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -784,
-        656
+        48,
+        1360
       ],
       "retryOnFail": true,
       "maxTries": 2,
@@ -934,13 +760,13 @@
       "parameters": {
         "amount": 2.5
       },
-      "id": "7cb4a3fc-9d16-42d8-a937-107254db0676",
+      "id": "25458de1-b2a7-429f-a4a8-ca964d1d351c",
       "name": "10.5. ⏱️ Wait (Rate Limit)",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -576,
-        672
+        256,
+        1376
       ],
       "webhookId": "rate-limit-delay"
     },
@@ -948,39 +774,39 @@
       "parameters": {
         "jsCode": "const items = $input.all();\nconst node9Data = $('8.5. 🔒 Limit URLs (Max 12)').all();\n\nconst results = items.map((item, index) => {\n  if (item.json.error) {\n    console.log(`⚠️ JINA ERROR: ${item.json.error.message || 'Unknown error'}`);\n     return {\n      json: {\n        url: 'unknown',\n        content: '',\n        processed: false,\n        error: item.json.error\n      }\n    };\n  }\n\n  const originalItem = node9Data[index]?.json;\n  const url = originalItem?.url || '';\n  const weight = originalItem?.weight || 0;\n  const source = originalItem?.source || 'unknown';\n  const priority = originalItem?.priority || 'normal';\n  \n  // Jina returns raw text/markdown in the body or data field\n  let content = item.json?.data || item.json || '';\n  \n  if (typeof content !== 'string') {\n    content = JSON.stringify(content);\n  }\n  \n  // Basic clean up of Jina footer if present\n  content = content.replace(/To use Jina reader.*/i, '');\n  \n  const isValid = content.length >= 150;\n  \n  if (isValid) {\n    console.log(`✅ SUCCESS JINA: ${url.substring(0, 50)}... (${content.length}ch)`);\n  }\n  \n  return {\n    json: {\n      url,\n      content,\n      processed: isValid,\n      weight,\n      source,\n      priority,\n      error: null,\n      charCount: content.length\n    }\n  };\n});\n\nreturn results;\n"
       },
-      "id": "0b967471-592f-46f3-aa71-b70dfb0c57d0",
+      "id": "69c5d717-405a-43c1-8d29-1edc1649a34a",
       "name": "11. Validate Jina Output",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -384,
-        672
+        448,
+        1376
       ]
     },
     {
       "parameters": {
         "jsCode": "const items = $input.all();\nconst validItems = items.filter(item => \n  item.json?.content && \n  item.json.content.length >= 100 && \n  item.json.processed === true\n);\n\nif (validItems.length === 0) {\n   console.log('⚠️ WARNING: NO VALID CONTENT IN THIS BATCH');\n}\n\nconsole.log(`✅ Validation: ${validItems.length}/${items.length} items valid`);\n\nreturn items;\n"
       },
-      "id": "711c6b6a-1a82-4f61-a7e1-1c971e8bb839",
+      "id": "850e1432-6d6a-4b9b-ab5b-a9464f9064b0",
       "name": "11.5. Validate Content Extraction",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -224,
-        848
+        608,
+        1552
       ]
     },
     {
       "parameters": {
         "jsCode": "const items = $input.all();\nlet priorityContent = '';\nlet regularContent = '';\nlet totalChars = 0;\n\nitems.forEach(item => {\n  const content = item.json?.content;\n  const weight = item.json?.weight || 0;\n  const priority = item.json?.priority;\n  const source = item.json?.source;\n  \n  if (!content || content.length < 100) return;\n  \n  if (weight >= 0.6 || priority === 'high') {\n    priorityContent += `\\n\\n[PRIMARY ${source.toUpperCase()}] ${content}`;\n    totalChars += content.length;\n  } else {\n    const truncated = content.substring(0, 600);\n    regularContent += `\\n\\n[Supporting] ${truncated}`;\n    totalChars += truncated.length;\n  }\n});\n\nconst aggregatedContent = priorityContent + regularContent;\n\nif (!aggregatedContent || aggregatedContent.length < 200) {\n  throw new Error('❌ AGGREGATED CONTENT TOO SHORT - SITE SCRAPING FAILED');\n}\n\nconst finalContent = aggregatedContent.substring(0, 15000);\n\nconsole.log(`📊 Aggregated: ${items.length} pages → ${totalChars} chars → ${finalContent.length} final chars`);\n\nreturn [{\n  json: {\n    aggregatedContent: finalContent,\n    pageCount: items.length,\n    totalChars: totalChars,\n    finalChars: finalContent.length\n  }\n}];\n"
       },
-      "id": "32ddd72c-9b12-45cd-9782-daaf9ca456e2",
+      "id": "fce7d19b-0e1e-49e5-913d-fa05f96cf7d1",
       "name": "12. Aggregate Content",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -320,
-        528
+        800,
+        1168
       ]
     },
     {
@@ -992,106 +818,107 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        320,
-        -80
+        1152,
+        624
       ],
-      "id": "2ec876ae-abd3-4d0d-84ce-e3cdcfe9f9c5",
+      "id": "b5bb77f4-3130-40a3-8a95-047fdd6c28e7",
       "name": "13. Merge SEO + Website Data"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ \"You are a Senior Copywriter's Research Assistant. \\n\\nYour Job: Analyze the raw text scraped from a hotel website and extract an exhaustive list of facts needed for a new landing page/blog.\\n\\nRAW TEXT:\\n\" + $json.aggregatedContent + \"\\n\\nOUTPUT FORMAT (Plain Text Bullet Points):\\n1. USPs (What makes this place unique?)\\n2. Vibe & Atmosphere (Romantic, Family, Business, Nature?)\\n3. Key Amenities (Pools, Spa name, Dining names, specific Room Types)\\n4. Location Highlights (Distance to key landmarks in km)\\n5. Target Audience\\n\\nINSTRUCTION:\\n- Do not summarize; categorize.\\n- If the source mentions specific names for rooms, spas, or cafes, they MUST be included in the output.\\n- No marketing fluff, just facts.\\n- Ignore 'concise' limits, ensure all entities are captured.\" }}",
+        "text": "={{ \"You are a Senior Copywriter's Research Assistant. \\n\\nYour Job: Analyze the raw text scraped from a hotel website and extract only the critical facts needed for a new landing page/blog.\\n\\nRAW TEXT:\\n\" + $json.aggregatedContent + \"\\n\\nOUTPUT FORMAT (Plain Text Bullet Points):\\n1. USPs (What makes this place unique?)\\n2. Vibe & Atmosphere (Romantic, Family, Business, Nature?)\\n3. Key Amenities (Pools, Spa name, Dining names, specific Room Types)\\n4. Location Highlights (Distance to key landmarks in km)\\n5. Target Audience\\n\\nKeep it concise. Max 600 words. No marketing fluff, just facts.\" }}",
         "options": {}
       },
-      "id": "1a475a8e-a3c9-4772-8455-0d371f85ebb4",
+      "id": "ba72a268-30c3-41ff-9972-2fde2ab99fe6",
       "name": "13.5 Context Refiner",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        528,
-        -112
+        1360,
+        624
       ]
     },
     {
       "parameters": {
-        "jsCode": "const mergedData = $('13. Merge SEO + Website Data').first().json;\nconst refinedContext = $input.first().json.output || $input.first().json.text;\nconst sheetData = $('3. Extract Sheet Data').first().json;\n\nconst seoContextText = mergedData.seoGuidelines;\nconst keywords = mergedData.keywords;\n\nif (!seoContextText || seoContextText.length < 50) {\n  throw new Error('❌ MERGE FAILED: MISSING SEO CONTEXT');\n}\n\nconsole.log(`✅ Context merged and refined.`);\n\nreturn [{\n  json: {\n    primaryKeyword: keywords[0] || 'NA',\n    secondaryKeyword1: keywords[1] || 'NA',\n    secondaryKeyword2: keywords[2] || 'NA',\n    tertiaryKeyword: keywords[3] || 'NA',\n    seoGuidelines: seoContextText,\n    refinedContext: refinedContext,\n    languageVariant: sheetData.languageVariant,\n    contentType: sheetData.contentType,\n    approxWordCount: sheetData.approxWordCount,\n    keywords: keywords,\n    attemptNumber: sheetData.attemptNumber || 1,\n    previousIssues: [],\n    executionId: sheetData.executionId\n  }\n}];\n"
+        "jsCode": "const mergedData = $('13. Merge SEO + Website Data').first().json;\nconst refinedContext = $input.first().json.output || $input.first().json.text;\nconst sheetData = $('3. Extract Sheet Data').first().json;\n\nconst seoContextText = mergedData.seoGuidelines;\nconst keywords = mergedData.keywords;\n\nif (!seoContextText || seoContextText.length < 50) {\n  throw new Error('❌ MERGE FAILED: MISSING SEO CONTEXT');\n}\n\nconsole.log(`✅ Context merged and refined.`);\n\nreturn [{\n  json: {\n    primaryKeyword: keywords[0] || 'NA',\n    secondaryKeyword1: keywords[1] || 'NA',\n    secondaryKeyword2: keywords[2] || 'NA',\n    tertiaryKeyword: keywords[3] || 'NA',\n    seoGuidelines: seoContextText,\n    refinedContext: refinedContext,\n    languageVariant: sheetData.languageVariant,\n    contentType: sheetData.contentType,\n    keywords: keywords,\n    attemptNumber: sheetData.attemptNumber || 1,\n    previousIssues: [],\n    executionId: sheetData.executionId\n  }\n}];\n"
       },
-      "id": "80766d75-1aa0-4f6b-931b-ddee728ca414",
+      "id": "155db86c-03ea-48e7-8512-c34917e30a38",
       "name": "14. Merge All Context",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        832,
-        -96
+        1664,
+        608
       ]
     },
     {
       "parameters": {
-        "jsCode": "let ctx;\nlet currentAttempt = 1;\n\ntry {\n  const retryInput = $('18.8. Inject Retry Context').first();\n  if (retryInput && retryInput.json) {\n    ctx = retryInput.json;\n    currentAttempt = ctx.attemptNumber || 1;\n    console.log('🔄 RETRY DETECTED: Attempt ' + currentAttempt + '/3');\n  } else {\n    throw new Error('No retry context');\n  }\n} catch (e) {\n  ctx = $input.first().json;\n  currentAttempt = ctx.attemptNumber || 1;\n  console.log('✨ FIRST RUN: Attempt ' + currentAttempt + '/3');\n}\n\nif (currentAttempt > 3) {\n  throw new Error('🛑 MAX RETRY LIMIT REACHED (3/3). QC failed on all attempts.');\n}\n\nconst contentType = ctx.contentType || 'New Page';\nconst isBlog = contentType.toLowerCase().includes('blog');\nconst approxWordCount = parseInt(ctx.approxWordCount);\nlet wordCountRules;\n\nif (!isNaN(approxWordCount) && approxWordCount > 0) {\n  const min = Math.floor(approxWordCount * 0.85);\n  const max = Math.ceil(approxWordCount * 1.15);\n  wordCountRules = { min, max, target: `${min}-${max}` };\n} else {\n  wordCountRules = isBlog \n    ? { min: 800, max: 1200, target: '800-1200' }\n    : { min: 500, max: 700, target: '500-700' };\n}\n\nlet structureInstructions = '';\n\nif (isBlog) {\n  structureInstructions = `\n  BLOG STRUCTURE:\n  1. Introduction: Set the scene before jumping into the main topic. (E.g. if writing about Dehradun attractions, start with Dehradun's vibe). Prepare readers.\n  2. Body: Follow the plan structure (H1 > H2 > H3). Include listed places. Add factually correct places if relevant. Avoid repeating words.\n  3. Conclusion: Brief summary (1-2 lines). Mention property USPs. Add anchor texts.\n  `;\n} else {\n  structureInstructions = `\n  NEW PAGE STRUCTURE:\n  1. Introduction: DO NOT start directly with the hotel. First, set context about the city/topic (e.g. business hub/weekend getaway). Then lead into how the hotel fits this context.\n  2. Body: Focus entirely on the property (Rooms, Facilities, Location, USPs). H2 for main sections, H3 for sub-points. Simple, factual, easy to read.\n  3. Conclusion: Summarise highlights (1-2 lines). Subtly market the hotel as the perfect choice.\n  `;\n}\n\nconst languageRules = `\n  LANGUAGE & STYLE RULES (STRICTLY FOLLOW):\n  • Use Active Voice. Use Title Case for all Headers (omitting prepositions/articles).\n  • Hyphens: Do NOT hyphenate numbers/units (e.g., write '250 sq. ft.', not '250-sq. ft.'). Do NOT hyphenate 'King size bed'.\n  • Units: Use 'km', 'sq. ft.'. Use numbers instead of words (Stay 3 nights, not three).\n  • Terms: Use '55-inch' (not 55\"), 'high tea' (not hi-tea), 'Doctor on Call', 'walking distance' (if <2km).\n  • Dashes: Use em dashes (—) for pauses. Avoid en dashes.\n  • Tone: Simple, factual, no fluff. No 'Lorem Ipsum'.\n`;\n\nconst internalLinkingRules = `\n  INTERNAL LINKING:\n  • Prioritise interlinks in opening paragraph.\n  • Link terms like 'rooms', 'dining', 'offers'.\n  • Format: <a href=\"/rooms\">Rooms</a>\n`;\n\nconst keywordRules = `\n  KEYWORD USAGE:\n  • Primary Keyword must appear in H1 and Page Title.\n  • Use keywords verbatim (exact match).\n  • Each keyword must appear at least once and max 5 times.\n  • Insert naturally; do not force if it sounds artificial.\n`;\n\nconst metaRules = `\n  META DATA:\n  • Page Title: Keyword 1 | Keyword 2 | Hotel Name (Max 65 chars, Min 45 chars).\n  • Meta Description: Include one keyword. Summary. (Max 160 chars, Min 140 chars).\n`;\n\nconst retryContext = (currentAttempt > 1)\n  ? '\\n\\n🔄 RETRY ATTEMPT ' + currentAttempt + '/3:\\nPrevious QC issues: ' + (ctx.previousIssues || []).join(', ') + '\\n\\nFIX THESE SPECIFIC ISSUES. Maintain the length and depth of the previous version; only modify the specific lines causing the QC failure. All other fields must remain unchanged.\\n'\n  : '';\n\nconst prompt = `You are an expert SEO content writer API. You DO NOT speak. You ONLY output valid JSON.\n${retryContext}\n\nBRIEF:\n• Content Type: ${contentType}\n• Target Word Count: ${wordCountRules.target} words\n• Primary Keyword: ${ctx.primaryKeyword}\n• Secondary Keywords: ${ctx.secondaryKeyword1}, ${ctx.secondaryKeyword2}\n\nPROPERTY FACTS (Strictly adhere to this):\n${ctx.refinedContext}\n\n${structureInstructions}\n\n${languageRules}\n\nSTRICT NEGATIVE CONSTRAINTS (DO NOT USE):\n• Nestled, Boasts, Oasis, Haven, Tapestry, Symphony, Breathtaking, Testament, Moreover, Furthermore\n• Do not use extra hyphens in page names.\n\n${keywordRules}\n\n${metaRules}\n\nOUTPUT STRUCTURE (JSON ONLY):\n{\n  \"metaTitle\": \"[Keyword 1 | Keyword 2 | Hotel Name]\",\n  \"metaDescription\": \"[Include keyword. Summary.]\",\n  \"blogContent\": \"# [H1 - must contain Primary Keyword]\\n\\n[Intro Paragraphs]\\n\\n## [H2]\\n...\",\n  \"faqSection\": \"Q1: [Question]\\nA1: [Answer max 30 words]\\n... [5-8 Questions]\"\n}\n\n${internalLinkingRules}\n\nSEO PLAN (Follow strictly):\n${ctx.seoGuidelines}\n\nOUTPUT VALID JSON NOW.`;\n\nreturn [{\n  json: {\n    prompt: prompt,\n    wordCountRules: wordCountRules,\n    primaryKeyword: ctx.primaryKeyword,\n    attemptNumber: currentAttempt,\n    previousIssues: ctx.previousIssues || []\n  }\n}];\n"
+        "jsCode": "let ctx;\nlet currentAttempt = 1;\n\ntry {\n  const retryInput = $('18.8. Inject Retry Context').first();\n  if (retryInput && retryInput.json) {\n    ctx = retryInput.json;\n    currentAttempt = ctx.attemptNumber || 1;\n    console.log('🔄 RETRY DETECTED: Attempt ' + currentAttempt + '/3');\n  } else {\n    throw new Error('No retry context');\n  }\n} catch (e) {\n  ctx = $input.first().json;\n  currentAttempt = ctx.attemptNumber || 1;\n  console.log('✨ FIRST RUN: Attempt ' + currentAttempt + '/3');\n}\n\nif (currentAttempt > 3) {\n  throw new Error('🛑 MAX RETRY LIMIT REACHED (3/3). QC failed on all attempts.');\n}\n\nconst contentType = ctx.contentType || 'New Page';\nconst isBlog = contentType.toLowerCase().includes('blog');\n\nconst wordCountRules = isBlog \n  ? { min: 800, max: 1200, target: '800-1200' }\n  : { min: 500, max: 700, target: '500-700' };\n\n// --- ADVANCED SEO GUIDELINES LOGIC ---\n\nlet structureInstructions = '';\n\nif (isBlog) {\n  structureInstructions = `\n  BLOG STRUCTURE:\n  1. Introduction: Set the scene before jumping into the main topic. (E.g. if writing about Dehradun attractions, start with Dehradun's vibe). Prepare readers.\n  2. Body: Follow the plan structure (H1 > H2 > H3). Include listed places. Add factually correct places if relevant. Avoid repeating words.\n  3. Conclusion: Brief summary (1-2 lines). Mention property USPs. Add anchor texts.\n  `;\n} else {\n  structureInstructions = `\n  NEW PAGE STRUCTURE:\n  1. Introduction: DO NOT start directly with the hotel. First, set context about the city/topic (e.g. business hub/weekend getaway). Then lead into how the hotel fits this context.\n  2. Body: Focus entirely on the property (Rooms, Facilities, Location, USPs). H2 for main sections, H3 for sub-points. Simple, factual, easy to read.\n  3. Conclusion: Summarise highlights (1-2 lines). Subtly market the hotel as the perfect choice.\n  `;\n}\n\nconst languageRules = `\n  LANGUAGE & STYLE RULES:\n  • Use Active Voice.\n  • Capitalization: Title Case for all Headers (omitting prepositions/articles). E.g. \"Deluxe Room With Balcony\".\n  • Hyphens: Do NOT hyphenate numbers/units (250 sq. ft., 23 km). Do NOT hyphenate \"King size bed\".\n  • Units: Use \"km\", \"sq. ft.\". Use numbers instead of words (Stay 3 nights, not three).\n  • Terms: Use \"55-inch\" (not 55\"), \"high tea\" (not hi-tea), \"Doctor on Call\", \"walking distance\" (if <2km).\n  • Dashes: Use em dashes (—) for pauses. Avoid en dashes.\n  • Tone: Simple, factual, no fluff. No \"Lorem Ipsum\".\n`;\n\nconst retryContext = (currentAttempt > 1)\n  ? '\\n\\n🔄 RETRY ATTEMPT ' + currentAttempt + '/3:\\nPrevious QC issues: ' + (ctx.previousIssues || []).join(', ') + '\\n\\nFIX THESE SPECIFIC ISSUES. All other fields must remain unchanged.\\n'\n  : '';\n\nconst prompt = `You are an expert SEO content writer API. You DO NOT speak. You ONLY output valid JSON.\n${retryContext}\n\nBRIEF:\n• Content Type: ${contentType}\n• Target Word Count: ${wordCountRules.target} words\n• Primary Keyword: ${ctx.primaryKeyword}\n• Secondary Keywords: ${ctx.secondaryKeyword1}, ${ctx.secondaryKeyword2}\n\nPROPERTY FACTS (Strictly adhere to this):\n${ctx.refinedContext}\n\n${structureInstructions}\n\n${languageRules}\n\nSTRICT NEGATIVE CONSTRAINTS (DO NOT USE):\n• Nestled, Boasts, Oasis, Haven, Tapestry, Symphony, Breathtaking, Testament, Moreover, Furthermore\n• Do not use extra hyphens in page names.\n\nOUTPUT STRUCTURE (JSON ONLY):\n{\n  \"metaTitle\": \"[Keyword 1 | Keyword 2 | Hotel Name] (Max 65 chars). Prioritise keywords.\",\n  \"metaDescription\": \"[Include keyword. Summary. Max 160 chars]\",\n  \"blogContent\": \"# [H1 - must contain Primary Keyword]\\n\\n[Intro Paragraphs]\\n\\n## [H2]\\n...\",\n  \"faqSection\": \"Q1: [Question]\\nA1: [Answer max 30 words]\\n... [5-8 Questions]\"\n}\n\nINTERNAL LINKING:\n• Prioritise interlinks in opening paragraph.\n• Link terms like 'rooms', 'dining', 'offers'.\n• Format: <a href=\"/rooms\">Rooms</a>\n\nSEO PLAN (Follow strictly):\n${ctx.seoGuidelines}\n\nOUTPUT VALID JSON NOW.`;\n\nreturn [{\n  json: {\n    prompt: prompt,\n    wordCountRules: wordCountRules,\n    primaryKeyword: ctx.primaryKeyword,\n    attemptNumber: currentAttempt,\n    previousIssues: ctx.previousIssues || []\n  }\n}];\n"
       },
-      "id": "2199ba3e-be0b-40e9-b2f2-8643cfb9e6b3",
+      "id": "654ed07b-668a-4302-8095-8a3f9d160553",
       "name": "15. Build AI Prompt",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1024,
-        -96
+        1856,
+        608
       ]
     },
     {
       "parameters": {
-        "jsCode": "const ctx = $input.first().json;\nconst currentAttempt = ctx.attemptNumber || 1;\n\nif (currentAttempt > 3) {\n  throw new Error('🛑 MAX RETRY LIMIT REACHED (3/3)');\n}\n\nconst issues = (ctx.previousIssues || []).join('\\n- ');\n\nconst prompt = '🔄 RETRY ATTEMPT ' + currentAttempt + '/3\\n\\nYour previous JSON output FAILED QC:\\n\\nQC FAILURES:\\n- ' + issues + '\\n\\nFIX ONLY THESE ISSUES. Maintain the length and depth of the previous version; only modify the specific lines causing the QC failure. Keep all other fields unchanged. OUTPUT JSON ONLY. NO MARKDOWN. NO PREAMBLE.';\n\nreturn [{\n  json: {\n    prompt: prompt,\n    attemptNumber: currentAttempt,\n    previousIssues: ctx.previousIssues\n  }\n}];\n"
+        "jsCode": "const ctx = $input.first().json;\nconst currentAttempt = ctx.attemptNumber || 1;\n\nif (currentAttempt > 3) {\n  throw new Error('🛑 MAX RETRY LIMIT REACHED (3/3)');\n}\n\nconst issues = (ctx.previousIssues || []).join('\\n- ');\n\nconst prompt = '🔄 RETRY ATTEMPT ' + currentAttempt + '/3\\n\\nYour previous JSON output FAILED QC:\\n\\nQC FAILURES:\\n- ' + issues + '\\n\\nFIX ONLY THESE ISSUES. Keep all other fields unchanged. OUTPUT CORRECTED JSON.';\n\nreturn [{\n  json: {\n    prompt: prompt,\n    attemptNumber: currentAttempt,\n    previousIssues: ctx.previousIssues\n  }\n}];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        864,
-        832
+        1696,
+        1536
       ],
-      "id": "5fd8d2ed-74e6-4319-9c88-694f23312398",
+      "id": "449a6208-adc3-4ce8-91d1-19e5fe1c4ad7",
       "name": "15.5 Retry Prompt Gen"
     },
     {
       "parameters": {
         "promptType": "define",
         "text": "={{ $json.prompt }}",
+        "hasOutputParser": true,
         "options": {}
       },
-      "id": "3a5e74a4-fe59-40f0-b405-b551ec45bff1",
+      "id": "0cf302dc-9c4b-4611-9c9b-8bdf65614a7d",
       "name": "16. AI Generate Content",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        352,
-        224
+        1168,
+        1008
       ],
       "typeVersion": 1.7,
       "alwaysOutputData": false
     },
     {
       "parameters": {
-        "jsCode": "const input = $input.first().json;\n// If no parser is used, the agent usually returns { output: \"...\" }\n// Sometimes it might return { text: \"...\" } depending on the chain type\nlet contentString = input.output || input.text || input;\n\n// If it is already an object (rare if parser removed, but safe to check)\nif (typeof contentString === 'object') {\n  return [{json: contentString}];\n}\n\nlet parsed;\n\n// 1. Extract potential JSON block (handling markdown code fences)\nlet jsonString = contentString;\nconst jsonMatch = contentString.match(/\\{[\\s\\S]*\\}/);\nif (jsonMatch) {\n  jsonString = jsonMatch[0];\n}\n\n// 2. Helper to sanitize string literals within JSON\n// This finds double-quoted strings, respecting escaped quotes, \n// and escapes unescaped control characters inside them.\nfunction sanitizeJson(str) {\n  // Regex matches double-quoted strings, including escaped quotes like \\\"\n  return str.replace(/\"(?:[^\"\\\\]|\\\\.)*\"/g, (match) => {\n    // Inside a string literal, replace unescaped control chars\n    return match\n      .replace(/\\n/g, '\\\\n')  // Escape literal newlines\n      .replace(/\\r/g, '\\\\r')  // Escape literal carriage returns\n      .replace(/\\t/g, '\\\\t')  // Escape literal tabs\n      .replace(/[\\u0000-\\u001f]/g, ''); // Remove other control chars\n  });\n}\n\n// 3. Try parsing\ntry {\n  // First attempt: Parse as is (best case)\n  parsed = JSON.parse(jsonString);\n} catch (e) {\n  // Second attempt: Sanitize string literals and retry\n  try {\n    const sanitizedString = sanitizeJson(jsonString);\n    parsed = JSON.parse(sanitizedString);\n    console.log('⚠️ JSON required sanitization to parse.');\n  } catch (e2) {\n    throw new Error('❌ Invalid JSON from AI (Parse & Sanitize Failed): ' + e2.message);\n  }\n}\n\n// Cleaning Helper Functions\nconst aiPhrases = /\\b(nestled|boasts|moreover|furthermore|in the heart of|look no further|when it comes to|breathtaking|exquisite|serene|majestic|vibrant|iconic)\\b/gi;\n\nfunction humanize(text) {\n  if (!text) return '';\n  if (typeof text !== 'string') return String(text);\n  return text\n    .replace(aiPhrases, match => {\n      const replacements = {\n        'nestled': 'located', 'boasts': 'has', 'moreover': 'also',\n        'furthermore': 'also', 'in the heart of': 'in', \n        'look no further': '', 'when it comes to': 'for'\n      };\n      return replacements[match.toLowerCase()] || '';\n    })\n    .replace(/\\s{2,}/g, ' ');\n}\n\nfunction filterHTML(text) {\n  if (!text) return '';\n  if (typeof text !== 'string') return String(text);\n  return text\n    .replace(/<!DOCTYPE[^>]*>/gi, '')\n    .replace(/<html[^>]*>/gi, '')\n    .replace(/<\\/html>/gi, '')\n    .replace(/<head[^>]*>[\\s\\S]*?<\\/head>/gi, '')\n    .replace(/<meta[^>]*>/gi, '')\n    .replace(/<body[^>]*>/gi, '')\n    .replace(/<\\/body>/gi, '');\n}\n\n// Apply Cleaning\nif (parsed) {\n  parsed.metaTitle = humanize(filterHTML(parsed.metaTitle || '')).trim();\n  parsed.metaDescription = humanize(filterHTML(parsed.metaDescription || '')).trim();\n  parsed.blogContent = humanize(filterHTML(parsed.blogContent || ''));\n  parsed.faqSection = humanize(filterHTML(parsed.faqSection || ''));\n  \n  console.log(`✅ Cleaned output: Title=${parsed.metaTitle.length}ch, Desc=${parsed.metaDescription.length}ch, Content=${parsed.blogContent.length}ch`);\n  return [{json: parsed}];\n}\n\nreturn [{json: {}}];"
+        "jsCode": "const content = $input.first().json;\nlet parsed;\n\ntry {\n  parsed = typeof content === 'string' ? JSON.parse(content) : content;\n} catch (e) {\n  throw new Error('❌ Invalid JSON from AI');\n}\n\nif (parsed.output && typeof parsed.output === 'object') {\n  console.log('🔍 Detected nested output structure - extracting');\n  parsed = parsed.output;\n}\n\n// Redundant now, but kept as a safety net\nconst aiPhrases = /\\b(nestled|boasts|moreover|furthermore|in the heart of|look no further|when it comes to|breathtaking|exquisite|serene|majestic|vibrant|iconic)\\b/gi;\n\nfunction humanize(text) {\n  if (!text) return '';\n  return text\n    .replace(aiPhrases, match => {\n      const replacements = {\n        'nestled': 'located', 'boasts': 'has', 'moreover': 'also',\n        'furthermore': 'also', 'in the heart of': 'in', \n        'look no further': '', 'when it comes to': 'for'\n      };\n      return replacements[match.toLowerCase()] || '';\n    })\n    .replace(/\\s{2,}/g, ' ');\n}\n\nfunction filterHTML(text) {\n  if (!text) return '';\n  return text\n    .replace(/<!DOCTYPE[^>]*>/gi, '')\n    .replace(/<html[^>]*>/gi, '')\n    .replace(/<\\/html>/gi, '')\n    .replace(/<head[^>]*>[\\s\\S]*?<\\/head>/gi, '')\n    .replace(/<meta[^>]*>/gi, '')\n    .replace(/<body[^>]*>/gi, '')\n    .replace(/<\\/body>/gi, '');\n}\n\nparsed.metaTitle = humanize(filterHTML(parsed.metaTitle || '')).trim();\nparsed.metaDescription = humanize(filterHTML(parsed.metaDescription || '')).trim();\nparsed.blogContent = humanize(filterHTML(parsed.blogContent || ''));\nparsed.faqSection = humanize(filterHTML(parsed.faqSection || ''));\n\nconsole.log(`✅ Cleaned output: Title=${parsed.metaTitle.length}ch, Desc=${parsed.metaDescription.length}ch, Content=${parsed.blogContent.length}ch`);\n\nreturn [{json: parsed}];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        688,
-        224
+        1520,
+        928
       ],
-      "id": "0fbec222-31cf-4ffc-ae06-5e4a36931c19",
+      "id": "b3b22342-2589-477e-b633-b062b8873e93",
       "name": "16.5 Format & Clean"
     },
     {
       "parameters": {
-        "jsCode": "const qcIssues = [];\nconst qcWarnings = [];\nlet sourceNode = null;\nlet parsedContent = null;\nlet currentAttempt = 1;\n\ntry {\n  const retryNode = $('15.5 Retry Prompt Gen').last();\n  if (retryNode && retryNode.json && retryNode.json.attemptNumber) {\n    currentAttempt = retryNode.json.attemptNumber;\n    console.log('🔄 Context: Using Retry Node 15.5, Attempt ' + currentAttempt);\n  } else {\n    const promptNode = $('15. Build AI Prompt').first();\n    if (promptNode && promptNode.json && promptNode.json.attemptNumber) {\n      currentAttempt = promptNode.json.attemptNumber;\n      console.log('✨ Context: Using Initial Node 15, Attempt ' + currentAttempt);\n    }\n  }\n} catch (e) {\n  try {\n      const promptNode = $('15. Build AI Prompt').first();\n      currentAttempt = promptNode.json.attemptNumber || 1;\n  } catch (err) {\n      console.log('⚠️ Could not read attempt number from upstream nodes');\n  }\n}\n\ntry {\n  console.log('🔍 ATTEMPTING NODE 16.5 (Humanizer)');\n  const humanizedItem = $('16.5 Format & Clean').first();\n  \n  if (!humanizedItem || !humanizedItem.json) {\n    throw new Error('Node 16.5 returned null');\n  }\n  \n  parsedContent = humanizedItem.json;\n  sourceNode = '16.5 (Cleaned)';\n  console.log('✅ USING NODE 16.5 OUTPUT');\n  \n} catch (humanizerError) {\n  console.log('⚠️ NODE 16.5 FAILED: ' + humanizerError.message);\n  console.log('🔄 FALLING BACK TO NODE 16');\n  \n  try {\n    const writerItem = $('16. AI Generate Content').first();\n    \n    if (!writerItem || !writerItem.json) {\n      throw new Error('Node 16 returned null');\n    }\n    \n    if (writerItem.json.output && typeof writerItem.json.output === 'object') {\n      parsedContent = writerItem.json.output;\n      sourceNode = '16 (AI Generated)';\n      console.log('✅ USING NODE 16 OUTPUT');\n    } else {\n      throw new Error('Node 16 output missing or invalid');\n    }\n    \n  } catch (writerError) {\n    console.log('❌ NODE 16 ALSO FAILED: ' + writerError.message);\n    throw new Error('BOTH Node 16 and 16.5 failed. Check AI model or credentials.');\n  }\n}\n\nif (!parsedContent || typeof parsedContent !== 'object') {\n  throw new Error('❌ Parsed content is not a valid object');\n}\n\nconst metaTitle = (parsedContent.metaTitle || '').trim();\nconst metaDescription = (parsedContent.metaDescription || '').trim();\nconst blogContent = (parsedContent.blogContent || '').trim();\nconst faqSection = (parsedContent.faqSection || '').trim();\n\nconsole.log(`📊 QC Input - Attempt: ${currentAttempt}/3, Title: ${metaTitle.length}ch, Desc: ${metaDescription.length}ch, Content: ${blogContent.length}ch`);\n\n// --- ADVANCED SEO GUIDELINES QC ---\n\n// 1. Structure Tags Check\nif (/<html|<!DOCTYPE|<head|<meta/i.test(blogContent)) {\n  qcIssues.push('HTML structure tags detected in blogContent - must be markdown only');\n}\n\n// 2. Meta Title (Max 65, Min 45)\nif (!metaTitle) {\n  qcIssues.push('Meta Title missing');\n} else {\n  if (metaTitle.length > 65) {\n    qcIssues.push(`Meta Title ${metaTitle.length} chars - EXCEEDS 65 CHAR LIMIT`);\n  } else if (metaTitle.length < 45) {\n    qcIssues.push(`Meta Title ${metaTitle.length} chars - TOO SHORT (min 45)`);\n  }\n}\n\n// 3. Meta Description (Max 160, Min 140)\nif (!metaDescription) {\n  qcIssues.push('Meta Description missing');\n} else {\n  if (metaDescription.length > 160) {\n    qcIssues.push(`Meta Description ${metaDescription.length} chars - EXCEEDS 160 CHAR LIMIT`);\n  } else if (metaDescription.length < 140) {\n    qcIssues.push(`Meta Description ${metaDescription.length} chars - TOO SHORT (min 140)`);\n  }\n}\n\n// 4. Forbidden Words\nconst forbiddenWords = ['nestled', 'boasts', 'oasis', 'haven', 'tapestry', 'symphony', 'breathtaking', 'testament', 'moreover', 'furthermore', 'hi-tea'];\nforbiddenWords.forEach(word => {\n  const regex = new RegExp(`\\\\b${word}\\\\b`, 'i');\n  if (regex.test(blogContent) || regex.test(metaDescription)) {\n    qcIssues.push(`FORBIDDEN WORD DETECTED: '${word}'`);\n  }\n});\n\n// 5. Word Count (Dynamic Check)\nif (!blogContent || blogContent.length < 100) {\n  qcIssues.push('Blog content missing or too short');\n} else {\n  const cleanBlog = blogContent.split('\\n').filter(function(line) {\n    return !line.match(/^#{1,6}\\s/);\n  }).join('\\n').trim();\n  \n  const wordCount = cleanBlog.split(/\\s+/).length;\n  \n  let wordCountRules;\n  try {\n    wordCountRules = $('15. Build AI Prompt').first().json.wordCountRules || { min: 500, max: 650 };\n  } catch (e) {\n    wordCountRules = { min: 500, max: 650 };\n  }\n  \n  if (wordCount < wordCountRules.min * 0.9) {\n    qcIssues.push(`Word count ${wordCount} - TOO SHORT (min ${wordCountRules.min})`);\n  }\n}\n\n// 6. FAQ Count (5-8 normal, 8-10 warning, <5 error)\nif (!faqSection || faqSection.length < 20) {\n  qcIssues.push('FAQ section missing');\n} else {\n  const faqPattern = /(Q|Question)\\s*\\d+[:.]/gi;\n  const faqQuestions = faqSection.match(faqPattern) || [];\n  \n  if (faqQuestions.length < 5) {\n    qcIssues.push(`FAQ has ${faqQuestions.length} questions - MUST HAVE 5-8`);\n  } else if (faqQuestions.length > 8) {\n    qcWarnings.push(`FAQ has ${faqQuestions.length} questions - Recommended max 8 (accepted but consider reducing)`);\n  }\n}\n\n// 7. Keyword Usage (Verbatim check, 1-5 times)\nlet keywords = [];\ntry {\n  keywords = $('14. Merge All Context').first().json.keywords || [];\n} catch (e) {\n  keywords = [];\n}\n\nif (keywords.length > 0) {\n  keywords.forEach(kw => {\n    // Case insensitive, but exact word sequence match\n    const regex = new RegExp(kw.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'), 'gi');\n    const matches = (blogContent.match(regex) || []).length;\n    \n    if (matches < 1) {\n      qcWarnings.push(`Primary Keyword '${kw}' missing or not verbatim.`);\n    } else if (matches > 5) {\n      qcWarnings.push(`Keyword '${kw}' used ${matches} times - Recommened max 5.`);\n    }\n  });\n}\n\nconst qcPassed = qcIssues.length === 0;\nconst qcScore = Math.max(0, 100 - qcIssues.length * 20);\n\nconsole.log('========================================');\nconsole.log('QC RESULT: ' + (qcPassed ? '✅ PASSED' : '❌ FAILED'));\nconsole.log('Score: ' + qcScore + '/100');\nconsole.log('Issues: ' + (qcIssues.length > 0 ? qcIssues.join(' | ') : 'None'));\nconsole.log('Warnings: ' + (qcWarnings.length > 0 ? qcWarnings.join(' | ') : 'None'));\nconsole.log('========================================');\n\nreturn [{\n  json: {\n    qcPassed: qcPassed,\n    qcScore: qcScore,\n    qcIssues: qcIssues,\n    qcWarnings: qcWarnings,\n    attemptNumber: currentAttempt,\n    keywords: keywords,\n    sourceNode: sourceNode,\n    parsedOutput: {\n      metaTitle: metaTitle,\n      metaDescription: metaDescription,\n      blogContent: blogContent,\n      faqSection: faqSection\n    },\n    fullOutput: JSON.stringify(parsedContent, null, 2)\n  }\n}];\n"
+        "jsCode": "const qcIssues = [];\nconst qcWarnings = [];\nlet sourceNode = null;\nlet parsedContent = null;\nlet currentAttempt = 1;\n\ntry {\n  const retryNode = $('15.5 Retry Prompt Gen').last();\n  if (retryNode && retryNode.json && retryNode.json.attemptNumber) {\n    currentAttempt = retryNode.json.attemptNumber;\n    console.log('🔄 Context: Using Retry Node 15.5, Attempt ' + currentAttempt);\n  } else {\n    const promptNode = $('15. Build AI Prompt').first();\n    if (promptNode && promptNode.json && promptNode.json.attemptNumber) {\n      currentAttempt = promptNode.json.attemptNumber;\n      console.log('✨ Context: Using Initial Node 15, Attempt ' + currentAttempt);\n    }\n  }\n} catch (e) {\n  try {\n      const promptNode = $('15. Build AI Prompt').first();\n      currentAttempt = promptNode.json.attemptNumber || 1;\n  } catch (err) {\n      console.log('⚠️ Could not read attempt number from upstream nodes');\n  }\n}\n\ntry {\n  console.log('🔍 ATTEMPTING NODE 16.5 (Humanizer)');\n  const humanizedItem = $('16.5 Format & Clean').first();\n  \n  if (!humanizedItem || !humanizedItem.json) {\n    throw new Error('Node 16.5 returned null');\n  }\n  \n  parsedContent = humanizedItem.json;\n  sourceNode = '16.5 (Cleaned)';\n  console.log('✅ USING NODE 16.5 OUTPUT');\n  \n} catch (humanizerError) {\n  console.log('⚠️ NODE 16.5 FAILED: ' + humanizerError.message);\n  console.log('🔄 FALLING BACK TO NODE 16');\n  \n  try {\n    const writerItem = $('16. AI Generate Content').first();\n    \n    if (!writerItem || !writerItem.json) {\n      throw new Error('Node 16 returned null');\n    }\n    \n    if (writerItem.json.output && typeof writerItem.json.output === 'object') {\n      parsedContent = writerItem.json.output;\n      sourceNode = '16 (AI Generated)';\n      console.log('✅ USING NODE 16 OUTPUT');\n    } else {\n      throw new Error('Node 16 output missing or invalid');\n    }\n    \n  } catch (writerError) {\n    console.log('❌ NODE 16 ALSO FAILED: ' + writerError.message);\n    throw new Error('BOTH Node 16 and 16.5 failed. Check AI model or credentials.');\n  }\n}\n\nif (!parsedContent || typeof parsedContent !== 'object') {\n  throw new Error('❌ Parsed content is not a valid object');\n}\n\nconst metaTitle = (parsedContent.metaTitle || '').trim();\nconst metaDescription = (parsedContent.metaDescription || '').trim();\nconst blogContent = (parsedContent.blogContent || '').trim();\nconst faqSection = (parsedContent.faqSection || '').trim();\n\nconsole.log(`📊 QC Input - Attempt: ${currentAttempt}/3, Title: ${metaTitle.length}ch, Desc: ${metaDescription.length}ch, Content: ${blogContent.length}ch`);\n\n// --- ADVANCED SEO GUIDELINES QC ---\n\n// 1. Structure Tags Check\nif (/<html|<!DOCTYPE|<head|<meta/i.test(blogContent)) {\n  qcIssues.push('HTML structure tags detected in blogContent - must be markdown only');\n}\n\n// 2. Meta Title (Max 65 chars per guidelines)\nif (!metaTitle) {\n  qcIssues.push('Meta Title missing');\n} else {\n  if (metaTitle.length > 65) {\n    qcIssues.push(`Meta Title ${metaTitle.length} chars - EXCEEDS 65 CHAR LIMIT`);\n  } else if (metaTitle.length < 30) {\n    qcIssues.push(`Meta Title ${metaTitle.length} chars - TOO SHORT`);\n  }\n}\n\n// 3. Meta Description (Max 160 chars)\nif (!metaDescription) {\n  qcIssues.push('Meta Description missing');\n} else {\n  if (metaDescription.length > 160) {\n    qcIssues.push(`Meta Description ${metaDescription.length} chars - EXCEEDS 160 CHAR LIMIT`);\n  } else if (metaDescription.length < 100) {\n    qcIssues.push(`Meta Description ${metaDescription.length} chars - TOO SHORT`);\n  }\n}\n\n// 4. Forbidden Words (Strict Negative Constraints)\nconst forbiddenWords = ['nestled', 'boasts', 'oasis', 'haven', 'tapestry', 'symphony', 'breathtaking', 'testament', 'moreover', 'furthermore', 'hi-tea'];\nforbiddenWords.forEach(word => {\n  const regex = new RegExp(`\\\\b${word}\\\\b`, 'i');\n  if (regex.test(blogContent) || regex.test(metaDescription)) {\n    qcIssues.push(`FORBIDDEN WORD DETECTED: '${word}'`);\n  }\n});\n\n// 5. Word Count\nif (!blogContent || blogContent.length < 100) {\n  qcIssues.push('Blog content missing or too short');\n} else {\n  const cleanBlog = blogContent.split('\\n').filter(function(line) {\n    return !line.match(/^#{1,6}\\s/);\n  }).join('\\n').trim();\n  \n  const wordCount = cleanBlog.split(/\\s+/).length;\n  \n  let wordCountRules;\n  try {\n    wordCountRules = $('15. Build AI Prompt').first().json.wordCountRules || { min: 500, max: 650 };\n  } catch (e) {\n    wordCountRules = { min: 500, max: 650 };\n  }\n  \n  if (wordCount < wordCountRules.min * 0.9) {\n    qcIssues.push(`Word count ${wordCount} - TOO SHORT (min ${wordCountRules.min})`);\n  } \n  // Note: Relaxed upper limit check to avoid false failures on comprehensive guides\n}\n\n// 6. FAQ Count\nif (!faqSection || faqSection.length < 20) {\n  qcIssues.push('FAQ section missing');\n} else {\n  const faqPattern = /^\\s*Q\\d+\\s*:/gm;\n  const faqQuestions = faqSection.match(faqPattern) || [];\n  \n  if (faqQuestions.length < 5) {\n    qcIssues.push(`FAQ has ${faqQuestions.length} questions - MUST HAVE 5-8`);\n  }\n}\n\nconst qcPassed = qcIssues.length === 0;\nconst qcScore = Math.max(0, 100 - qcIssues.length * 20);\n\nconsole.log('========================================');\nconsole.log('QC RESULT: ' + (qcPassed ? '✅ PASSED' : '❌ FAILED'));\nconsole.log('Score: ' + qcScore + '/100');\nconsole.log('Issues: ' + (qcIssues.length > 0 ? qcIssues.join(' | ') : 'None'));\nconsole.log('========================================');\n\nlet keywords = [];\ntry {\n  keywords = $('14. Merge All Context').first().json.keywords || [];\n} catch (e) {\n  keywords = [];\n}\n\nreturn [{\n  json: {\n    qcPassed: qcPassed,\n    qcScore: qcScore,\n    qcIssues: qcIssues,\n    qcWarnings: qcWarnings,\n    attemptNumber: currentAttempt,\n    keywords: keywords,\n    sourceNode: sourceNode,\n    parsedOutput: {\n      metaTitle: metaTitle,\n      metaDescription: metaDescription,\n      blogContent: blogContent,\n      faqSection: faqSection\n    },\n    fullOutput: JSON.stringify(parsedContent, null, 2)\n  }\n}];\n"
       },
-      "id": "3b96805d-58c9-4f46-a504-79b9259ffddc",
+      "id": "09d28fc0-feb2-469c-b74d-de5591553e31",
       "name": "17. QC Check",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        864,
-        224
+        1696,
+        928
       ]
     },
     {
@@ -1118,13 +945,13 @@
         },
         "options": {}
       },
-      "id": "0774bded-e776-491c-a0e5-aedb951056fc",
+      "id": "6867f56d-9875-4fb2-8150-39458c0fe66d",
       "name": "18. IF QC Passed?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        736,
-        496
+        1568,
+        1200
       ]
     },
     {
@@ -1150,7 +977,7 @@
             "FAQ + Hyperlinks": "={{ $('17. QC Check').first().json.parsedOutput.faqSection }}",
             "Keywords Used": "={{ $('17. QC Check').first().json.keywords.join(', ') }}",
             "QC Status": "Passed",
-            "QC Feedback": "={{ '✅ Score: ' + $('17. QC Check').first().json.qcScore + '/100 | Attempt: ' + $('17. QC Check').first().json.attemptNumber + '/3 | Source: ' + $('17. QC Check').first().json.sourceNode + ($json.qcWarnings.length > 0 ? ' | Warnings: ' + $json.qcWarnings.join('; ') : '') }}",
+            "QC Feedback": "={{ '✅ Score: ' + $('17. QC Check').first().json.qcScore + '/100 | Attempt: ' + $('17. QC Check').first().json.attemptNumber + '/3 | Source: ' + $('17. QC Check').first().json.sourceNode }}",
             "Processing Timestamp": "={{ $now.toISO() }}",
             "Status": "Complete"
           },
@@ -1160,13 +987,13 @@
         },
         "options": {}
       },
-      "id": "46c4de12-3102-47c8-bc51-7a2e50dbbcc0",
+      "id": "948878e0-a9a4-46ef-b586-7a11d285bd9c",
       "name": "19. Update Sheet Success",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1376,
-        160
+        2208,
+        864
       ],
       "alwaysOutputData": true,
       "credentials": {
@@ -1180,13 +1007,13 @@
       "parameters": {
         "jsCode": "const qcResult = $input.first().json;\nconst MAX_ATTEMPTS = 3;\nconst currentAttempt = qcResult.attemptNumber || 1;\n\nconsole.log(`❌ QC FAILED at attempt ${currentAttempt}/3`);\n\nif (currentAttempt >= MAX_ATTEMPTS) {\n  console.log(`🛑 MAX ATTEMPTS REACHED (${currentAttempt}/${MAX_ATTEMPTS}) - STOPPING`);\n  return [{\n    json: {\n      attemptNumber: currentAttempt,\n      maxAttempts: MAX_ATTEMPTS,\n      shouldRetry: false,\n      previousIssues: qcResult.qcIssues || [],\n      qcScore: qcResult.qcScore || 0,\n      mergedContext: null\n    }\n  }];\n}\n\nconst nextAttempt = currentAttempt + 1;\nconst shouldRetry = true;\n\nconsole.log(`🔄 WILL RETRY: Attempt ${nextAttempt}/${MAX_ATTEMPTS}`);\n\nconst originalContext = $('14. Merge All Context').first().json;\n\nreturn [{\n  json: {\n    attemptNumber: nextAttempt,\n    maxAttempts: MAX_ATTEMPTS,\n    shouldRetry: shouldRetry,\n    previousIssues: qcResult.qcIssues || [],\n    qcScore: qcResult.qcScore || 0,\n    previousOutput: qcResult.fullOutput || '{}',\n    mergedContext: {\n      ...originalContext,\n      attemptNumber: nextAttempt,\n      previousIssues: qcResult.qcIssues || [],\n      previousOutput: qcResult.fullOutput || '{}'\n    }\n  }\n}];\n"
       },
-      "id": "b00881ef-80b1-45dc-8559-a31eb7b8b2d5",
+      "id": "9ca50ce8-7342-469f-a27e-f6d530aa0aab",
       "name": "18.5. Retry Logic & Counter",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        960,
-        496
+        1824,
+        1216
       ]
     },
     {
@@ -1213,26 +1040,26 @@
         },
         "options": {}
       },
-      "id": "601cf345-5ce2-46fd-ba1e-88e0342e09d2",
+      "id": "ce8c1cbb-56f2-43ae-b39a-59afef421829",
       "name": "18.6. IF Should Retry?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1120,
-        496
+        2000,
+        1248
       ]
     },
     {
       "parameters": {
         "amount": "={{ $json.attemptNumber === 2 ? 15 : ($json.attemptNumber === 3 ? 30 : 60) }}"
       },
-      "id": "0c377b62-e3e9-4727-b32d-059c7f89601f",
+      "id": "c22cb6cc-ab50-413a-80e9-0e53e6ce19c5",
       "name": "18.7. Wait (Exponential Backoff)",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        384,
-        704
+        1216,
+        1408
       ],
       "webhookId": "018489bd-981a-4b19-bc9c-da75e56938bc"
     },
@@ -1240,13 +1067,13 @@
       "parameters": {
         "jsCode": "const retryData = $input.first().json;\n\nif (!retryData.mergedContext) {\n  throw new Error('🛑 RETRY ABORTED: No context to inject');\n}\n\nconsole.log(`✅ INJECTING RETRY CONTEXT: Attempt ${retryData.attemptNumber}/3`);\n\nreturn [{\n  json: retryData.mergedContext\n}];\n"
       },
-      "id": "5e8cc7bd-a372-431a-a90e-65a1307ebbc0",
+      "id": "5f731177-6a4f-4cbc-94cb-83f5f118709d",
       "name": "18.8. Inject Retry Context",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        592,
-        704
+        1424,
+        1408
       ]
     },
     {
@@ -1269,222 +1096,21 @@
             "QC Status": "={{ 'Failed - Max Attempts (' + $json.attemptNumber + '/3)' }}",
             "QC Feedback": "={{ '❌ QC Score: ' + $json.qcScore + '/100 | Issues: ' + $json.previousIssues.join('; ') }}",
             "Processing Timestamp": "={{ $now.toISO() }}",
-            "Status": "Manual Review Needed",
-            "row_number": 0
+            "Status": "Manual Review Needed"
           },
           "matchingColumns": [
             "Project Name"
-          ],
-          "schema": [
-            {
-              "id": "Project Name",
-              "displayName": "Project Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Sitemap URL",
-              "displayName": "Sitemap URL",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "SEO Plan Doc Link",
-              "displayName": "SEO Plan Doc Link",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Language Variant",
-              "displayName": "Language Variant",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "On Chain References (other than homepage)",
-              "displayName": "On Chain References (other than homepage)",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "External Reference Links for Blogs",
-              "displayName": "External Reference Links for Blogs",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Child Property URL",
-              "displayName": "Child Property URL",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Additional Context for Target Page\n",
-              "displayName": "Additional Context for Target Page\n",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Content Type",
-              "displayName": "Content Type",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Meta Title",
-              "displayName": "Meta Title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Meta Description",
-              "displayName": "Meta Description",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "AI Generated Blog Post",
-              "displayName": "AI Generated Blog Post",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "FAQ + Hyperlinks",
-              "displayName": "FAQ + Hyperlinks",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Keywords Used",
-              "displayName": "Keywords Used",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "QC Status",
-              "displayName": "QC Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "QC Feedback",
-              "displayName": "QC Feedback",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Processing Timestamp",
-              "displayName": "Processing Timestamp",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Details",
-              "displayName": "Error Details",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "row_number",
-              "displayName": "row_number",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "number",
-              "canBeUsedToMatch": true,
-              "readOnly": true,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
+          ]
         },
         "options": {}
       },
-      "id": "3915205c-74b8-480c-a9b5-8628a14bde1e",
+      "id": "c4e6b9c2-e0ac-4da3-a9f8-8f7bdad68312",
       "name": "20. Update Sheet Failed (Max Retries)",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1376,
-        368
+        2208,
+        1072
       ],
       "alwaysOutputData": true,
       "credentials": {
@@ -1497,27 +1123,75 @@
     {
       "parameters": {
         "sessionIdType": "customKey",
-        "sessionKey": "={{ $('14. Merge All Context').first().json.primaryKeyword + '-' + $('14. Merge All Context').first().json.executionId }}",
-        "contextWindowLength": 10
+        "sessionKey": "={{ $('14. Merge All Context').first().json.primaryKeyword + '-' + $('14. Merge All Context').first().json.executionId }}"
       },
-      "id": "0830a911-8457-4aba-a08b-0dff90e5c19e",
+      "id": "180a5a2b-fb03-4f60-93fd-7e1162b1980e",
       "name": "Window Buffer Memory",
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "position": [
-        384,
-        432
+        1232,
+        1216
       ],
       "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "model": "mistral-medium-2505",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        832
+      ],
+      "id": "d81d6ab8-5239-49b5-9e69-0a66587bf02a",
+      "name": "Mistral Cloud Chat Model",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "zVNIevhGxwl3AEol",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"metaTitle\": {\n      \"type\": \"string\",\n      \"description\": \"SEO-optimized meta title. Max 65 characters.\"\n    },\n    \"metaDescription\": {\n      \"type\": \"string\",\n      \"description\": \"SEO-optimized meta description. Max 160 characters.\"\n    },\n    \"blogContent\": {\n      \"type\": \"string\",\n      \"description\": \"Blog post content in markdown. No HTML.\"\n    },\n    \"faqSection\": {\n      \"type\": \"string\",\n      \"description\": \"FAQ section with 5-8 questions.\"\n    }\n  },\n  \"required\": [\"metaTitle\", \"metaDescription\", \"blogContent\", \"faqSection\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1376,
+        1216
+      ],
+      "id": "7c87850a-59cd-489e-bd3d-73f6782a458e",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n# Replace codes with Native nodes\n\n## You are an expert N8N workflow designer. Create workflows using ONLY built-in N8N nodes from the official node library. Never use Code nodes, Function nodes, Execute Command nodes, or any custom JavaScript. Required guidelines: ∙ Use native nodes like HTTP Request, Webhook, Gmail, Slack, Google Sheets, Microsoft Excel, Airtable, Discord, Telegram ∙ For data manipulation use Set node, Split In Batches, Merge, Compare Datasets ∙ For logic use IF node, Switch node, Stop and Error node ∙ For scheduling use Cron node, Wait node, Schedule Trigger ∙ Always provide complete N8N JSON format ∙ Include proper node connections and parameter configurations ∙ Test workflows should be executable without custom code Create a workflow for: [insert your specific automation request here] ",
+        "height": 752,
+        "width": 752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4377e0a3-adfd-444a-822d-01ad07d634a7",
+      "name": "Sticky Note"
     },
     {
       "parameters": {},
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        128,
-        224
+        1072,
+        1216
       ],
-      "id": "180e412f-ae54-4470-9377-12573a0be8ee",
+      "id": "bdd270df-be66-4c5c-b33f-f2c8528d7d4c",
       "name": "path NO-OP"
     },
     {
@@ -1530,10 +1204,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1312,
-        144
+        2144,
+        848
       ],
-      "id": "bf06a898-dac0-46d0-93c5-870963f1e583",
+      "id": "85fb9095-47a2-4b4a-afa7-ff2030b02a7a",
       "name": "Sticky Note1"
     },
     {
@@ -1546,106 +1220,14 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1312,
-        352
+        2144,
+        1056
       ],
-      "id": "5ade19bb-23fa-4656-8351-82903a13289a",
+      "id": "9f35ff38-861b-46be-b520-1c84f4bb6a63",
       "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "model": "meta-llama/llama-3.3-70b-instruct:free",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
-      "typeVersion": 1,
-      "position": [
-        512,
-        48
-      ],
-      "id": "42830ba3-f481-4861-8dcd-2720a0dab989",
-      "name": "OpenRouter Chat Model",
-      "credentials": {
-        "openRouterApi": {
-          "id": "x0LG52oVRDHGvw9B",
-          "name": "OpenRouter account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": "meta-llama/llama-3.3-70b-instruct:free",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
-      "typeVersion": 1,
-      "position": [
-        208,
-        512
-      ],
-      "id": "5510069d-e3ad-47cb-a504-aab729b988c1",
-      "name": "OpenRouter Chat Model1",
-      "credentials": {
-        "openRouterApi": {
-          "id": "x0LG52oVRDHGvw9B",
-          "name": "OpenRouter account"
-        }
-      }
     }
   ],
-  "pinData": {
-    "Webhook": [
-      {
-        "json": {
-          "headers": {
-            "host": "n8n.seoautomation.sbs",
-            "user-agent": "Mozilla/5.0 (compatible; Google-Apps-Script; beanserver; +https://script.google.com; id: UAEmdDd-HksngTdrf7HJwxwtVAPnzd53Os1U)",
-            "content-length": "730",
-            "accept-encoding": "gzip, deflate, br",
-            "content-type": "application/json",
-            "x-forwarded-for": "34.116.28.102",
-            "x-forwarded-host": "n8n.seoautomation.sbs",
-            "x-forwarded-port": "443",
-            "x-forwarded-proto": "https",
-            "x-forwarded-server": "4f63611c1e66",
-            "x-real-ip": "34.116.28.102"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "Project Name": "Amaghati",
-            "Status": "Ready for n8n",
-            "Sitemap URL": "https://www.aamaghatiresort.com/sitemap.xml",
-            "SEO Plan Doc Link": "https://docs.google.com/document/d/1QjJZKG5SwtFn7Dk3YkU66N9g2dvjQoJE84UbHO0NGO8/edit",
-            "Language Variant": "UK English",
-            "Approx Word Count": 800,
-            "On Chain References (other than homepage)": "",
-            "External Reference Links for Blogs": "",
-            "Child Property URL": "",
-            "Additional Context for Target Page\n": "",
-            "Content Type": "New Blog",
-            "Meta Title": "",
-            "Meta Description": "",
-            "AI Generated Blog Post": "",
-            "FAQ + Hyperlinks": "",
-            "Keywords Used": "",
-            "QC Status": "",
-            "QC Feedback": "",
-            "Processing Timestamp": "",
-            "Error Details": "",
-            "rowNumber": 5,
-            "sheetName": "Main Input and AI Output",
-            "timestamp": "2026-01-08T07:17:36.339Z"
-          },
-          "webhookUrl": "https://n8n.seoautomation.sbs/webhook-test/seo-content-webhook",
-          "executionMode": "test"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "repo_name": "n8n-workflows-backup",
   "repo_owner": "sidhartha1s",
   "repo_path": "backups",
@@ -1656,16 +1238,16 @@
   },
   "shared": [
     {
-      "updatedAt": "2026-02-04T16:59:39.513Z",
-      "createdAt": "2026-02-04T16:59:39.513Z",
+      "updatedAt": "2026-02-12T06:41:04.493Z",
+      "createdAt": "2026-02-12T06:41:04.493Z",
       "role": "workflow:owner",
-      "workflowId": "ORKMeqIjUHR8BV0YGFqoY",
+      "workflowId": "QN6r7AQvFGeM2YcC",
       "projectId": "RL6dq3Iv75Grec4D"
     }
   ],
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-02-12T08:09:58.834Z",
-  "versionId": "87bb7b3e-13b9-41c8-a8e3-adf37682cc88"
+  "updatedAt": "2026-02-12T06:45:06.620Z",
+  "versionId": "a7e02565-d6bd-42a4-bcd3-371ace082f10"
 }
