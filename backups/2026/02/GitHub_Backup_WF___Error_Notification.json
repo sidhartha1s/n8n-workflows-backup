@@ -1,0 +1,161 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-25T05:27:17.579Z",
+    "createdAt": "2026-02-25T05:27:10.668Z",
+    "versionId": "49c65504-9bcc-484d-a9c7-32f5c38ec7f3",
+    "workflowId": "6XC1BGy7DcKsxX6S",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          -272,
+          -64
+        ],
+        "id": "c2206903-0ca4-4f90-ac0f-a36ea7e18f72",
+        "name": "Error Trigger"
+      },
+      {
+        "parameters": {
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U06DLM6U3JM",
+            "mode": "list",
+            "cachedResultName": "sidhartha"
+          },
+          "text": "=⚠️ Execution Error [GitHub Backup Workflow]\n📌 Execution URL: {{ $json.execution.url }}",
+          "otherOptions": {}
+        },
+        "id": "5fb14313-f0f5-4c10-8de5-a5f7cf2900f5",
+        "name": "Error msg to slack",
+        "type": "n8n-nodes-base.slack",
+        "position": [
+          -64,
+          -64
+        ],
+        "executeOnce": true,
+        "typeVersion": 2.2,
+        "webhookId": "b9db9b69-28c7-4b30-a0a2-27cf5751b52b",
+        "credentials": {
+          "slackApi": {
+            "id": "O62AlOYXuAYiMczt",
+            "name": "Slack account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Error msg to slack",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "sid sid",
+    "name": "Version 49c65504",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "49c65504-9bcc-484d-a9c7-32f5c38ec7f3",
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Error msg to slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-25T05:18:04.612Z",
+  "id": "6XC1BGy7DcKsxX6S",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "GitHub Backup WF | Error Notification",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        -64
+      ],
+      "id": "c2206903-0ca4-4f90-ac0f-a36ea7e18f72",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U06DLM6U3JM",
+          "mode": "list",
+          "cachedResultName": "sidhartha"
+        },
+        "text": "=⚠️ Execution Error [GitHub Backup Workflow]\n📌 Execution URL: {{ $json.execution.url }}",
+        "otherOptions": {}
+      },
+      "id": "5fb14313-f0f5-4c10-8de5-a5f7cf2900f5",
+      "name": "Error msg to slack",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        -64,
+        -64
+      ],
+      "executeOnce": true,
+      "typeVersion": 2.2,
+      "webhookId": "b9db9b69-28c7-4b30-a0a2-27cf5751b52b",
+      "credentials": {
+        "slackApi": {
+          "id": "O62AlOYXuAYiMczt",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-workflows-backup",
+  "repo_owner": "sidhartha1s",
+  "repo_path": "backups",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-25T05:18:04.612Z",
+      "createdAt": "2026-02-25T05:18:04.612Z",
+      "role": "workflow:owner",
+      "workflowId": "6XC1BGy7DcKsxX6S",
+      "projectId": "RL6dq3Iv75Grec4D"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-02-25T05:19:35.417Z",
+      "createdAt": "2026-02-25T05:19:35.417Z",
+      "id": "KkH2Kb6FRRRS6P97",
+      "name": "ERROR WF"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-25T05:27:10.666Z",
+  "versionId": "49c65504-9bcc-484d-a9c7-32f5c38ec7f3"
+}
