@@ -1,670 +1,405 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-13T06:55:16.114Z",
+    "createdAt": "2026-02-13T06:55:05.724Z",
+    "versionId": "fce6aefe-d38e-4c4d-bcff-b5f1b1a4f038",
+    "workflowId": "JgKGDAAL629frkJn",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "a573e744-ca9e-4bf6-a11b-655e5821aed5",
+        "name": "On clicking 'execute'",
+        "type": "n8n-nodes-base.manualTrigger",
+        "position": [
+          480,
+          80
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "filters": {},
+          "requestOptions": {}
+        },
+        "id": "04a92673-25d8-4599-bae2-95d29d54706c",
+        "name": "n8n",
+        "type": "n8n-nodes-base.n8n",
+        "position": [
+          880,
+          192
+        ],
+        "typeVersion": 1,
+        "credentials": {
+          "n8nApi": {
+            "id": "A8UqMhip8eWUj9i6",
+            "name": "n8n account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "65ddff9a-6c8c-4024-95a9-5cc6747bbc86",
+        "name": "Loop Over Items",
+        "type": "n8n-nodes-base.splitInBatches",
+        "position": [
+          1040,
+          192
+        ],
+        "typeVersion": 3,
+        "notes": "CRITICAL: Do NOT feed Execute Workflow back to input 0. splitInBatches auto-advances."
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 8,
+                "triggerAtMinute": 1
+              }
+            ]
+          }
+        },
+        "id": "9fba0dec-27de-40d3-99e0-af332994a77c",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "position": [
+          480,
+          288
+        ],
+        "typeVersion": 1.2
+      },
+      {
+        "parameters": {
+          "content": "## Backup to GitHub \nThis workflow backs up all instance workflows to GitHub every 12 hours.\n\nFiles saved: `backups/YYYY/MM/ID.json`\n\nRepo config in **Config** node (subworkflow).\n\nRecursive design reduces memory usage.",
+          "height": 417,
+          "width": 385,
+          "color": 4
+        },
+        "id": "7eab4f92-7196-46ad-807a-6bc1879909b8",
+        "name": "Sticky Note1",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          0,
+          0
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "## Main workflow loop",
+          "height": 416,
+          "width": 1288,
+          "color": 7
+        },
+        "id": "d2e3819b-eabf-4440-96f5-26a6f3ecb771",
+        "name": "Sticky Note2",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          448,
+          0
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U06DLM6U3JM",
+            "mode": "list",
+            "cachedResultName": "sidhartha"
+          },
+          "text": "=ℹ️ Starting Workflows Backup",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "03a29027-6a97-4c6d-a266-f66958286c72",
+        "name": "Starting Message",
+        "type": "n8n-nodes-base.slack",
+        "position": [
+          720,
+          192
+        ],
+        "typeVersion": 2.2,
+        "executeOnce": true,
+        "webhookId": "43a0429a-3e79-4c70-b8b0-069372efa22c",
+        "credentials": {
+          "slackApi": {
+            "id": "O62AlOYXuAYiMczt",
+            "name": "Slack account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowId": "=lHFh9BPdfLKVrQeS1k2GJ",
+          "mode": "each",
+          "options": {}
+        },
+        "id": "82254805-1b09-4f2a-b3c4-d321afeeb95b",
+        "name": "Execute Workflow",
+        "type": "n8n-nodes-base.executeWorkflow",
+        "position": [
+          1264,
+          176
+        ],
+        "typeVersion": 1,
+        "executeOnce": false,
+        "onError": "continueErrorOutput",
+        "notes": "Calls this workflow recursively. NO loop-back connection — splitInBatches auto-advances."
+      },
+      {
+        "parameters": {
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U06DLM6U3JM",
+            "mode": "list",
+            "cachedResultName": "sidhartha"
+          },
+          "text": "=✅ Backup completed — {{ $('n8n').all().length }} workflows processed.",
+          "otherOptions": {}
+        },
+        "id": "3afa4429-e5e8-4e7f-8e81-57ee9375a753",
+        "name": "Completed Notification",
+        "type": "n8n-nodes-base.slack",
+        "position": [
+          1248,
+          32
+        ],
+        "executeOnce": true,
+        "typeVersion": 2.2,
+        "webhookId": "b9db9b69-28c7-4b30-a0a2-27cf5751b52b",
+        "credentials": {
+          "slackApi": {
+            "id": "O62AlOYXuAYiMczt",
+            "name": "Slack account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U06DLM6U3JM",
+            "mode": "list",
+            "cachedResultName": "sidhartha"
+          },
+          "text": "=❌ Failed to backup {{ $('Loop Over Items').item.json.name }} (ID: {{ $('Loop Over Items').item.json.id }})",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "6d458254-6b04-4ec2-9951-85d282bb4d15",
+        "name": "Failed Flows",
+        "type": "n8n-nodes-base.slack",
+        "position": [
+          1440,
+          240
+        ],
+        "typeVersion": 2.2,
+        "executeOnce": true,
+        "webhookId": "cfe4d6e6-ae78-43f3-af5f-1b1125979973",
+        "credentials": {
+          "slackApi": {
+            "id": "O62AlOYXuAYiMczt",
+            "name": "Slack account"
+          }
+        },
+        "notes": "executeOnce prevents spam. Only first failure logged. Remove to log all."
+      }
+    ],
+    "connections": {
+      "On clicking 'execute'": {
+        "main": [
+          [
+            {
+              "node": "Starting Message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Starting Message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Starting Message": {
+        "main": [
+          [
+            {
+              "node": "n8n",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "n8n": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Completed Notification",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Execute Workflow",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execute Workflow": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Failed Flows",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Failed Flows": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "sid sid",
+    "name": "Version fce6aefe",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "fce6aefe-d38e-4c4d-bcff-b5f1b1a4f038",
   "connections": {
-    "Set Variables": {
+    "On clicking 'execute'": {
       "main": [
         [
           {
-            "node": "Get many workflows",
+            "node": "Starting Message",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Split Workflows": {
+    "Schedule Trigger": {
       "main": [
         [
           {
-            "node": "Create README",
+            "node": "Starting Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Starting Message": {
+      "main": [
+        [
+          {
+            "node": "n8n",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "n8n": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Completed Notification",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Prepare File Content",
+            "node": "Execute Workflow",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Prepare File Content": {
+    "Execute Workflow": {
       "main": [
         [
           {
-            "node": "Convert to File",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Upload to GitHub": {
-      "main": [
-        [
-          {
-            "node": "Split Workflows",
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Append row in sheet",
+            "node": "Failed Flows",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Convert to File": {
+    "Failed Flows": {
       "main": [
         [
           {
-            "node": "Upload to GitHub",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Append row in sheet": {
-      "main": [
-        [
-          {
-            "node": "Split Workflows",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get many workflows": {
-      "main": [
-        [
-          {
-            "node": "Split Workflows",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Has Workflows?": {
-      "main": [
-        [
-          {
-            "node": "Split Workflows1",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log Empty Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Log Empty Error": {
-      "main": [
-        [
-          {
-            "node": "Slack — No Workflows Alert",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Log API Fetch Error": {
-      "main": [
-        [
-          {
-            "node": "Slack — API Fetch Alert",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Log Conversion Error": {
-      "main": [
-        [
-          {
-            "node": "Merge Loop Paths",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Log GitHub Error": {
-      "main": [
-        [
-          {
-            "node": "Merge Loop Paths",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Merge Loop Paths": {
-      "main": [
-        [
-          {
-            "node": "Split Workflows1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Log README Error": {
-      "main": [
-        [
-          {
-            "node": "Merge Finalize",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Merge Finalize": {
-      "main": [
-        [
-          {
-            "node": "Read Today Error Log",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Read Today Error Log": {
-      "main": [
-        [
-          {
-            "node": "Aggregate Results",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Aggregate Results": {
-      "main": [
-        [
-          {
-            "node": "Any Errors?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Any Errors?": {
-      "main": [
-        [],
-        []
-      ]
-    },
-    "Set Variables1": {
-      "main": [
-        [
-          {
-            "node": "Get many workflows1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get many workflows1": {
-      "main": [
-        [
-          {
-            "node": "Has Workflows?",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log API Fetch Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Workflows1": {
-      "main": [
-        [
-          {
-            "node": "Create README1",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Prepare File Content1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare File Content1": {
-      "main": [
-        [
-          {
-            "node": "Convert to File1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Convert to File1": {
-      "main": [
-        [
-          {
-            "node": "Upload to GitHub1",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log Conversion Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Upload to GitHub1": {
-      "main": [
-        [
-          {
-            "node": "Merge Loop Paths",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log GitHub Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Create README1": {
-      "main": [
-        [
-          {
-            "node": "Merge Finalize",
-            "type": "main",
-            "index": 1
-          }
-        ],
-        [
-          {
-            "node": "Log README Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Manual Trigger": {
-      "main": [
-        [
-          {
-            "node": "Set Variables1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Set SHA (File Exists)": {
-      "main": [
-        [
-          {
-            "node": "Merge SHA Paths",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Set SHA (New File)": {
-      "main": [
-        [
-          {
-            "node": "Merge SHA Paths",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Merge SHA Paths": {
-      "main": [
-        [
-          {
-            "node": "Upload to GitHub3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Aggregate Rows": {
-      "main": [
-        [
-          {
-            "node": "Aggregate Results2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Global Error Trigger": {
-      "main": [
-        [
-          {
-            "node": "Slack — Global Crash Alert",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Daily Trigger2": {
-      "main": [
-        [
-          {
-            "node": "Set Variables3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Set Variables3": {
-      "main": [
-        [
-          {
-            "node": "Get many workflows3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get many workflows3": {
-      "main": [
-        [
-          {
-            "node": "Has Workflows?2",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log API Fetch Error2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Has Workflows?2": {
-      "main": [
-        [
-          {
-            "node": "Split Workflows3",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log Empty Error2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Log Empty Error2": {
-      "main": [
-        [
-          {
-            "node": "Slack — No Workflows Alert2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Log API Fetch Error2": {
-      "main": [
-        [
-          {
-            "node": "Slack — API Fetch Alert2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Workflows3": {
-      "main": [
-        [
-          {
-            "node": "Create README3",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Prepare File Content3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare File Content3": {
-      "main": [
-        [
-          {
-            "node": "Convert to File3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Convert to File3": {
-      "main": [
-        [
-          {
-            "node": "Get File SHA1",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log Conversion Error2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Log Conversion Error2": {
-      "main": [
-        [
-          {
-            "node": "Merge Loop Paths2",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Get File SHA1": {
-      "main": [
-        [
-          {
-            "node": "Set SHA (File Exists)",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Set SHA (New File)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Upload to GitHub3": {
-      "main": [
-        [
-          {
-            "node": "Merge Loop Paths2",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log GitHub Error2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Log GitHub Error2": {
-      "main": [
-        [
-          {
-            "node": "Merge Loop Paths2",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Merge Loop Paths2": {
-      "main": [
-        [
-          {
-            "node": "Split Workflows3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Create README3": {
-      "main": [
-        [
-          {
-            "node": "Merge Finalize2",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log README Error2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Log README Error2": {
-      "main": [
-        [
-          {
-            "node": "Merge Finalize2",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Merge Finalize2": {
-      "main": [
-        [
-          {
-            "node": "Read Today Error Log2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Read Today Error Log2": {
-      "main": [
-        [
-          {
-            "node": "Aggregate Rows",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Aggregate Results2": {
-      "main": [
-        [
-          {
-            "node": "Any Errors?2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Any Errors?2": {
-      "main": [
-        [
-          {
-            "node": "Slack — Error Summary",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Slack — Success Summary2",
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -672,2336 +407,109 @@
       ]
     }
   },
-  "createdAt": "2026-02-10T08:28:09.889Z",
-  "id": "sVkLQ7gao_arw_nhylED3",
-  "isArchived": true,
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
+  "createdAt": "2026-02-12T07:12:19.597Z",
+  "id": "JgKGDAAL629frkJn",
+  "isArchived": false,
+  "meta": null,
   "name": "40.n8n backup workflow",
   "nodes": [
     {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "400c349a-6694-4ebc-8cc8-4b36b30cdd05",
-              "name": "folderName",
-              "value": "=Backup_{{ $now.format('yyyy-MM-dd') }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "2b7b5150-f49e-4e3c-aefe-eb51da2b115c",
-      "name": "Set Variables",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -1088,
-        -352
-      ],
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "id": "92bba0fa-ab5b-41a6-bc10-71f7e208a4c7",
-      "name": "Split Workflows",
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
-      "position": [
-        -576,
-        -352
-      ],
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "workflow-content",
-              "name": "nodes",
-              "value": "={{ JSON.stringify($json, null, 2) }}",
-              "type": "string"
-            },
-            {
-              "id": "workflow-filename",
-              "name": "fileName",
-              "value": "={{ $json.name }}.json",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "da55afe6-e3f7-4668-af60-b1a8c7d54548",
-      "name": "Prepare File Content",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -256,
-        -352
-      ],
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "resource": "file",
-        "owner": {
-          "__rl": true,
-          "value": "sidhartha1s",
-          "mode": "name"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n-workflows-backup",
-          "mode": "list",
-          "cachedResultName": "n8n-workflows-backup",
-          "cachedResultUrl": "https://github.com/sidhartha1s/n8n-workflows-backup"
-        },
-        "filePath": "={{ $('Set Variables').item.json.folderName }}/{{ $('Prepare File Content').item.json.fileName }}",
-        "binaryData": true,
-        "commitMessage": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd T') }} Backup completed"
-      },
-      "id": "74bd442a-ab5e-4086-a885-9a8b3501ce4d",
-      "name": "Upload to GitHub",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [
-        192,
-        -272
-      ],
-      "webhookId": "20f36eee-6bfe-4264-9490-d76d5c1ef46d",
-      "alwaysOutputData": false,
-      "notesInFlow": true,
-      "credentials": {
-        "githubApi": {
-          "id": "NbjyfSXU2g7rFbbu",
-          "name": "GitHub account"
-        }
-      },
-      "disabled": true,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "resource": "file",
-        "owner": {
-          "__rl": true,
-          "value": "=sidhartha1s",
-          "mode": "name"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n-workflows-backup",
-          "mode": "list",
-          "cachedResultName": "n8n-workflows-backup",
-          "cachedResultUrl": "https://github.com/sidhartha1s/n8n-workflows-backup"
-        },
-        "filePath": "={{ $('Set Variables').item.json.folderName }}/README.md",
-        "fileContent": "=# N8N Workflow Backup - {{ $('Set Variables').item.json.folderName }}\n\nThis folder contains the backup of all N8N workflows as of {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd') }}\n\n## Backup Details\n- Backup Time: {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd T') }}\n- Total Workflows: {{ $('Get many workflows').all().length }}\n\n## Files\nEach workflow is saved as a separate JSON file with the format\n\n---\n*Automatically generated by N8N Backup Workflow*",
-        "commitMessage": "=Add README for backup folder"
-      },
-      "id": "bcf5dc66-38bc-4e5c-9246-9868dd0a8aca",
-      "name": "Create README",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [
-        -256,
-        -608
-      ],
-      "webhookId": "5f0a2d4b-f990-480e-8bf7-1aea62f5fc7c",
-      "credentials": {
-        "githubApi": {
-          "id": "NbjyfSXU2g7rFbbu",
-          "name": "GitHub account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "operation": "toText",
-        "sourceProperty": "nodes",
-        "options": {
-          "fileName": "={{ $json.fileName }}"
-        }
-      },
-      "type": "n8n-nodes-base.convertToFile",
-      "typeVersion": 1.1,
-      "position": [
-        -32,
-        -352
-      ],
-      "id": "331fb56f-2ba6-4bff-830a-de858f576a87",
-      "name": "Convert to File",
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list",
-          "cachedResultName": "n8n Backups Daily",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gqmegitfHNqya-lEUdaQ16hBVD8okXi2oeGr8V4nWFM/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "File Name": "={{ $('Prepare File Content').item.json.fileName }}",
-            "Error Message": "={{ $json.error }}",
-            "DateTime": "={{$now.setZone('Asia/Kolkata').format('yyyy-MM-dd T')}}",
-            "Folder Name": "={{ $('Set Variables').item.json.folderName }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "displayName": "DateTime",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Folder Name",
-              "displayName": "Folder Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "File Name",
-              "displayName": "File Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Error Message",
-              "displayName": "Error Message",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        432,
-        -176
-      ],
-      "id": "810f0eb8-a5fe-4a8d-a7d8-c3138d8f0c86",
-      "name": "Append row in sheet",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "filters": {},
-        "requestOptions": {}
-      },
-      "type": "n8n-nodes-base.n8n",
-      "typeVersion": 1,
-      "position": [
-        -880,
-        -352
-      ],
-      "id": "4d9cbce0-d222-4546-95d9-7f359dec7c34",
-      "name": "Get many workflows",
-      "credentials": {
-        "n8nApi": {
-          "id": "A8UqMhip8eWUj9i6",
-          "name": "n8n account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "check-empty",
-              "leftValue": "={{ $input.all().length }}",
-              "rightValue": 0,
-              "operator": {
-                "type": "number",
-                "operation": "gt"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "fe19d3a2-275c-4eb0-ab63-893ecc8ee125",
-      "name": "Has Workflows?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -3616,
-        576
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list",
-          "cachedResultName": "n8n Backups Daily",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables1').item.json.folderName }}",
-            "File Name": "N/A — No workflows returned",
-            "Status": "error",
-            "Error Type": "empty_workflow_list",
-            "Error Message": "Get many workflows returned 0 workflows. API may have failed or instance has no workflows."
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "displayName": "DateTime",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Folder Name",
-              "displayName": "Folder Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "File Name",
-              "displayName": "File Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Type",
-              "displayName": "Error Type",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Message",
-              "displayName": "Error Message",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        -3424,
-        656
-      ],
-      "id": "8f38a654-e9bc-473c-bc98-a13fa8fc1a8f",
-      "name": "Log Empty Error",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "select": "user",
-        "user": {
-          "__rl": true,
-          "value": "U06DLM6U3JM",
-          "mode": "list",
-          "cachedResultName": "sidhartha"
-        },
-        "text": "=🚨 *n8n Backup CRITICAL FAILURE* — {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}\n\n*Folder:* `{{ $('Set Variables1').item.json.folderName }}`\n*Error:* No workflows were returned by the n8n API.\n\nPossible causes:\n• n8n API credential has expired\n• Instance has no active workflows\n• n8n API is unreachable\n\n*Action required:* Please check your n8n instance immediately.\n📋 <https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4|View Error Log>",
-        "otherOptions": {}
-      },
-      "id": "2e5dc97a-b62f-41f7-8a09-11c6a8a7a5eb",
-      "name": "Slack — No Workflows Alert",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        -3184,
-        656
-      ],
-      "webhookId": "20f7d9e7-e652-4345-b509-0b69703ce3b9",
-      "credentials": {
-        "slackApi": {
-          "id": "O62AlOYXuAYiMczt",
-          "name": "Slack account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list",
-          "cachedResultName": "n8n Backups Daily",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables1').item.json.folderName }}",
-            "File Name": "N/A",
-            "Status": "error",
-            "Error Type": "api_fetch_failure",
-            "Error Message": "={{ $json.error.message ?? 'Unknown error fetching workflows from n8n API' }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "displayName": "DateTime",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Folder Name",
-              "displayName": "Folder Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "File Name",
-              "displayName": "File Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Type",
-              "displayName": "Error Type",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Message",
-              "displayName": "Error Message",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        -3424,
-        832
-      ],
-      "id": "090fbfdb-6c56-4c66-9a9a-52ec7cf7a5d5",
-      "name": "Log API Fetch Error",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "select": "user",
-        "user": {
-          "__rl": true,
-          "value": "U06DLM6U3JM",
-          "mode": "list",
-          "cachedResultName": "sidhartha"
-        },
-        "text": "=🚨 *n8n Backup CRITICAL FAILURE* — {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}\n\n*Folder:* `{{ $('Set Variables1').item.json.folderName }}`\n*Error:* Failed to fetch workflows from n8n API.\n*Details:* {{ $('Log API Fetch Error').item.json['Error Message'] }}\n\n*Action required:* Backup did not run. Check n8n API credentials.\n📋 <https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4|View Error Log>",
-        "otherOptions": {}
-      },
-      "id": "5144be78-fe9a-4a43-b010-4143624589e3",
-      "name": "Slack — API Fetch Alert",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        -3184,
-        832
-      ],
-      "webhookId": "b7ad3b58-7a02-405e-8066-a43ef8eee9ed",
-      "credentials": {
-        "slackApi": {
-          "id": "O62AlOYXuAYiMczt",
-          "name": "Slack account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list",
-          "cachedResultName": "n8n Backups Daily",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables1').item.json.folderName }}",
-            "File Name": "={{ $('Prepare File Content1').item.json.fileName }}",
-            "Status": "error",
-            "Error Type": "conversion_error",
-            "Error Message": "={{ $json.error.message ?? 'Failed to convert workflow to file' }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "displayName": "DateTime",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Folder Name",
-              "displayName": "Folder Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "File Name",
-              "displayName": "File Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Type",
-              "displayName": "Error Type",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Message",
-              "displayName": "Error Message",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        -2736,
-        592
-      ],
-      "id": "d4fe4a85-b0cc-47a1-bbe9-eec8d1c5f9af",
-      "name": "Log Conversion Error",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list",
-          "cachedResultName": "n8n Backups Daily",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables1').item.json.folderName }}",
-            "File Name": "={{ $('Prepare File Content1').item.json.fileName }}",
-            "Status": "error",
-            "Error Type": "github_upload_failure",
-            "Error Message": "={{ $json.error.message ?? 'Unknown GitHub upload error' }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "displayName": "DateTime",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Folder Name",
-              "displayName": "Folder Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "File Name",
-              "displayName": "File Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Type",
-              "displayName": "Error Type",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Message",
-              "displayName": "Error Message",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        -2512,
-        592
-      ],
-      "id": "f12a9977-a84a-4285-8b99-c893482628b3",
-      "name": "Log GitHub Error",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
       "parameters": {},
-      "id": "0fd43897-33bc-4c00-a7c9-f8706c808f81",
-      "name": "Merge Loop Paths",
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3,
-      "position": [
-        -2304,
-        432
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list",
-          "cachedResultName": "n8n Backups Daily",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables1').item.json.folderName }}",
-            "File Name": "README.md",
-            "Status": "error",
-            "Error Type": "readme_creation_failure",
-            "Error Message": "={{ $json.error.message ?? 'Failed to create README on GitHub' }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "displayName": "DateTime",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Folder Name",
-              "displayName": "Folder Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "File Name",
-              "displayName": "File Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Type",
-              "displayName": "Error Type",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Error Message",
-              "displayName": "Error Message",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        -3104,
-        240
-      ],
-      "id": "33a7f448-687c-4111-be41-f3f80b9ce745",
-      "name": "Log README Error",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {},
-      "id": "30e0eec0-82d8-4085-acd1-c594ba5fa185",
-      "name": "Merge Finalize",
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3,
-      "position": [
-        -2928,
-        128
-      ]
-    },
-    {
-      "parameters": {
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list",
-          "cachedResultName": "n8n Backups Daily",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit#gid=0"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        -2736,
-        128
-      ],
-      "id": "9f5b3196-07ed-4b83-9a1b-ceadf14f76ac",
-      "name": "Read Today Error Log",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "agg-errors",
-              "name": "errorCount",
-              "value": "={{ $input.all().filter(i => i.json['Status'] === 'error').length }}",
-              "type": "number"
-            },
-            {
-              "id": "agg-types",
-              "name": "errorTypes",
-              "value": "={{ [...new Set($input.all().filter(i => i.json['Status'] === 'error').map(i => i.json['Error Type']))].join(', ') }}",
-              "type": "string"
-            },
-            {
-              "id": "agg-total",
-              "name": "totalFetched",
-              "value": "={{ $('Get many workflows1').all().length }}",
-              "type": "number"
-            },
-            {
-              "id": "agg-uploaded",
-              "name": "totalUploaded",
-              "value": "={{ $('Get many workflows1').all().length - $input.all().filter(i => i.json['Status'] === 'error' && i.json['Error Type'] !== 'readme_creation_failure').length }}",
-              "type": "number"
-            },
-            {
-              "id": "agg-interrupted",
-              "name": "isInterrupted",
-              "value": "={{ ($('Get many workflows1').all().length - $input.all().filter(i => i.json['Status'] === 'error' && i.json['Error Type'] !== 'readme_creation_failure').length) < $('Get many workflows1').all().length && $input.all().filter(i => i.json['Status'] === 'error').length > 0 }}",
-              "type": "boolean"
-            },
-            {
-              "id": "agg-folder",
-              "name": "folderName",
-              "value": "={{ $('Set Variables1').item.json.folderName }}",
-              "type": "string"
-            },
-            {
-              "id": "agg-starttime",
-              "name": "startTime",
-              "value": "={{ $('Set Variables1').item.json.startTime }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "68af981a-ae4a-42af-9b4c-40eb8febd658",
-      "name": "Aggregate Results",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -2528,
-        128
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "check-has-errors",
-              "leftValue": "={{ $json.errorCount }}",
-              "rightValue": 0,
-              "operator": {
-                "type": "number",
-                "operation": "gt"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "a082b617-ec4c-429a-a60d-6d65e505e130",
-      "name": "Any Errors?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -2320,
-        -64
-      ]
-    },
-    {
-      "parameters": {
-        "select": "user",
-        "user": {
-          "__rl": true,
-          "value": "U06DLM6U3JM",
-          "mode": "list",
-          "cachedResultName": "sidhartha"
-        },
-        "text": "=⚠️ *n8n Backup Completed with Errors* — {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }} IST\n\n*Folder:* `{{ $json.folderName }}`\n*Started:* {{ $json.startTime }}\n\n*Summary:*\n• 📦 Total Workflows: {{ $json.totalFetched }}\n• ✅ Uploaded: {{ $json.totalUploaded }}\n• ❌ Failed: {{ $json.errorCount }}\n• 🔍 Error Types: {{ $json.errorTypes }}\n{{ $json.isInterrupted ? '\\n🚨 *BACKUP WAS INTERRUPTED* — Not all workflows were backed up.' : '' }}\n\n📋 <https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4|View Full Error Log>",
-        "otherOptions": {}
-      },
-      "id": "de381369-6e01-4f74-9fed-ca6ec2f3831d",
-      "name": "Slack — Error Summary Alert",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        -2032,
-        -96
-      ],
-      "webhookId": "f196831b-95b6-4b3e-b877-eb1fdc50c4ae",
-      "credentials": {
-        "slackApi": {
-          "id": "O62AlOYXuAYiMczt",
-          "name": "Slack account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "select": "user",
-        "user": {
-          "__rl": true,
-          "value": "U06DLM6U3JM",
-          "mode": "list",
-          "cachedResultName": "sidhartha"
-        },
-        "text": "=✅ *n8n Backup Completed Successfully* — {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }} IST\n\n*Folder:* `{{ $json.folderName }}`\n*Started:* {{ $json.startTime }}\n\n*Summary:*\n• 📦 Total Workflows: {{ $json.totalFetched }}\n• ✅ All workflows uploaded successfully\n• 📁 GitHub: <https://github.com/sidhartha1s/n8n-workflows-backup|View Repository>",
-        "otherOptions": {}
-      },
-      "id": "cfb9016a-25f8-4c86-9425-d283244a3891",
-      "name": "Slack — Success Summary",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        -2112,
-        240
-      ],
-      "webhookId": "60f81af0-a5f7-4940-b5a5-d981b5aee579",
-      "credentials": {
-        "slackApi": {
-          "id": "O62AlOYXuAYiMczt",
-          "name": "Slack account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "400c349a-6694-4ebc-8cc8-4b36b30cdd05",
-              "name": "folderName",
-              "value": "=Backup_{{ $now.format('yyyy-MM-dd') }}",
-              "type": "string"
-            },
-            {
-              "id": "set-totalfetched",
-              "name": "totalFetched",
-              "value": 0,
-              "type": "number"
-            },
-            {
-              "id": "set-totaluploaded",
-              "name": "totalUploaded",
-              "value": 0,
-              "type": "number"
-            },
-            {
-              "id": "set-startime",
-              "name": "startTime",
-              "value": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "2c01e9b6-1c4b-499c-b54c-b3d12c7f69d1",
-      "name": "Set Variables1",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -4048,
-        576
-      ]
-    },
-    {
-      "parameters": {
-        "filters": {},
-        "requestOptions": {}
-      },
-      "type": "n8n-nodes-base.n8n",
-      "typeVersion": 1,
-      "position": [
-        -3824,
-        576
-      ],
-      "id": "93f347e0-72c8-471e-abe0-40add23efc00",
-      "name": "Get many workflows1",
-      "credentials": {
-        "n8nApi": {
-          "id": "A8UqMhip8eWUj9i6",
-          "name": "n8n account"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "id": "5ae36938-b918-4977-be71-1b8917eeb847",
-      "name": "Split Workflows1",
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
-      "position": [
-        -3424,
-        432
-      ]
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "workflow-content",
-              "name": "nodes",
-              "value": "={{ JSON.stringify($json, null, 2) }}",
-              "type": "string"
-            },
-            {
-              "id": "workflow-filename",
-              "name": "fileName",
-              "value": "={{ $json.name.replace(/[^a-zA-Z0-9_\\-]/g, '_') }}.json",
-              "type": "string"
-            },
-            {
-              "id": "workflow-name-orig",
-              "name": "workflowName",
-              "value": "={{ $json.name }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "48d0c6aa-3e86-404f-b32d-aba3f2772e9b",
-      "name": "Prepare File Content1",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -3184,
-        432
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "toText",
-        "sourceProperty": "nodes",
-        "options": {
-          "fileName": "={{ $json.fileName }}"
-        }
-      },
-      "type": "n8n-nodes-base.convertToFile",
-      "typeVersion": 1.1,
-      "position": [
-        -2960,
-        432
-      ],
-      "id": "a71dfb00-57ea-4658-9365-059f172c5fd7",
-      "name": "Convert to File1",
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "resource": "file",
-        "owner": {
-          "__rl": true,
-          "value": "sidhartha1s",
-          "mode": "name"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n-workflows-backup",
-          "mode": "list",
-          "cachedResultName": "n8n-workflows-backup",
-          "cachedResultUrl": "https://github.com/sidhartha1s/n8n-workflows-backup"
-        },
-        "filePath": "={{ $('Set Variables1').item.json.folderName }}/{{ $('Prepare File Content1').item.json.fileName }}",
-        "binaryData": true,
-        "commitMessage": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }} — Backup: {{ $('Prepare File Content1').item.json.workflowName }}"
-      },
-      "id": "ab785b22-7319-475c-961d-4bda40501b46",
-      "name": "Upload to GitHub1",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [
-        -2736,
-        432
-      ],
-      "alwaysOutputData": false,
-      "notesInFlow": true,
-      "webhookId": "27d74d67-09fc-49b1-bad2-7b70dc6781df",
-      "credentials": {
-        "githubApi": {
-          "id": "NbjyfSXU2g7rFbbu",
-          "name": "GitHub account"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "resource": "file",
-        "owner": {
-          "__rl": true,
-          "value": "=sidhartha1s",
-          "mode": "name"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n-workflows-backup",
-          "mode": "list",
-          "cachedResultName": "n8n-workflows-backup",
-          "cachedResultUrl": "https://github.com/sidhartha1s/n8n-workflows-backup"
-        },
-        "filePath": "={{ $('Set Variables1').item.json.folderName }}/README.md",
-        "fileContent": "=# N8N Workflow Backup — {{ $('Set Variables1').item.json.folderName }}\n\nThis folder contains the backup of all N8N workflows.\n\n## Backup Details\n- **Backup Date:** {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd') }}\n- **Completed At:** {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }} IST\n- **Total Workflows Fetched:** {{ $('Get many workflows1').all().length }}\n\n## Files\nEach workflow is saved as a separate JSON file named after the workflow.\n\n---\n*Automatically generated by N8N Backup Workflow*",
-        "commitMessage": "=Add README for {{ $('Set Variables1').item.json.folderName }}"
-      },
-      "id": "19082866-3091-4816-8f79-dc7b57149c24",
-      "name": "Create README1",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [
-        -3280,
-        144
-      ],
-      "webhookId": "b8fd20c1-514a-4701-8ee0-9707f88468ad",
-      "credentials": {
-        "githubApi": {
-          "id": "NbjyfSXU2g7rFbbu",
-          "name": "GitHub account"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {},
-      "id": "036d8491-21c4-4e70-969b-69c2fac694f5",
-      "name": "Manual Trigger",
+      "id": "a573e744-ca9e-4bf6-a11b-655e5821aed5",
+      "name": "On clicking 'execute'",
       "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
       "position": [
-        -4256,
-        576
-      ]
-    },
-    {
-      "parameters": {
-        "content": "# Working - with errors\n"
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -3872,
-        208
+        480,
+        80
       ],
-      "id": "0de361c0-a8b9-42aa-ac8b-3a20cdc050e3",
-      "name": "Sticky Note1"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "set-sha-from-get",
-              "name": "fileSha",
-              "value": "={{ $json.sha }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "c1fbc6df-cf0e-4a44-b40c-f9995b091fed",
-      "name": "Set SHA (File Exists)",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        576,
-        1136
-      ],
-      "disabled": true,
-      "notes": "File exists → extract SHA from Get File response"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "set-sha-empty",
-              "name": "fileSha",
-              "value": "",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "0d594bef-3f3a-4731-a36b-b79f55ece215",
-      "name": "Set SHA (New File)",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        592,
-        1296
-      ],
-      "disabled": true,
-      "notes": "File does not exist (404) → no SHA needed, create new"
-    },
-    {
-      "parameters": {
-        "mode": "chooseBranch",
-        "chooseBranchMode": "=waitForAll",
-        "output": "=specifiedInput"
-      },
-      "id": "146e2668-8d2c-4c73-9eae-95d65f044bab",
-      "name": "Merge SHA Paths",
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3,
-      "position": [
-        800,
-        1248
-      ],
-      "disabled": true,
-      "notes": "chooseBranch: passes whichever SHA path (exists or new) fires, no wait"
-    },
-    {
-      "parameters": {
-        "aggregate": "aggregateAllItemData",
-        "options": {}
-      },
-      "id": "8e03d39e-107e-4bc4-b9ec-d7974b7c2de6",
-      "name": "Aggregate Rows",
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
-      "position": [
-        688,
-        784
-      ],
-      "disabled": true,
-      "notes": "Collapses all 30+ sheet rows into ONE single item containing arrays. Set node now runs once."
-    },
-    {
-      "parameters": {
-        "select": "user",
-        "user": {
-          "__rl": true,
-          "value": "U06DLM6U3JM",
-          "mode": "list"
-        },
-        "text": "=⚠️ *{{ $json.totalUploaded }}/{{ $json.totalFetched }} backed up* — {{ $json.folderName }}\n{{ $json.errorCount }} error{{ $json.errorCount > 1 ? 's' : '' }} ({{ $json.errorTypes }}){{ $json.isInterrupted ? ' — ⚠️ BACKUP INTERRUPTED' : '' }}\n📋 <https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4|View Log>",
-        "otherOptions": {}
-      },
-      "id": "d8f4997f-54b7-4082-aa94-14b74e12de80",
-      "name": "Slack — Error Summary",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        1408,
-        656
-      ],
-      "webhookId": "9e1ed748-1ba8-476a-90b0-db5d2adfb262",
-      "credentials": {
-        "slackApi": {
-          "id": "O62AlOYXuAYiMczt",
-          "name": "Slack account"
-        }
-      },
-      "disabled": true,
-      "notes": "Clean one-line summary. Only fires ONCE now."
-    },
-    {
-      "parameters": {},
-      "id": "ac68ff5b-3e9e-4123-83e1-50f1f130bd44",
-      "name": "Global Error Trigger",
-      "type": "n8n-nodes-base.errorTrigger",
-      "typeVersion": 1,
-      "position": [
-        -368,
-        1904
-      ],
-      "notes": "Catches unhandled workflow crashes. This is a separate mini-workflow island within the same JSON."
-    },
-    {
-      "parameters": {
-        "select": "user",
-        "user": {
-          "__rl": true,
-          "value": "U06DLM6U3JM",
-          "mode": "list"
-        },
-        "text": "=🔴 *n8n Workflow Crashed* — {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }} IST\n\n*Workflow:* {{ $json.workflow.name }}\n*Execution ID:* {{ $json.execution.id }}\n*Error:* {{ $json.execution.error.message }}\n*Node:* {{ $json.execution.error.node?.name ?? 'Unknown' }}\n\n⚡ Unhandled crash — workflow stopped unexpectedly.\n🔗 <{{ $json.execution.url }}|View Execution>",
-        "otherOptions": {}
-      },
-      "id": "35b80dc5-56b1-4fc6-b91a-294808c8109a",
-      "name": "Slack — Global Crash Alert",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        -128,
-        1904
-      ],
-      "webhookId": "49830309-342a-4578-9bb9-0e1f9f985d51",
-      "credentials": {
-        "slackApi": {
-          "id": "O62AlOYXuAYiMczt",
-          "name": "Slack account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "triggerTimes": {
-          "item": [
-            {
-              "hour": 2
-            }
-          ]
-        }
-      },
-      "id": "576060b1-68e6-40d3-b35c-fba1cee865ca",
-      "name": "Daily Trigger2",
-      "type": "n8n-nodes-base.cron",
-      "typeVersion": 1,
-      "position": [
-        -1312,
-        1200
-      ],
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "folder-name",
-              "name": "folderName",
-              "value": "=Backup_{{ $now.format('yyyy-MM-dd') }}",
-              "type": "string"
-            },
-            {
-              "id": "start-time",
-              "name": "startTime",
-              "value": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "f50ba1c8-1de6-4724-81d0-d6e75b2ab217",
-      "name": "Set Variables3",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -1056,
-        1312
-      ],
-      "disabled": true
+      "typeVersion": 1
     },
     {
       "parameters": {
         "filters": {},
         "requestOptions": {}
       },
+      "id": "04a92673-25d8-4599-bae2-95d29d54706c",
+      "name": "n8n",
       "type": "n8n-nodes-base.n8n",
-      "typeVersion": 1,
       "position": [
-        -832,
-        1312
+        880,
+        192
       ],
-      "id": "510aa3b4-9d3f-4346-951d-e02b574d20ba",
-      "name": "Get many workflows3",
+      "typeVersion": 1,
       "credentials": {
         "n8nApi": {
           "id": "A8UqMhip8eWUj9i6",
           "name": "n8n account"
         }
-      },
-      "disabled": true,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "has-workflows-check",
-              "leftValue": "={{ $input.all().length }}",
-              "rightValue": 0,
-              "operator": {
-                "type": "number",
-                "operation": "gt"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "f95bf2b8-4041-4575-ad6a-8e4de0acf9e0",
-      "name": "Has Workflows?2",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        -608,
-        1312
-      ],
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list",
-          "cachedResultName": "n8n Backups Daily",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4/edit#gid=0"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables3').item.json.folderName }}",
-            "File Name": "N/A — No workflows returned",
-            "Status": "error",
-            "Error Type": "empty_workflow_list",
-            "Error Message": "Get many workflows returned 0 workflows. API may have failed or instance has no workflows."
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "displayName": "DateTime",
-              "type": "string"
-            },
-            {
-              "id": "Folder Name",
-              "displayName": "Folder Name",
-              "type": "string"
-            },
-            {
-              "id": "File Name",
-              "displayName": "File Name",
-              "type": "string"
-            },
-            {
-              "id": "Status",
-              "displayName": "Status",
-              "type": "string"
-            },
-            {
-              "id": "Error Type",
-              "displayName": "Error Type",
-              "type": "string"
-            },
-            {
-              "id": "Error Message",
-              "displayName": "Error Message",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        -368,
-        1440
-      ],
-      "id": "eb994089-f22f-49fb-9d46-1dbbfd08ce0d",
-      "name": "Log Empty Error2",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "select": "user",
-        "user": {
-          "__rl": true,
-          "value": "U06DLM6U3JM",
-          "mode": "list",
-          "cachedResultName": "sidhartha"
-        },
-        "text": "=🚨 *n8n Backup CRITICAL FAILURE* — {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }} IST\n\n*Folder:* `{{ $('Set Variables3').item.json.folderName }}`\n*Error:* No workflows were returned by the n8n API.\n\nPossible causes:\n• n8n API credential expired\n• Instance has no active workflows\n• n8n API unreachable\n\n*Action:* Check your n8n instance immediately.\n📋 <https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4|View Error Log>",
-        "otherOptions": {}
-      },
-      "id": "5724cc28-4915-40bd-b4e4-b984e339cc97",
-      "name": "Slack — No Workflows Alert2",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        -128,
-        1440
-      ],
-      "webhookId": "6babc8f2-cc5f-4d7d-b3f4-b0c3f8a7d3cf",
-      "credentials": {
-        "slackApi": {
-          "id": "O62AlOYXuAYiMczt",
-          "name": "Slack account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables3').item.json.folderName }}",
-            "File Name": "N/A",
-            "Status": "error",
-            "Error Type": "api_fetch_failure",
-            "Error Message": "={{ $json.error.message ?? 'Unknown error fetching workflows from n8n API' }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "type": "string"
-            },
-            {
-              "id": "Folder Name",
-              "type": "string"
-            },
-            {
-              "id": "File Name",
-              "type": "string"
-            },
-            {
-              "id": "Status",
-              "type": "string"
-            },
-            {
-              "id": "Error Type",
-              "type": "string"
-            },
-            {
-              "id": "Error Message",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        -368,
-        1680
-      ],
-      "id": "dc2124cb-f2d4-4d4f-ba1e-4f5aebab0a1d",
-      "name": "Log API Fetch Error2",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "select": "user",
-        "user": {
-          "__rl": true,
-          "value": "U06DLM6U3JM",
-          "mode": "list"
-        },
-        "text": "=🚨 *n8n Backup CRITICAL FAILURE* — {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }} IST\n\n*Folder:* `{{ $('Set Variables3').item.json.folderName }}`\n*Error:* Failed to fetch workflows from n8n API.\n*Details:* {{ $('Log API Fetch Error2').item.json['Error Message'] }}\n\n*Action:* Backup did not run. Check n8n API credentials.\n📋 <https://docs.google.com/spreadsheets/d/1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4|View Error Log>",
-        "otherOptions": {}
-      },
-      "id": "5e98189c-6f4b-4b36-831f-ebcba79b8448",
-      "name": "Slack — API Fetch Alert2",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
-      "position": [
-        -128,
-        1680
-      ],
-      "webhookId": "16c91f4c-4326-4e7f-980e-8e72c2a196aa",
-      "credentials": {
-        "slackApi": {
-          "id": "O62AlOYXuAYiMczt",
-          "name": "Slack account"
-        }
-      },
-      "disabled": true
+      }
     },
     {
       "parameters": {
         "options": {}
       },
-      "id": "dbe52721-4a5a-4a45-88f7-0102271239e5",
-      "name": "Split Workflows3",
+      "id": "65ddff9a-6c8c-4024-95a9-5cc6747bbc86",
+      "name": "Loop Over Items",
       "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
-      "position": [
-        -352,
-        1152
-      ],
-      "disabled": true,
-      "notes": "batchSize=10000 ensures output[0] fires exactly ONCE after all workflows processed"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "workflow-nodes",
-              "name": "nodes",
-              "value": "={{ JSON.stringify($json, null, 2) }}",
-              "type": "string"
-            },
-            {
-              "id": "workflow-filename",
-              "name": "fileName",
-              "value": "={{ $json.name.replace(/[^a-zA-Z0-9_\\-]/g, '_') }}.json",
-              "type": "string"
-            },
-            {
-              "id": "workflow-name",
-              "name": "workflowName",
-              "value": "={{ $json.name }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "bd773d4b-0bb1-4a48-b9d0-6e3975d33f36",
-      "name": "Prepare File Content3",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -128,
-        1152
-      ],
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "operation": "toText",
-        "sourceProperty": "nodes",
-        "options": {
-          "fileName": "={{ $json.fileName }}"
-        }
-      },
-      "type": "n8n-nodes-base.convertToFile",
-      "typeVersion": 1.1,
-      "position": [
-        96,
-        1248
-      ],
-      "id": "b2505be6-6d9b-408f-9876-4e05daa1c9f0",
-      "name": "Convert to File3",
-      "disabled": true,
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables3').item.json.folderName }}",
-            "File Name": "={{ $('Prepare File Content3').item.json.fileName }}",
-            "Status": "error",
-            "Error Type": "conversion_error",
-            "Error Message": "={{ $json.error.message ?? 'Failed to convert workflow to file' }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "type": "string"
-            },
-            {
-              "id": "Folder Name",
-              "type": "string"
-            },
-            {
-              "id": "File Name",
-              "type": "string"
-            },
-            {
-              "id": "Status",
-              "type": "string"
-            },
-            {
-              "id": "Error Type",
-              "type": "string"
-            },
-            {
-              "id": "Error Message",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        336,
-        1424
-      ],
-      "id": "98b4b927-02c9-400f-94d6-779b13d4d878",
-      "name": "Log Conversion Error2",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "resource": "file",
-        "operation": "get",
-        "owner": {
-          "__rl": true,
-          "value": "sidhartha1s",
-          "mode": "name"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n-workflows-backup",
-          "mode": "list",
-          "cachedResultName": "n8n-workflows-backup",
-          "cachedResultUrl": "https://github.com/sidhartha1s/n8n-workflows-backup"
-        },
-        "filePath": "={{ $('Set Variables3').item.json.folderName }}/{{ $('Prepare File Content3').item.json.fileName }}",
-        "additionalParameters": {}
-      },
-      "id": "548f0581-111e-48e8-a8e9-1c03976020f1",
-      "name": "Get File SHA1",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [
-        336,
-        1248
-      ],
-      "webhookId": "c1bda3e6-40a6-4954-801c-8ede3f587219",
-      "credentials": {
-        "githubApi": {
-          "id": "NbjyfSXU2g7rFbbu",
-          "name": "GitHub account"
-        }
-      },
-      "disabled": true,
-      "onError": "continueErrorOutput",
-      "notes": "If file exists: returns sha. If 404: error path = new file."
-    },
-    {
-      "parameters": {
-        "resource": "file",
-        "operation": "edit",
-        "owner": {
-          "__rl": true,
-          "value": "sidhartha1s",
-          "mode": "name"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n-workflows-backup",
-          "mode": "list",
-          "cachedResultName": "n8n-workflows-backup"
-        },
-        "filePath": "={{ $('Set Variables3').item.json.folderName }}/{{ $('Prepare File Content3').item.json.fileName }}",
-        "binaryData": true,
-        "commitMessage": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }} — Backup: {{ $('Prepare File Content3').item.json.workflowName }}"
-      },
-      "id": "d2d34fdd-5c86-4861-baa6-96b5500af5ad",
-      "name": "Upload to GitHub3",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
       "position": [
         1040,
-        1248
+        192
       ],
-      "webhookId": "bf9b56a8-7599-4fbe-907e-9567033067be",
-      "credentials": {
-        "githubApi": {
-          "id": "NbjyfSXU2g7rFbbu",
-          "name": "GitHub account"
-        }
-      },
-      "disabled": true,
-      "onError": "continueErrorOutput",
-      "notes": "GitHub edit operation: if sha provided = update, if empty = create. One node handles both."
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables3').item.json.folderName }}",
-            "File Name": "={{ $('Prepare File Content3').item.json.fileName }}",
-            "Status": "error",
-            "Error Type": "github_upload_failure",
-            "Error Message": "={{ $json.error.message ?? 'Unknown GitHub upload error' }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "DateTime",
-              "type": "string"
-            },
-            {
-              "id": "Folder Name",
-              "type": "string"
-            },
-            {
-              "id": "File Name",
-              "type": "string"
-            },
-            {
-              "id": "Status",
-              "type": "string"
-            },
-            {
-              "id": "Error Type",
-              "type": "string"
-            },
-            {
-              "id": "Error Message",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        1264,
-        1344
-      ],
-      "id": "807ff0bc-5ffa-4238-8f7c-06d5fcb7b36f",
-      "name": "Log GitHub Error2",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "mode": "chooseBranch"
-      },
-      "id": "d5f8c151-8f4d-47db-a56a-f6f11aa088d5",
-      "name": "Merge Loop Paths2",
-      "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [
-        1568,
-        1440
-      ],
-      "disabled": true,
-      "notes": "chooseBranch: passes whichever path (success or error) arrives, loop continues immediately"
+      "notes": "CRITICAL: Do NOT feed Execute Workflow back to input 0. splitInBatches auto-advances."
     },
     {
       "parameters": {
-        "resource": "file",
-        "owner": {
-          "__rl": true,
-          "value": "sidhartha1s",
-          "mode": "name"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n-workflows-backup",
-          "mode": "list",
-          "cachedResultName": "n8n-workflows-backup"
-        },
-        "filePath": "={{ $('Set Variables3').item.json.folderName }}/README.md",
-        "fileContent": "=# N8N Workflow Backup — {{ $('Set Variables3').item.json.folderName }}\n\nThis folder contains the backup of all N8N workflows.\n\n## Backup Details\n- **Backup Date:** {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd') }}\n- **Completed At:** {{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }} IST\n- **Total Workflows Fetched:** {{ $('Get many workflows3').all().length }}\n- **Successfully Uploaded:** {{ $('Get many workflows3').all().length - $input.all().filter(row => row.json['Status'] === 'error' && row.json['Error Type'] !== 'readme_creation_failure').length }}\n- **Failed:** {{ $input.all().filter(row => row.json['Status'] === 'error' && row.json['Error Type'] !== 'readme_creation_failure').length }}\n\n## Files\nEach workflow is saved as a separate JSON file named after the workflow.\n\n---\n*Automatically generated by N8N Backup Workflow*",
-        "commitMessage": "=Add README for {{ $('Set Variables3').item.json.folderName }}"
-      },
-      "id": "5363ef49-6288-4222-b5dd-f4ebc6da4d4f",
-      "name": "Create README3",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [
-        -224,
-        784
-      ],
-      "webhookId": "b422768a-fe12-44e4-b999-6e92166e1260",
-      "credentials": {
-        "githubApi": {
-          "id": "NbjyfSXU2g7rFbbu",
-          "name": "GitHub account"
-        }
-      },
-      "disabled": true,
-      "onError": "continueErrorOutput",
-      "notes": "Triggered by Split output[0] (done) after ALL workflows processed. Reads error log to compute success/fail counts."
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "DateTime": "={{ $now.setZone('Asia/Kolkata').format('yyyy-MM-dd HH:mm:ss') }}",
-            "Folder Name": "={{ $('Set Variables3').item.json.folderName }}",
-            "File Name": "README.md",
-            "Status": "error",
-            "Error Type": "readme_creation_failure",
-            "Error Message": "={{ $json.error.message ?? 'Failed to create README on GitHub' }}"
-          },
-          "matchingColumns": [],
-          "schema": [
+        "rule": {
+          "interval": [
             {
-              "id": "DateTime",
-              "type": "string"
-            },
-            {
-              "id": "Folder Name",
-              "type": "string"
-            },
-            {
-              "id": "File Name",
-              "type": "string"
-            },
-            {
-              "id": "Status",
-              "type": "string"
-            },
-            {
-              "id": "Error Type",
-              "type": "string"
-            },
-            {
-              "id": "Error Message",
-              "type": "string"
+              "field": "hours",
+              "hoursInterval": 8,
+              "triggerAtMinute": 1
             }
           ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
-      "position": [
-        16,
-        912
-      ],
-      "id": "0199d883-0de2-4453-9380-a9fff62d75d9",
-      "name": "Log README Error2",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
         }
       },
-      "disabled": true
+      "id": "9fba0dec-27de-40d3-99e0-af332994a77c",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        480,
+        288
+      ],
+      "typeVersion": 1.2
     },
     {
       "parameters": {
-        "mode": "chooseBranch",
-        "output": "input1"
+        "content": "## Backup to GitHub \nThis workflow backs up all instance workflows to GitHub every 12 hours.\n\nFiles saved: `backups/YYYY/MM/ID.json`\n\nRepo config in **Config** node (subworkflow).\n\nRecursive design reduces memory usage.",
+        "height": 417,
+        "width": 385,
+        "color": 4
       },
-      "id": "3bbfedb0-dd36-4b83-8da7-a79662c0bb95",
-      "name": "Merge Finalize2",
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3,
+      "id": "7eab4f92-7196-46ad-807a-6bc1879909b8",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
       "position": [
-        240,
-        784
+        0,
+        0
       ],
-      "disabled": true,
-      "notes": "chooseBranch: passes whichever README path (success or error) arrives"
+      "typeVersion": 1
     },
     {
       "parameters": {
-        "documentId": {
-          "__rl": true,
-          "value": "1k3t3DiZNyv_w1IZosd9Kw1Xo4Hq0LUc6pZLIkFBUVH4",
-          "mode": "list"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list"
-        },
-        "filtersUI": {
-          "values": [
-            {
-              "lookupColumn": "Folder Name",
-              "lookupValue": "={{ $('Set Variables3').item.json.folderName }}"
-            }
-          ]
-        },
-        "options": {}
+        "content": "## Main workflow loop",
+        "height": 416,
+        "width": 1288,
+        "color": 7
       },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.6,
+      "id": "d2e3819b-eabf-4440-96f5-26a6f3ecb771",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
       "position": [
-        464,
-        784
+        448,
+        0
       ],
-      "id": "203c9c3f-db91-4ac8-85a8-7dcdb2fe2ac2",
-      "name": "Read Today Error Log2",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "kwTwxynkf7YLmp2t",
-          "name": "Google Sheets account"
-        }
-      },
-      "disabled": true,
-      "notes": "Reads all rows for today's backup folder. Returns one item per row (potentially 30+ items)."
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "agg-errors",
-              "name": "errorCount",
-              "value": "={{ $json['Status'].filter(s => s === 'error').length }}",
-              "type": "number"
-            },
-            {
-              "id": "agg-types",
-              "name": "errorTypes",
-              "value": "={{ [...new Set($json['Error Type'].filter((t, i) => $json['Status'][i] === 'error'))].join(', ') }}",
-              "type": "string"
-            },
-            {
-              "id": "agg-total",
-              "name": "totalFetched",
-              "value": "={{ $('Get many workflows3').all().length }}",
-              "type": "number"
-            },
-            {
-              "id": "agg-uploaded",
-              "name": "totalUploaded",
-              "value": "={{ $('Get many workflows3').all().length - $json['Error Type'].filter((t, i) => $json['Status'][i] === 'error' && t !== 'readme_creation_failure').length }}",
-              "type": "number"
-            },
-            {
-              "id": "agg-interrupted",
-              "name": "isInterrupted",
-              "value": "={{ ($('Get many workflows3').all().length - $json['Error Type'].filter((t, i) => $json['Status'][i] === 'error' && t !== 'readme_creation_failure').length) < $('Get many workflows3').all().length && $json['Status'].filter(s => s === 'error').length > 0 }}",
-              "type": "boolean"
-            },
-            {
-              "id": "agg-folder",
-              "name": "folderName",
-              "value": "={{ $('Set Variables3').item.json.folderName }}",
-              "type": "string"
-            },
-            {
-              "id": "agg-starttime",
-              "name": "startTime",
-              "value": "={{ $('Set Variables3').item.json.startTime }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "f1af5948-2246-4b75-95f3-474b030627c6",
-      "name": "Aggregate Results2",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        928,
-        784
-      ],
-      "disabled": true,
-      "notes": "Now runs ONCE (not 31 times) because Aggregate collapsed all rows into 1 item with arrays"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict"
-          },
-          "conditions": [
-            {
-              "id": "check-has-errors",
-              "leftValue": "={{ $json.errorCount }}",
-              "rightValue": 0,
-              "operator": {
-                "type": "number",
-                "operation": "gt"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "929b2206-d9ce-4197-9d32-88c8a1e77cd5",
-      "name": "Any Errors?2",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1168,
-        784
-      ],
-      "disabled": true
+      "typeVersion": 1
     },
     {
       "parameters": {
@@ -3009,97 +517,138 @@
         "user": {
           "__rl": true,
           "value": "U06DLM6U3JM",
-          "mode": "list"
+          "mode": "list",
+          "cachedResultName": "sidhartha"
         },
-        "text": "=✅ *{{ $json.totalUploaded }}/{{ $json.totalFetched }} backed up* — {{ $json.folderName }}\n📁 <https://github.com/sidhartha1s/n8n-workflows-backup|View Repository>",
+        "text": "=ℹ️ Starting Workflows Backup",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "03a29027-6a97-4c6d-a266-f66958286c72",
+      "name": "Starting Message",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        720,
+        192
+      ],
+      "typeVersion": 2.2,
+      "executeOnce": true,
+      "webhookId": "43a0429a-3e79-4c70-b8b0-069372efa22c",
+      "credentials": {
+        "slackApi": {
+          "id": "O62AlOYXuAYiMczt",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": "=lHFh9BPdfLKVrQeS1k2GJ",
+        "mode": "each",
+        "options": {}
+      },
+      "id": "82254805-1b09-4f2a-b3c4-d321afeeb95b",
+      "name": "Execute Workflow",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "position": [
+        1264,
+        176
+      ],
+      "typeVersion": 1,
+      "executeOnce": false,
+      "onError": "continueErrorOutput",
+      "notes": "Calls this workflow recursively. NO loop-back connection — splitInBatches auto-advances."
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U06DLM6U3JM",
+          "mode": "list",
+          "cachedResultName": "sidhartha"
+        },
+        "text": "=✅ Backup completed — {{ $('n8n').all().length }} workflows processed.",
         "otherOptions": {}
       },
-      "id": "ff77accc-34e2-470a-b847-174c0222cb9a",
-      "name": "Slack — Success Summary2",
+      "id": "3afa4429-e5e8-4e7f-8e81-57ee9375a753",
+      "name": "Completed Notification",
       "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.3,
       "position": [
-        1408,
-        880
+        1248,
+        32
       ],
-      "webhookId": "70a4aad1-cc33-48ac-8175-24ebed7ac2af",
+      "executeOnce": true,
+      "typeVersion": 2.2,
+      "webhookId": "b9db9b69-28c7-4b30-a0a2-27cf5751b52b",
+      "credentials": {
+        "slackApi": {
+          "id": "O62AlOYXuAYiMczt",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U06DLM6U3JM",
+          "mode": "list",
+          "cachedResultName": "sidhartha"
+        },
+        "text": "=❌ Failed to backup {{ $('Loop Over Items').item.json.name }} (ID: {{ $('Loop Over Items').item.json.id }})",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "6d458254-6b04-4ec2-9951-85d282bb4d15",
+      "name": "Failed Flows",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        1440,
+        240
+      ],
+      "typeVersion": 2.2,
+      "executeOnce": true,
+      "webhookId": "cfe4d6e6-ae78-43f3-af5f-1b1125979973",
       "credentials": {
         "slackApi": {
           "id": "O62AlOYXuAYiMczt",
           "name": "Slack account"
         }
       },
-      "disabled": true,
-      "notes": "Clean success message. Only fires ONCE."
-    },
-    {
-      "parameters": {
-        "height": 928,
-        "width": 1936
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -1168,
-        -736
-      ],
-      "id": "f0b432d9-8998-45a6-80d7-90e515e95e4d",
-      "name": "Sticky Note"
-    },
-    {
-      "parameters": {
-        "content": "",
-        "height": 1760,
-        "width": 3088,
-        "color": 3
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -1344,
-        336
-      ],
-      "id": "29d28e43-340f-4ff6-b8f4-e5f79d17974c",
-      "name": "Sticky Note2"
+      "notes": "executeOnce prevents spam. Only first failure logged. Remove to log all."
     }
   ],
-  "pinData": {
-    "Manual Trigger": [
-      {
-        "json": {},
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "repo_name": "n8n-workflows-backup",
   "repo_owner": "sidhartha1s",
   "repo_path": "backups",
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": true
   },
   "shared": [
     {
-      "updatedAt": "2026-02-10T08:28:09.889Z",
-      "createdAt": "2026-02-10T08:28:09.889Z",
+      "updatedAt": "2026-02-12T07:12:19.597Z",
+      "createdAt": "2026-02-12T07:12:19.597Z",
       "role": "workflow:owner",
-      "workflowId": "sVkLQ7gao_arw_nhylED3",
+      "workflowId": "JgKGDAAL629frkJn",
       "projectId": "RL6dq3Iv75Grec4D"
     }
   ],
-  "staticData": null,
-  "tags": [
-    {
-      "updatedAt": "2026-02-11T05:02:46.485Z",
-      "createdAt": "2026-02-11T05:02:46.485Z",
-      "id": "fKDGLY4ejjOreKzZ",
-      "name": "backup"
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        0
+      ]
     }
-  ],
-  "triggerCount": 0,
-  "updatedAt": "2026-02-12T08:09:45.312Z",
-  "versionId": "8351f742-6024-43a0-b26d-d3437ef0898a"
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-24T10:52:23.866Z",
+  "versionId": "fce6aefe-d38e-4c4d-bcff-b5f1b1a4f038"
 }
